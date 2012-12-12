@@ -748,8 +748,14 @@ add_tour() {
     sed -i '/^<krpano/d' $tour_file
     sed -i '/^<\/krpano/d' $tour_file
 
-    # Add krpano tags at the beginning and at the end of tour.xml
-    sed -i '1i<?xml version="1.0" encoding="UTF-8"?>\n<krpano version="1.0.8.15" showerrors="false">' $tour_file
+    # Add krpano tags at the beginning of tour.xml
+    # If it's tour_clean.xml,then add an onstart action to load scene1'
+    if [ $1 = "tour_clean" ]; then
+        sed -i '1i<?xml version="1.0" encoding="UTF-8"?>\n<krpano version="1.0.8.15" showerrors="false" onstart="activatepano(scene1);">' $tour_file
+    else
+        sed -i '1i<?xml version="1.0" encoding="UTF-8"?>\n<krpano version="1.0.8.15" showerrors="false">' $tour_file
+    fi
+    # Add closing krpano tag at the end of tour.xml and tour_clean.xml
     echo '</krpano>' >> $tour_file
 
     # Delete empty lines
