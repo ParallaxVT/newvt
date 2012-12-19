@@ -588,25 +588,19 @@ remove_scroll () {
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
     if [ "$scroll" = "y" ]; then
-        scroll_folder="scroll"
-        scroll_swf='scroll_'$number_of_scenes'_title'
+        if [ "$scroll_more" = "title" ]; then
+            scroll_swf='scroll_'$number_of_scenes'_title'
+        fi
         if [ "$scroll_more" = "notitle" ]; then
-            scroll_folder="scroll"
             scroll_swf='scroll_'$number_of_scenes
-        # add_scroll_data
         fi
         if [ "$scroll_more" = "custom" ]; then
-            scroll_folder="custom_scroll"
             scroll_swf='scroll_'$number_of_scenes'_title'
-        # add_scroll_data
         fi
         if [ "$scroll_more" = "custom_notitle" ]; then
-            scroll_folder="custom_scroll"
             scroll_swf='scroll_'$number_of_scenes
-        # add_scroll_data
         fi
         if [ ${#scenes_array[@]} -gt "1" ]; then
-            # echo "*** add_croll_data function"
             add_scroll_data
         else
             remove_scroll
@@ -633,9 +627,9 @@ add_scroll_data() {
 
     echo "SCENES:         $number_of_scenes"
         # Replace the word [SWF_FILE] with the swf file name, in include/scroll/index.xml
-    sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include/$scroll_folder/index.xml
+    sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
         # Copy the corresponding swf file for the number of scenes
-    cp -r $orig_content'/scroll/'$scroll_swf.swf  $dest_include/$scroll_folder/
+    cp -r $orig_content'/scroll/'$scroll_swf.swf  $dest_include'/scroll'
 
         # Make content/scroll_thumbs/ directory if doesn't exists
     if [ ! -d $dest_content'/scroll_thumbs' ]; then
