@@ -2,15 +2,16 @@
 
 # Usage:
 # 1- Execute this a first time from inside jobs/job_folder/
-#    Inside this directory, put the panoramas in panos/virtual_toour_name/
+#    Inside this directory, put the panoramas in panos/virtual_tour_name/
 # 2- Then go to g/virtual_tours/project_folder/ and edit vt_conf.sh to add/remove features
-#    Once finished run the script again
-# Scroll options
-#    n              = no scroll
-#    y              = add scroll with title
-#    notitle        = add scroll without title
-#    custom         = copy scroll folder as custom_scroll, so it's not overidden later
-#    custom_notitle = idem as custom but without title
+#    Once finished run the script again.
+# 
+# Scroll options:
+#    scroll=n              -> delete any folder named 'scroll', including any copied from .custom/
+#    scroll=y              -> copies the 'scroll' folder from the template directory
+#    scroll=k              -> neither copies or removes the 'scroll' folder
+#    scroll_more=title     -> add scroll without title
+#    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
 orig_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/src
@@ -587,17 +588,11 @@ remove_scroll () {
 
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
-    if [ "$scroll" = "y" ]; then
+    if [ "$scroll" != "n" ]; then
         if [ "$scroll_more" = "title" ]; then
             scroll_swf='scroll_'$number_of_scenes'_title'
         fi
         if [ "$scroll_more" = "notitle" ]; then
-            scroll_swf='scroll_'$number_of_scenes
-        fi
-        if [ "$scroll_more" = "custom" ]; then
-            scroll_swf='scroll_'$number_of_scenes'_title'
-        fi
-        if [ "$scroll_more" = "custom_notitle" ]; then
             scroll_swf='scroll_'$number_of_scenes
         fi
         if [ ${#scenes_array[@]} -gt "1" ]; then
