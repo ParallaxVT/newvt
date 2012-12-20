@@ -589,6 +589,8 @@ remove_scroll () {
 
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
+    echo "SCENES:         $number_of_scenes"
+
     if [ "$scroll" != "n" ]; then
         if [ "$scroll_more" = "title" ]; then
             scroll_swf='scroll_'$number_of_scenes'_title'
@@ -621,7 +623,6 @@ add_scroll_data() {
         # scroll_swf='scroll_'$number_of_scenes
     # fi
 
-    echo "SCENES:         $number_of_scenes"
         # Replace the word [SWF_FILE] with the swf file name, in include/scroll/index.xml
     sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
         # Copy the corresponding swf file for the number of scenes
