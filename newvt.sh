@@ -234,6 +234,7 @@ add_structure() {
 
     if [ -f $jobs_dir/newvt.log ]; then
         mv $log_file $new_dir/
+        log_file=$new_dir/newvt.log
     fi
 
     echo "ADDED:          folder tree ..."
