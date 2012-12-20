@@ -243,7 +243,7 @@ add_structure() {
 add_custom_dir() {
     # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
     # .custom contains custom plugins to be included in every scene
-    if [ ${#scenes_array[@]} -gt "1" ]; then
+    if [ ${#tours_array[@]} -gt "1" ]; then
         if [ ! -d $new_dir/.custom ]; then
             echo -e "\nMake .custom directory" >> $log_file
             mkdir $new_dir/.custom
