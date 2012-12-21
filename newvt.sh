@@ -5,7 +5,7 @@
 #    Inside this directory, put the panoramas in panos/virtual_tour_name/
 # 2- Then go to g/virtual_tours/project_folder/ and edit vt_conf.sh to add/remove features
 #    Once finished run the script again.
-# 
+#
 # Scroll options:
 #    scroll=n              -> delete any folder named 'scroll', including any copied from .custom/
 #    scroll=y              -> copies the 'scroll' folder from the template directory
@@ -241,6 +241,7 @@ add_structure() {
 }
 
 add_custom_dir() {
+
     # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
     # .custom contains custom plugins to be included in every scene
     if [ ${#tours_array[@]} -gt "1" ]; then
@@ -274,12 +275,17 @@ remove_temp() {
 }
 
 add_scene_names_files () {
-    if [ ! -d $new_dir/$(basename $scenes_dir)'.sh' ]; then
-        > $new_dir/$(basename $scenes_dir)'.sh'
-    fi
-    for scene in "${scenes_array[@]}"; do
-        echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
+    for each_tour_dir in ${tours_array[@]}; do
+        if [ ! -d $each_tour_dir'.sh' ]; then
+            > $new_dir/$each_tour_dir'.sh'
+        fi
+        for each_scene_dir in ${scenes_array[@]}; do
+            echo "$each_scene_dir=" >> $new_dir/$each_tour_dir'.sh'
+        done
     done
+    # for scene in "${scenes_array[@]}"; do
+    #     echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
+    # done
 }
 
 add_scene_names() {
@@ -812,49 +818,6 @@ add_custom() {
     echo "ADDED:          custom plugins ..."
 }
 
-# old_start () {
-#     for scenes_dir in $(find ./panos/* -maxdepth 0 -type d ); do
-#         check_conf $scenes_dir
-#         echo "GENERATING:     $(basename $scenes_dir)"
-#         add_scene_tiles
-
-        # STRUCTURE
-        # new_directory $scenes_dir
-        # add_temp
-
-        # devel.xml -> PLUGINS
-        # touch_include_plugin_and_data
-        # add_logo
-        # add_title
-        # add_hotspot
-        # add_combobox
-        # add_info_btn
-        # add_scroll
-
-        # CUSTOM
-        # add_custom
-
-        # add_include_plugin
-
-       # devel.xml -> DATA
-        # add_sa $dest_content $dest_content
-        # add_movecamera_coords
-        # add_scroll_data
-        # add_plugins_data
-
-        # TOUR.XML
-        # add_krpano
-
-        # vt.conf
-        # add_vt_conf
-
-        # LAST BUT NOT LEAST
-    # remove_temp
-
-        # echo "--------------------------------"
-    # done
-# }
-
 start () {
 
     echo "orig_dir is: $orig_dir" >> $log_file
@@ -868,45 +831,52 @@ start () {
     done
     echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
 
-    for scenes_dir in "${tours_array[@]}"; do
+    for each_scene in "${tours_array[@]}"; do
 
         scenes_array=()
-        for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*.jpg -maxdepth 0 ); do
+        for each_pano in $(find $jobs_dir/panos/$(basename $each_scene)/*.jpg -maxdepth 0 ); do
             each_pano=$(basename "$each_pano")
             extension="${each_pano##*.}"
             each_pano="${each_pano%.*}"
-            scenes_array=( "${scenes_array[@]}" "$each_pano")
+            eval "scenes_array=( "${scenes_array[@]}" "$each_pano")"
         done
 
-        echo "GENERATING:     $(basename $scenes_dir)"
-        echo -e "\nNEW SCENE -> $(basename $scenes_dir)" >> $log_file
-        echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
+        # print each tour array and all its scenes:
+        # echo "$each_scene(${scenes_array[@]})"
+
+        echo "GENERATING:     $each_scene"
+        # echo -e "\nNEW SCENE -> $each_scene" >> $log_file
+        # echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
+
 
         add_structure
-        add_temp
-        add_scene_names
-        add_scene_tiles
-        add_include_plugin_and_data
-        add_info_btn
+        # add_temp
+        # add_scene_names
+        # add_scene_tiles
+        # add_include_plugin_and_data
+        # add_info_btn
 
-        add_include_plugin
-        add_custom
-        add_sa
-        add_movecamera_coords
-        add_hotspot
-        add_scroll
-        add_plugins_data
-        add_tour "tour"
-        add_tour_clean
-        add_html
+        # add_include_plugin
+        # add_custom
+        # add_sa
+        # add_movecamera_coords
+        # add_hotspot
+        # add_scroll
+        # add_plugins_data
+        # add_tour "tour"
+        # add_tour_clean
+        # add_html
 
         # LAST BUT NOT LEAST
-        remove_temp
+        # remove_temp
+
     done
 
-    add_custom_dir
-    # NEED TO MAKE THIS WORK
+    # add_custom_dir
+
     # add_scene_names_files
+
+    # NEED TO MAKE THIS WORK
 
 }
 
