@@ -99,51 +99,6 @@ build_config_file () {
     echo "ADDED:          vt_conf.sh ..."
 }
 
-# THIS FUNCTION IS NOT USED ANYMORE
-# questions() {
-
-    # echo "Is this a test? [y/n]"
-    # read testing
-    # if [ $testing = "n" ]; then
-        # echo "Folder name:"
-        # read -p new_vt
-        # read -e -p "Enter the path to the file: " -i "/cygdrive/g/virtual_tours/" FILEPATH
-        # new_dir=$FILEPATH
-        # new_dir=/cygdrive/g/virtual_tours/$new_vt
-    # else
-    #     new_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/output
-    # fi
-
-    # > vt_conf.sh
-    # echo '#!/bin/bash' >> vt_conf.sh
-    # echo 'testing='$testing       >> vt_conf.sh
-    # echo 'panoramas_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/test_directory_2/panos' >> vt_conf.sh
-    # echo 'panoramas_dir='$panoramas_dir >> vt_conf.sh
-    # echo 'new_dir='$new_dir       >> vt_conf.sh
-
-    # echo new_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/output
-
-#     base=( coordfinder editor_and_options global gyro movecamera orientation sa )
-
-#     for d in "$orig_include/"*; do
-#         found_match=0
-#         for i in "${base[@]}"; do
-#             [[ $(basename $d) = "$i" ]] && { found_match=1; break; }
-#         done
-#         if (( found_match )) ; then
-#             echo $plugin='y' >> vt_conf.sh
-#         else
-#             plugin=$(basename $d)
-#             echo $plugin'?'
-#             read $plugin
-#             echo $plugin=${!plugin} >> vt_conf.sh
-#         fi
-#     done
-
-#     source ./vt_conf.sh
-
-#     echo "ADDED:          vt_conf.sh ..."
-
 # }
 
 # THIS FUNCTION IS NOT USED ANYMORE
