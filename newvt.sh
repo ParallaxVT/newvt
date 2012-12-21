@@ -99,47 +99,6 @@ build_config_file () {
     echo "ADDED:          vt_conf.sh ..."
 }
 
-# }
-
-# THIS FUNCTION IS NOT USED ANYMORE
-# questions_old() {
-#     echo "Is this a test? [y/n]"
-#     read testing
-#     if [ $testing = "n" ]; then
-#         echo "Folder name:"
-#         read new_vt
-#         new_dir=/cygdrive/g/virtual_tours/$new_vt
-#     else
-#         new_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/output
-#     fi
-#     echo "Logo? (y/n)"
-#     read logo
-#     echo "Client logo?"
-#     read logo_client
-#     if [ $logo_client = "y" ]; then
-#         echo "Choose the client logo:"
-#         echo "Creare [1] Addoctor [2] Llama Digital [3] Other[4]"
-#         read logo_client_name
-#     fi
-#     echo "Title?"
-#     read title
-#     echo "Hotspots?"
-#     read hotspots
-#     echo "Combobox?"
-#     read combobox
-#     echo "Info button?"
-#     read info_btn
-#     echo "Scroll?"
-#     read scroll
-#     if [ $scroll = "y" ]; then
-#         echo "Scroll with title?"
-#         read scroll_title
-#     fi
-
-#     add_structure $new_dir
-
-# }
-
 # -------------------
 # STRUCTURE FUNCTIONS
 # -------------------
