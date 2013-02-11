@@ -14,7 +14,12 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
-orig_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/src
+if [ $HOSTNAME = "RafaLaptop" ]; then
+    mydrive=/cygdrive/c/Users/rafaelgp/work
+else
+    mydrive=/cygdrive/g
+fi
+orig_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_structure=$orig_dir/structure
@@ -24,6 +29,15 @@ log_file=$new_dir/newvt.log
 
 
 conf_file_found () {
+    if [ $HOSTNAME = "RafaLaptop" ]; then
+        echo "is c"
+       # Replace /cygwin/g with /cygwin/c
+        sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
+    else
+        echo "is g"
+        # Replace /cygwin/c with /cygwin/g
+        sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
+    fi
     source $config
     > $log_file
     echo "vt_conf.sh file found" >> $log_file
@@ -36,12 +50,12 @@ build_config_file () {
     echo "Is this a test? [y/n]"
     read testing
     if [ $testing = "n" ]; then
-        read -e -p "Path to virtual tour output folder: " -i "/cygdrive/g/virtual_tours/" VTPATH
+        read -e -p "Path to virtual tour output folder: " -i "$mydrive/virtual_tours/" VTPATH
         new_dir=$VTPATH
         jobs_dir=$PWD
     else
-        new_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/output
-        jobs_dir=/cygdrive/g/virtual_tours/.archives/vt_template_8_0_15/test_directory
+        new_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/output
+        jobs_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/test_directory
     fi
 
     # Generate log file
@@ -232,7 +246,7 @@ add_scene_names() {
 
 add_scene_tiles() {
 
-    krpath="/cygdrive/g/documents/software/virtual_tours/krpano/krpanotools-1.0.8.15/kmakemultires.exe"
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-1.0.8.15/kmakemultires.exe"
     krconfig="-config=templates/tv_tiles_2_levels_all_devices.config"
 
     # If scenes directory doesn't exists, create it
@@ -252,8 +266,13 @@ add_scene_tiles() {
         if [ ! -d $dest_scenes/$filename ]; then
             cygwin_dir=$panoimage
             echo -e "\ncygwin_dir is $cygwin_dir" >> $log_file
-            # Replace /cygwin/g/ with G:/
-            win_path=$(echo $cygwin_dir | sed -e 's/\/cygdrive\/g/G\:/g')
+            if [ $HOSTNAME = "RafaLaptop" ]; then
+                # Replace /cygwin/c/ with C:/
+                win_path=$(echo $cygwin_dir | sed -e 's/\/cygdrive\/c/C\:/g')
+            else
+                # Replace /cygwin/g/ with G:/
+                win_path=$(echo $cygwin_dir | sed -e 's/\/cygdrive\/g/G\:/g')
+            fi
             echo "win_path is $win_path" >> $log_file
             $krpath $krconfig $win_path
 
