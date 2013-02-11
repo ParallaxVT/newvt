@@ -750,7 +750,39 @@ add_custom() {
     echo "ADDED:          custom plugins ..."
 }
 
+add_timestamp() {
+    timestamp=$(date "+%Y%m%d%H%M%S").xml
+    for each_tour_xml in $(find . -name tour.xml); do
+        # Get rid off the extension
+        extension="${each_tour_xml##*.}"
+        each_tour_xml="${each_tour_xml%.*}"
+        mv  $each_tour_xml.xml $each_tour_xml$timestamp
+        # echo "$each_tour_xml.xml -> $each_tour_xml$timestamp"
+    done
+    for each_tour_clean_xml in $(find . -name tour_clean.xml); do
+        # Get rid off the extension
+        extension="${each_tour_clean_xml##*.}"
+        each_tour_clean_xml="${each_tour_clean_xml%.*}"
+        mv  $each_tour_clean_xml.xml $each_tour_clean_xml$timestamp
+        # echo "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp"
+    done
+    for each_html_file in $(find . -name "*.html"); do
+        sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
+        sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
+    done
+}
+
+rm_old_xml_files() {
+
+    find . -name "*.html" -exec rm -rf {} \;
+    find . -name "tour20*.xml" -exec rm -rf {} \;
+    find . -name "tour_clean20*.xml" -exec rm -rf {} \;
+}
+
+
 start () {
+
+    rm_old_xml_files
 
     echo "orig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
@@ -794,6 +826,7 @@ start () {
         add_tour "tour"
         add_tour_clean
         add_html
+        add_timestamp
 
         # LAST BUT NOT LEAST
         remove_temp
