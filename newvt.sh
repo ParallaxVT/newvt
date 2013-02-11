@@ -81,8 +81,10 @@ build_config_file () {
     # 2- Base: plugins that are always inculded in a virtual tour
     base="coordfinder|editor_and_options|global|gyro|movecamera|orientation|sa|startup"
     echo "# ========== Base =========="     >> $config
-    for d in $orig_include/@($base); do
+    for d in $orig_include/*; do
+    # for d in $orig_include/@($base); do
         plugin=$(basename $d)
+        [[ ! $plugin =~ ^($base)$ ]] && continue
         echo "$plugin=y"                    >> $config
     done
     echo ''                                 >> $config
@@ -102,8 +104,10 @@ build_config_file () {
     # fi
     #    - No fuatures: all the values are set to 'n'
     # if [ $features = "2" ]; then
-    for d in $orig_include/!($base); do
+    for d in $orig_include/*; do
+    # for d in $orig_include/!($base); do
         plugin=$(basename $d)
+        [[ $plugins =~ ^($base)$ ]] && continue
         echo "$plugin=n"                    >> $config
     done
     echo "Generated vt_conf.sh without any features" >> $log_file
