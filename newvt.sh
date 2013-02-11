@@ -203,17 +203,12 @@ remove_temp() {
 }
 
 add_scene_names_files () {
-    for each_tour_dir in ${tours_array[@]}; do
-        if [ ! -d $each_tour_dir'.sh' ]; then
-            > $new_dir/$each_tour_dir'.sh'
-        fi
-        for each_scene_dir in ${scenes_array[@]}; do
-            echo "$each_scene_dir=" >> $new_dir/$each_tour_dir'.sh'
-        done
+    if [ ! -d $new_dir/$(basename $scenes_dir)'.sh' ]; then
+        > $new_dir/$(basename $scenes_dir)'.sh'
+    fi
+    for scene in "${scenes_array[@]}"; do
+        echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
     done
-    # for scene in "${scenes_array[@]}"; do
-    #     echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
-    # done
 }
 
 add_scene_names() {
@@ -805,9 +800,8 @@ start () {
 
     # add_custom_dir
 
-    # add_scene_names_files
-
     # NEED TO MAKE THIS WORK
+    # add_scene_names_files
 
 }
 
