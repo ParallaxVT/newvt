@@ -89,6 +89,7 @@ build_config_file () {
 
     # 3- Optional: There are 2 types.
     # echo "Basic features [1] No features [2]"
+
     # read features
     echo "# ========== Optional ==========" >> $config
     #    -Basic: with instructions and full screen button. Logo is included but not displayed
