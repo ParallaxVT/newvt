@@ -222,7 +222,6 @@ add_scene_names() {
       pageurl="'$pageurl'"
       pagetitle="'${!panoname}'"
       title="'${!panoname}'"
-      apartment_name="'$apartment_name'"
       />
      ' >> $temp_folder/scene_names.temp
         order=$(expr $order + 1)
