@@ -795,8 +795,7 @@ start () {
         remove_temp
     done
 
-    # add_custom_dir
-
+    add_custom_dir
     # NEED TO MAKE THIS WORK
     # add_scene_names_files
 
