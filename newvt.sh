@@ -774,22 +774,22 @@ start () {
         echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
 
         add_structure
-        # add_temp
-        # add_scene_names
-        # add_scene_tiles
-        # add_include_plugin_and_data
-        # add_info_btn
+        add_temp
+        add_scene_names
+        add_scene_tiles
+        add_include_plugin_and_data
+        add_info_btn
 
-        # add_include_plugin
-        # add_custom
-        # add_sa
-        # add_movecamera_coords
-        # add_hotspot
-        # add_scroll
-        # add_plugins_data
-        # add_tour "tour"
-        # add_tour_clean
-        # add_html
+        add_include_plugin
+        add_custom
+        add_sa
+        add_movecamera_coords
+        add_hotspot
+        add_scroll
+        add_plugins_data
+        add_tour "tour"
+        add_tour_clean
+        add_html
 
         # LAST BUT NOT LEAST
         remove_temp
