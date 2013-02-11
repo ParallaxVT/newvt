@@ -758,23 +758,19 @@ start () {
     done
     echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
 
-    for each_scene in "${tours_array[@]}"; do
+    for scenes_dir in "${tours_array[@]}"; do
 
         scenes_array=()
-        for each_pano in $(find $jobs_dir/panos/$(basename $each_scene)/*.jpg -maxdepth 0 ); do
+        for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*.jpg -maxdepth 0 ); do
             each_pano=$(basename "$each_pano")
             extension="${each_pano##*.}"
             each_pano="${each_pano%.*}"
-            eval "scenes_array=( "${scenes_array[@]}" "$each_pano")"
+            scenes_array=( "${scenes_array[@]}" "$each_pano")
         done
 
-        # print each tour array and all its scenes:
-        # echo "$each_scene(${scenes_array[@]})"
-
-        echo "GENERATING:     $each_scene"
-        # echo -e "\nNEW SCENE -> $each_scene" >> $log_file
-        # echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
-
+        echo "GENERATING:     $(basename $scenes_dir)"
+        echo -e "\nNEW SCENE -> $(basename $scenes_dir)" >> $log_file
+        echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
 
         add_structure
         # add_temp
