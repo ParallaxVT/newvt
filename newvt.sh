@@ -813,7 +813,7 @@ start () {
     for scenes_dir in "${tours_array[@]}"; do
 
         scenes_array=()
-        for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*.jpg -maxdepth 0 ); do
+        for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
             each_pano=$(basename "$each_pano")
             extension="${each_pano##*.}"
             each_pano="${each_pano%.*}"
