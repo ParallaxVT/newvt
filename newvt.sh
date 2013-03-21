@@ -106,9 +106,9 @@ build_config_file () {
     # if [ $features = "2" ]; then
     for d in $orig_include/*; do
     # for d in $orig_include/!($base); do
-        plugin=$(basename $d)
-        [[ $plugins =~ ^($base)$ ]] && continue
-        echo "$plugin=n"                    >> $config
+        optional_plugins=$(basename $d)
+        [[ $optional_plugins =~ ^($base)$ ]] && continue
+        echo "$optional_plugins=n"                    >> $config
     done
     echo "Generated vt_conf.sh without any features" >> $log_file
     # fi
@@ -316,15 +316,16 @@ add_include_plugin_and_data() {
     > $include_data
     echo -e "\nCreate File $include_plugin" >> $log_file
     echo "Create File $include_data" >> $log_file
-
     # for D in $orig_include/*; do
-    for D in $(find $orig_include/* -maxdepth 0); do
+    for D in $(find $orig_include/* -maxdepth 0 -type d ); do
         plugin=$(basename $D)
         plugin_value=${!plugin}
+        # echo $plugin : $plugin_value
         if [ "$plugin_value" = "y" ]; then
-            echo '  <include url="%SWFPATH%/include/'$plugin'/index.xml" />' >> $include_plugin
+            # echo '  <include url="%SWFPATH%/include/'$plugin'/index.xml" />' >> $include_plugin
             cp -r $orig_include/$plugin $dest_include
             echo -e "\n    Copy $orig_include/$plugin to $dest_include" >> $log_file
+            # echo yes
         fi
         if [ "$plugin_value" = "n" ]; then
             if [ -d $dest_include/$plugin ]; then
@@ -333,21 +334,25 @@ add_include_plugin_and_data() {
                 # echo -e "\nMove $temp_folder/devel6.temp to $temp_folder/devel5.temp" >> $log_file
                 rm -rf $dest_include/$plugin
                 echo -e "\nDelete $dest_include/$plugin" >> $log_file
+                # echo no
             fi
         fi
         if [ "$plugin_value" = "k" ]; then
-            echo '  <include url="%SWFPATH%/include/'$plugin'/index.xml" />' >> $include_plugin
+            # echo '  <include url="%SWFPATH%/'$plugin'/index.xml" />' >> $include_plugin
             echo -e "\n    $dest_include/$plugin NOT MODIFIED" >> $log_file
+            # echo k
         fi
     done
     # Also include any folder manually added to the include/ directory
     # Will be duplicates, but they well be removed in 'add_include_plugin' function
-    for dir_added in $(find $dest_include/* -maxdepth 0); do
+    for dir_added in $(find $dest_include/* -maxdepth 0 -type d); do
+        # echo $dir_added
         added_plugin=$(basename $dir_added)
         added_plugin_value=${!added_plugin}
         echo '  <include url="%SWFPATH%/include/'$added_plugin'/index.xml" />' >> $include_plugin
         echo -e "\n    $dest_include/$added_plugin KEEPED" >> $log_file
     done
+    # exit 1
 }
 
 add_logo() {
@@ -662,12 +667,16 @@ add_tour() {
 
     # Merge all the files into tour.xml
     while read line; do
-        cat $dest_files"/"$line >> $tour_file
+        # cat $dest_files"/"$line >> $tour_file
+        cat $dest_files$line >> $tour_file
+        # echo $dest_files$line
+        # echo $line
     done < $temp_folder"/devel5.temp"
+# exit 1
 
     # Add tiles code
     > $temp_folder/tiles.temp
-    for f in $(find $dest_scenes/*.xml -maxdepth 0 ); do
+    for f in $(find $dest_scenes -type f -name \*.xml); do
         cat $f >> $temp_folder/tiles.temp
     done
     cat $temp_folder/tiles.temp >> $tour_file
@@ -774,7 +783,7 @@ add_timestamp() {
 
 rm_old_xml_files() {
 
-    find . -name "*.html" -exec rm -rf {} \;
+    find . -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
     find . -name "tour20*.xml" -exec rm -rf {} \;
     find . -name "tour_clean20*.xml" -exec rm -rf {} \;
 }
@@ -789,10 +798,16 @@ start () {
     echo "jobs_dir is: $jobs_dir" >> $log_file
 
     tours_array=()
-    for each_tour in $(find $jobs_dir/panos/* -maxdepth 0 -type d ); do
-        each_tour=$(basename "$each_tour")
-        tours_array=( "${tours_array[@]}" "$each_tour")
-    done
+    # Run the script for a particular tour, given as
+    # first parameter, removing any back slash a the end
+    if [ ! -z $1 ]; then
+        declare -a tours_array=( ${1%/})
+    else
+        for each_tour in $(find $jobs_dir/panos/* -maxdepth 0 -type d ); do
+            each_tour=$(basename "$each_tour")
+            tours_array=( "${tours_array[@]}" "$each_tour")
+        done
+    fi
     echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
 
     for scenes_dir in "${tours_array[@]}"; do
@@ -829,7 +844,7 @@ start () {
         add_timestamp
 
         # LAST BUT NOT LEAST
-        remove_temp
+        # remove_temp
     done
 
     add_custom_dir
@@ -840,9 +855,12 @@ start () {
 
 if [ -f $config ]; then
     conf_file_found
-    start
+    start $1
 else
     build_config_file
-    start
+    start $1
 fi
 
+echo -e "\nEOF" >> $log_file
+echo "EOF"
+exit 0
