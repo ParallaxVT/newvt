@@ -790,15 +790,13 @@ add_timestamp() {
 
 rm_old_xml_files() {
 
-    find . -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
-    find . -name "tour20*.xml" -exec rm -rf {} \;
-    find . -name "tour_clean20*.xml" -exec rm -rf {} \;
+    find $1 -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
+        find $1 -name "tour20*.xml" -exec rm -rf {} \;
+        find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
 }
 
 
 start () {
-
-    rm_old_xml_files
 
     echo "orig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
@@ -818,6 +816,8 @@ start () {
     echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
 
     for scenes_dir in "${tours_array[@]}"; do
+
+        rm_old_xml_files $scenes_dir
 
         scenes_array=()
         for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
