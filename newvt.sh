@@ -29,19 +29,24 @@ log_file=$new_dir/newvt.log
 
 
 conf_file_found () {
-    if [ $HOSTNAME = "RafaLaptop" ]; then
-        echo "is c"
-       # Replace /cygwin/g with /cygwin/c
-        sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
+    if [ ! -z $timestamp ]; then
+        echo "WARNING: timestamp variable not defined"
+        exit 1
     else
-        echo "is g"
+        if [ $HOSTNAME = "RafaLaptop" ]; then
+        # echo "is c"
+       # Replace /cygwin/g with /cygwin/c
+            sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
+        else
+        # echo "is g"
         # Replace /cygwin/c with /cygwin/g
-        sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
+            sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
+        fi
+        source $config
+        > $log_file
+        echo "vt_conf.sh file found" >> $log_file
+        echo "FOUND:          vt_conf.sh ..."
     fi
-    source $config
-    > $log_file
-    echo "vt_conf.sh file found" >> $log_file
-    echo "FOUND:          vt_conf.sh ..."
 }
 
 build_config_file () {
@@ -79,7 +84,7 @@ build_config_file () {
     echo ''                                 >> $config
 
     # 2- Base: plugins that are always inculded in a virtual tour
-    base="coordfinder|editor_and_options|global|gyro|movecamera|orientation|sa|startup"
+    base="coordfinder|editor_and_options|global|gyro|movecamera|orientation|sa|startup|timestamp"
     echo "# ========== Base =========="     >> $config
     for d in $orig_include/*; do
     # for d in $orig_include/@($base); do
@@ -760,25 +765,27 @@ add_custom() {
 }
 
 add_timestamp() {
-    timestamp=$(date "+%Y%m%d%H%M%S").xml
-    for each_tour_xml in $(find . -name tour.xml); do
+    if [ $timestamp = "y" ]; then
+        timestamp=$(date "+%Y%m%d%H%M%S").xml
+        for each_tour_xml in $(find . -name tour.xml); do
         # Get rid off the extension
-        extension="${each_tour_xml##*.}"
-        each_tour_xml="${each_tour_xml%.*}"
-        mv  $each_tour_xml.xml $each_tour_xml$timestamp
+            extension="${each_tour_xml##*.}"
+            each_tour_xml="${each_tour_xml%.*}"
+            mv  $each_tour_xml.xml $each_tour_xml$timestamp
         # echo "$each_tour_xml.xml -> $each_tour_xml$timestamp"
-    done
-    for each_tour_clean_xml in $(find . -name tour_clean.xml); do
+        done
+        for each_tour_clean_xml in $(find . -name tour_clean.xml); do
         # Get rid off the extension
-        extension="${each_tour_clean_xml##*.}"
-        each_tour_clean_xml="${each_tour_clean_xml%.*}"
-        mv  $each_tour_clean_xml.xml $each_tour_clean_xml$timestamp
+            extension="${each_tour_clean_xml##*.}"
+            each_tour_clean_xml="${each_tour_clean_xml%.*}"
+            mv  $each_tour_clean_xml.xml $each_tour_clean_xml$timestamp
         # echo "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp"
-    done
-    for each_html_file in $(find . -name "*.html"); do
-        sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
-        sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
-    done
+        done
+        for each_html_file in $(find . -name "*.html"); do
+            sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
+            sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
+        done
+    fi
 }
 
 rm_old_xml_files() {
