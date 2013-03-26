@@ -29,20 +29,20 @@ log_file=$new_dir/newvt.log
 
 
 conf_file_found () {
+    if [ $HOSTNAME = "RafaLaptop" ]; then
+        # echo "is c"
+       # Replace /cygwin/g with /cygwin/c
+        sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
+    else
+        # echo "is g"
+        # Replace /cygwin/c with /cygwin/g
+        sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
+    fi
+    source $config
     if [ -z $timestamp ]; then
         echo "WARNING: timestamp variable not defined"
         exit 1
     else
-        if [ $HOSTNAME = "RafaLaptop" ]; then
-        # echo "is c"
-       # Replace /cygwin/g with /cygwin/c
-            sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
-        else
-        # echo "is g"
-        # Replace /cygwin/c with /cygwin/g
-            sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
-        fi
-        source $config
         > $log_file
         echo "vt_conf.sh file found" >> $log_file
         echo "FOUND:          vt_conf.sh ..."
