@@ -29,7 +29,7 @@ log_file=$new_dir/newvt.log
 
 
 conf_file_found () {
-    if [ ! -z $timestamp ]; then
+    if [ -z $timestamp ]; then
         echo "WARNING: timestamp variable not defined"
         exit 1
     else
