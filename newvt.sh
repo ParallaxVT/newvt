@@ -851,7 +851,7 @@ start () {
         add_timestamp
 
         # LAST BUT NOT LEAST
-        # remove_temp
+        remove_temp
     done
 
     add_custom_dir
