@@ -25,7 +25,6 @@ orig_include=$orig_dir/include
 orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
 config=./vt_conf.sh
-log_file=$new_dir/newvt.log
 
 
 conf_file_found () {
@@ -43,6 +42,7 @@ conf_file_found () {
         echo "WARNING: timestamp variable not defined"
         exit 1
     else
+        log_file=$new_dir/newvt.log
         > $log_file
         echo "vt_conf.sh file found" >> $log_file
         echo "FOUND:          vt_conf.sh ..."
@@ -64,6 +64,7 @@ build_config_file () {
     fi
 
     # Generate log file
+    log_file=$new_dir/newvt.log
     log_file=./newvt.log
     > $log_file
     echo "vt_conf.sh file not found" >> $log_file
