@@ -790,9 +790,11 @@ add_timestamp() {
 
 rm_old_xml_files() {
 
-    find $1 -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
-        find $1 -name "tour20*.xml" -exec rm -rf {} \;
-        find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
+    if [ -d "$scenes_dir" ]; then
+        find $1 -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
+            find $1 -name "tour20*.xml" -exec rm -rf {} \;
+            find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
+    fi
 }
 
 
