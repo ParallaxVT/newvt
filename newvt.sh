@@ -41,6 +41,9 @@ conf_file_found () {
     if [ -z $timestamp ]; then
         echo "WARNING: timestamp variable not defined"
         exit 1
+    elif [ -z $domain_url ]; then
+        echo "WARNING: domain_url variable not defined"
+        exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
@@ -61,6 +64,7 @@ build_config_file () {
     else
         new_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/output
         jobs_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/test_directory
+        domain_url=http://clients.tourvista.co.uk/vt/----------/$scenes_dir/files
     fi
 
     # Generate log file
@@ -737,6 +741,10 @@ add_tour_clean() {
     echo '</layer>' >> $dest_content/sa.xml
     # then build tour.xml again, this time without sa.swf, and call it tour_clean.xml
     add_tour "tour_clean"
+    # Source config again so domain_url can get $scenes_dir value
+    source $config
+    # Replace %SWFPATH% with the value of $domain_url
+    sed -i "s|\%SWFPATH\%|$domain_url|g" $dest_files/tour_clean.xml
 }
 
 add_html() {
