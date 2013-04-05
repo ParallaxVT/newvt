@@ -67,7 +67,6 @@ build_config_file () {
     else
         new_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/output
         jobs_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/test_directory
-        domain_url=http://clients.tourvista.co.uk/vt/----------/$scenes_dir/files
     fi
 
     # Generate log file
@@ -89,6 +88,7 @@ build_config_file () {
     echo "testing=$testing"                 >> $config
     echo "jobs_dir=$jobs_dir"               >> $config
     echo "new_dir=$new_dir"                 >> $config
+    echo "domain_url=http://clients.tourvista.co.uk/vt/-----/files" >> $config
     echo ''                                 >> $config
 
     # 2- Base: plugins that are always inculded in a virtual tour
