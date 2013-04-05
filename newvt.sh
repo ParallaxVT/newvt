@@ -806,16 +806,19 @@ add_timestamp() {
 
 add_list() {
     if [ $list = "y" ]; then
-        # Download style.css from tourvista
-        if [ ! -f "./style.css" ]; then
-            wget http://www.tourvista.co.uk/css/style.css
-        fi
 
         index_file="./index.html"
         src="./.src/generate_html"
         temp_dir="$src/temp"
         template_file="$src/template.html"
         content_file="$temp_dir/content"
+        
+        # Get the template
+        cp -r $orig_dir/generate_html/template.html $src
+        # Download style.css from tourvista
+        if [ ! -f "./style.css" ]; then
+            wget http://www.tourvista.co.uk/css/style.css
+        fi
 
         cp $template_file $index_file
         mkdir -p $temp_dir
