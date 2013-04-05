@@ -126,7 +126,7 @@ build_config_file () {
     echo ''                                 >> $config
     echo "# ========== Options =========="  >> $config
     echo "timestamp=n"                   >> $config
-    echo "list=n"                         >> $config
+    echo "list=y"                         >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
     # fi
