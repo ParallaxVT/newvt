@@ -387,7 +387,6 @@ add_logo() {
         # echo "Choose the client logo:"
         # echo "Creare [1] Addoctor [2] Llama Digital [3] Other[4]"
         # read logo_client_name
-
         if [ $logo_client_name = "1" ]; then
             sed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
         fi
@@ -919,6 +918,7 @@ start () {
         add_custom
         add_sa
         add_movecamera_coords
+        add_logo
         add_hotspot
         add_scroll
         add_plugins_data
