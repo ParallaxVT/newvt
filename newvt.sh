@@ -150,7 +150,7 @@ add_structure() {
     dest_scenes=$dest_files/scenes
     dest_devel=$dest_files/devel.xml
 
-    panos_dir=$jobs_dir/panos/$scenes_dir
+    panos_dir=$jobs_dir/.src/panos/$scenes_dir
 
     # config=$orig_include/vt_conf.sh
     # krpano=$dest_files/tour.xml
@@ -885,7 +885,7 @@ start () {
     if [ ! -z $1 ]; then
         declare -a tours_array=( ${1%/})
     else
-        for each_tour in $(find $jobs_dir/panos/* -maxdepth 0 -type d ); do
+        for each_tour in $(find $jobs_dir/.src/panos/* -maxdepth 0 -type d ); do
             each_tour=$(basename "$each_tour")
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
@@ -897,7 +897,7 @@ start () {
         rm_old_xml_files $scenes_dir
 
         scenes_array=()
-        for each_pano in $(find $jobs_dir/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
+        for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
             each_pano=$(basename "$each_pano")
             extension="${each_pano##*.}"
             each_pano="${each_pano%.*}"
