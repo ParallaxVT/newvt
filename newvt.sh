@@ -92,7 +92,7 @@ build_config_file () {
     echo ''                                 >> $config
 
     # 2- Base: plugins that are always inculded in a virtual tour
-    base="coordfinder|editor_and_options|global|gyro|movecamera|orientation|sa|startup|timestamp"
+    base="coordfinder|editor_and_options|global|gyro|movecamera|sa|startup"
     echo "# ========== Base =========="     >> $config
     for d in $orig_include/*; do
     # for d in $orig_include/@($base); do
@@ -123,6 +123,11 @@ build_config_file () {
         [[ $optional_plugins =~ ^($base)$ ]] && continue
         echo "$optional_plugins=n"                    >> $config
     done
+    echo ''                                 >> $config
+    echo "# ========== Options =========="  >> $config
+    echo "timestamp=n"                   >> $config
+    echo "list=n"                         >> $config
+
     echo "Generated vt_conf.sh without any features" >> $log_file
     # fi
     # Source vt_conf.sh, which doesn't have any features yet
