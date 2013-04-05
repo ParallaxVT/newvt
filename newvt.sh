@@ -44,6 +44,9 @@ conf_file_found () {
     elif [ -z $domain_url ]; then
         echo "WARNING: domain_url variable not defined"
         exit 1
+    elif [ -z $list ]; then
+        echo "WARNING: list variable not defined"
+        exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
@@ -797,10 +800,68 @@ add_timestamp() {
     fi
 }
 
+add_list() {
+    if [ $list = "y" ]; then
+        # Download style.css from tourvista
+        if [ ! -f "./style.css" ]; then
+            wget http://www.tourvista.co.uk/css/style.css
+        fi
+
+        index_file="./index.html"
+        src="./.src/generate_html"
+        temp_dir="$src/temp"
+        template_file="$src/template.html"
+        content_file="$temp_dir/content"
+
+        cp $template_file $index_file
+        mkdir -p $temp_dir
+        > $content_file
+
+        for tour in .src/panos/*; do
+            tour_name="$(basename $tour)"
+            echo $tour_name
+            tour_title="${tour_name//_/ }"
+            all_brands_array=( $tour_title )
+            tour_title="${all_brands_array[@]^}"
+            temp_file="$temp_dir/tour_$tour_name"
+            > $temp_file
+            echo "<h4><a href="$tour_name/index.html">$tour_title</a></h4>" >> $temp_file
+            echo "<ul>" >> $temp_file
+            for scene_html in ./.src/panos/$tour_name/*; do
+                scene_name="$(basename $scene_html)"
+                extension="${scene_name##*.}"
+                scene_name="${scene_name%.*}"
+                echo "    $scene_name"
+                scene_fancy_name="${scene_name//_/ }"
+                all_words_array=( $scene_fancy_name )
+                scene_fancy_name="${all_words_array[@]^}"
+                echo "<li><a href=\"$tour_name/$scene_name.html\">$scene_fancy_name</a></li>" >> $temp_file
+            done
+            echo "</ul>" >> $temp_file
+
+            cat $temp_dir/tour_$tour_name >> $content_file
+
+            cp $template_file ./$tour_name/index.html
+
+            sed -i "s/$tour_name\///g" "$temp_dir/tour_$tour_name"
+            sed -i -e "/\[CONTENT\]/r $temp_dir/tour_$tour_name" ./$tour_name/index.html
+            sed -i -e '/\[CONTENT\]/d' ./$tour_name/index.html
+            sed -i -e 's/<h4><a href=index.html>/<h4>/g' ./$tour_name/index.html
+            sed -i -e 's/<\/a><\/h4>/<\/h4>/g' ./$tour_name/index.html
+            sed -i -e 's/.\/style/..\/style.css/g' ./$tour_name/index.html
+        done
+
+        sed -i -e "/\[CONTENT\]/r $content_file" $index_file
+        sed -i -e '/\[CONTENT\]/d' $index_file
+
+        rm -r $temp_dir
+    fi
+}
+
 rm_old_xml_files() {
 
     if [ -d "$scenes_dir" ]; then
-        find $1 -type f \( -iname "*.html" ! -iname "template.html" ! -iname "list.html" \) -exec rm -rf {} \;
+        find $1 -type f \( -iname "*.html" ! -iname "template.html" ! -iname "index.html" \) -exec rm -rf {} \;
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
     fi
@@ -864,6 +925,10 @@ start () {
         # LAST BUT NOT LEAST
         remove_temp
     done
+
+    if [ -z $1 ]; then
+        add_list
+    fi
 
     add_custom_dir
     # NEED TO MAKE THIS WORK
