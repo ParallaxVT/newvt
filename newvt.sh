@@ -25,7 +25,7 @@ orig_include=$orig_dir/include
 orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
 config=./vt_conf.sh
-
+krpano_version="1.16.2"
 
 conf_file_found () {
     if [ $HOSTNAME = "RafaLaptop" ]; then
@@ -264,8 +264,9 @@ add_scene_names() {
 
 add_scene_tiles() {
 
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-1.0.8.15/kmakemultires.exe"
-    krconfig="-config=templates/tv_tiles_2_levels_all_devices.config"
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
+    krconfig="C:\Users\rafaelgp\work\documents\software\virtual_tours\krpano\krpano_conf\templates\tv_tiles_2_levels_all_devices.config"
+    # krconfig="-config=templates/tv_tiles_2_levels_all_devices.config"
 
     # If scenes directory doesn't exists, create it
     if [ ! -d $dest_scenes ]; then
@@ -409,7 +410,7 @@ add_hotspot() {
         if [ ${#scenes_array[@]} -gt "1" ]; then
             if [ ! -f $dest_content/hs.xml ]; then
                 > $dest_content/hs.xml
-                echo '<krpano version="1.0.8.15">'  >> $dest_content/hs.xml
+                echo '<krpano>'  >> $dest_content/hs.xml
                 order=1
                 for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                     hs_action=add_hs_scene$order
@@ -514,7 +515,7 @@ add_movecamera_coords()  {
     if [ ! -f $dest_content/coord.xml ]; then
         order=1
         > $dest_content/coord.xml
-        echo '<krpano version="1.0.8.15">'  >> $dest_content/coord.xml
+        echo '<krpano>'  >> $dest_content/coord.xml
         echo -e "\nCreated $dest_content/coord.xml" >> $log_file
         # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
         for eachpano in $(find $panos_dir/*.jpg -maxdepth 0 ); do
@@ -706,9 +707,9 @@ add_tour() {
     # Add krpano tags at the beginning of tour.xml
     # If it's tour_clean.xml,then add an onstart action to load scene1'
     if [ $1 = "tour_clean" ]; then
-        sed -i '1i<?xml version="1.0" encoding="UTF-8"?>\n<krpano version="1.0.8.15" showerrors="false" onstart="activatepano(scene1);">' $tour_file
+        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_file
     else
-        sed -i '1i<?xml version="1.0" encoding="UTF-8"?>\n<krpano version="1.0.8.15" showerrors="false">' $tour_file
+        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
     fi
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
     echo '</krpano>' >> $tour_file
@@ -805,6 +806,13 @@ add_timestamp() {
     fi
 }
 
+add_version() {
+    for each_xml_file in $(find $scenes_dir/files/ -type f  -name "*.xml"); do
+        sed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
+    done
+    echo "ADDED:          version $krpano_version  ..."
+}
+
 add_list() {
     if [ $list = "y" ]; then
 
@@ -813,7 +821,7 @@ add_list() {
         temp_dir="$src/temp"
         template_file="$src/template.html"
         content_file="$temp_dir/content"
-        
+
         # Get the template
         cp -r $orig_dir/generate_html/template.html $src
         # Download style.css from tourvista
@@ -930,6 +938,7 @@ start () {
         add_tour_clean
         add_html
         add_timestamp
+        add_version
 
         # LAST BUT NOT LEAST
         remove_temp
