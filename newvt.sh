@@ -19,7 +19,7 @@ if [ $HOSTNAME = "RafaLaptop" ]; then
 else
     mydrive=/cygdrive/g
 fi
-orig_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/src
+orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_structure=$orig_dir/structure
@@ -65,8 +65,8 @@ build_config_file () {
         new_dir=$VTPATH
         jobs_dir=$PWD
     else
-        new_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/output
-        jobs_dir=$mydrive/virtual_tours/.archives/vt_template_8_0_15/test_directory
+        new_dir=$mydrive/virtual_tours/.archives/vt_test/output
+        jobs_dir=$mydrive/virtual_tours/.archives/vt_test/test_directory
     fi
 
     # Generate log file
