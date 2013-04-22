@@ -295,11 +295,15 @@ add_scene_tiles() {
             echo "win_path is $win_path" >> $log_file
             $krpath $krconfig $win_path
 
-            mv $panos_dir/output/scenes/$filename $dest_scenes
-            mv $panos_dir/output/$filename.xml $dest_scenes
-            sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
-            mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
-
+            if [ $? != 0 ]; then
+                echo_warning  "Krpano tiles FILED while processing: $each_scene"
+                exit 1
+            else
+                mv $panos_dir/output/scenes/$filename $dest_scenes
+                mv $panos_dir/output/$filename.xml $dest_scenes
+                sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
+                mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
+            fi
             echo -e "MADE TILES FOR: $(basename $scenes_dir)/$filename ..."
             echo -e "\nMove $panos_dir/output/scenes/$filename to $dest_scenes" >> $log_file
             echo "Move $panos_dir/output/$filename.xml to $dest_scenes" >> $log_file
