@@ -686,6 +686,8 @@ add_tour() {
     sed -e 's/^url=["'"'"']//' -e 's/["'"'"']$//' $temp_folder"/devel4.temp" > $temp_folder"/devel5.temp"
     # Delete %SWFPATH%
     sed -i 's/%SWFPATH%//g' $temp_folder/devel5.temp
+    # Delete the line containing the coordinates finder
+    sed -i '/coordfinder/d' $temp_folder/devel5.temp
 
     # Merge all the files into tour.xml
     while read line; do
