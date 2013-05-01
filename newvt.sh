@@ -27,6 +27,16 @@ orig_devel=$orig_structure/files/devel.xml
 config=./vt_conf.sh
 krpano_version="1.16.2"
 
+echo_green() {
+    echo -e "    \e[32m$1\e[0m    $2"
+}
+echo_warning() {
+    echo -e "\e[41mWARNING:\e[0m $1"
+}
+echo_attention() {
+    echo -e "    \e[93m> ATTENTION:   \e[0m $1"
+}
+
 conf_file_found () {
     if ! [ $HOSTNAME = "RafaelGP" ]; then
         # echo "is c"
