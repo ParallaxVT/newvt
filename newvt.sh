@@ -14,7 +14,7 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
-if [ $HOSTNAME = "RafaLaptop" ]; then
+if ! [ $HOSTNAME = "RafaelGP" ]; then
     mydrive=/media/c/Users/rafaelgp/work
 else
     mydrive=/media/g
@@ -28,13 +28,13 @@ config=./vt_conf.sh
 krpano_version="1.16.2"
 
 conf_file_found () {
-    if [ $HOSTNAME = "RafaLaptop" ]; then
+    if ! [ $HOSTNAME = "RafaelGP" ]; then
         # echo "is c"
-       # Replace /cygwin/g with /cygwin/c
+       # Replace /media/g with /media/c
         sed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
     else
         # echo "is g"
-        # Replace /cygwin/c with /cygwin/g
+        # Replace /media/c with /media/g
         sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
     fi
     source $config
