@@ -917,7 +917,17 @@ start () {
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
     fi
-    echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
+    # Let me khow how many modules are in total
+    if [ ${#modules_array[@]} = 1 ]; then
+        echo -e "\nThere is ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
+    else
+        echo -e "\nThere are ${#tours_array[@]} tours:" >> $log_file
+        for eachitem in ${tours_array[@]} ; do
+            echo -e "    $eachitem" >> $log_file
+        done
+    fi
+        # echo -e "\n--> There are ${#tours_array[@]} tours: ${tours_array[@]}" >> $log_file
+    exit 0
 
     for scenes_dir in "${tours_array[@]}"; do
 
