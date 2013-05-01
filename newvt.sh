@@ -907,7 +907,7 @@ start () {
     echo "jobs_dir is: $jobs_dir" >> $log_file
 
     tours_array=()
-    # To run the script for a particular tour, enter its folder name as a param 
+    # To run the script for a particular tour, enter its folder name as a param
     # Any trailing back slash at the end is automatically removed
     if [ ! -z $1 ]; then
         declare -a tours_array=( ${1%/})
