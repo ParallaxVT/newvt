@@ -49,19 +49,19 @@ conf_file_found () {
     fi
     source $config
     if [ -z $timestamp ]; then
-        echo "WARNING: timestamp variable not defined"
+        echo_warning "timestamp variable not defined"
         exit 1
     elif [ -z $domain_url ]; then
-        echo "WARNING: domain_url variable not defined"
+        echo_warning "domain_url variable not defined"
         exit 1
     elif [ -z $list ]; then
-        echo "WARNING: list variable not defined"
+        echo_warning "list variable not defined"
         exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
         echo "vt_conf.sh file found" >> $log_file
-        echo "FOUND:          vt_conf.sh ..."
+        echo_green "FOUND:          vt_conf.sh ..."
     fi
 }
 
