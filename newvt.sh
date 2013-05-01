@@ -15,9 +15,9 @@
 
 # Some paths variables
 if [ $HOSTNAME = "RafaLaptop" ]; then
-    mydrive=/cygdrive/c/Users/rafaelgp/work
+    mydrive=/media/c/Users/rafaelgp/work
 else
-    mydrive=/cygdrive/g
+    mydrive=/media/g
 fi
 orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
 orig_content=$orig_dir/content
@@ -31,11 +31,11 @@ conf_file_found () {
     if [ $HOSTNAME = "RafaLaptop" ]; then
         # echo "is c"
        # Replace /cygwin/g with /cygwin/c
-        sed -i 's/\/cygdrive\/g/\/cygdrive\/c\/Users\/rafaelgp\/work/g' $config
+        sed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
     else
         # echo "is g"
         # Replace /cygwin/c with /cygwin/g
-        sed -i 's/\/cygdrive\/c\/Users\/rafaelgp\/work/\/cygdrive\/g/g' $config
+        sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
     fi
     source $config
     if [ -z $timestamp ]; then
@@ -287,10 +287,10 @@ add_scene_tiles() {
             echo -e "\ncygwin_dir is $cygwin_dir" >> $log_file
             if [ $HOSTNAME = "RafaLaptop" ]; then
                 # Replace /cygwin/c/ with C:/
-                win_path=$(echo $cygwin_dir | sed -e 's/\/cygdrive\/c/C\:/g')
+                win_path=$(echo $cygwin_dir | sed -e 's/\/media\/c/C\:/g')
             else
                 # Replace /cygwin/g/ with G:/
-                win_path=$(echo $cygwin_dir | sed -e 's/\/cygdrive\/g/G\:/g')
+                win_path=$(echo $cygwin_dir | sed -e 's/\/media\/g/G\:/g')
             fi
             echo "win_path is $win_path" >> $log_file
             $krpath $krconfig $win_path
