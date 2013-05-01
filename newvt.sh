@@ -902,7 +902,7 @@ rm_old_xml_files() {
 
 start () {
 
-    echo "orig_dir is: $orig_dir" >> $log_file
+    echo -e "\norig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
     echo "jobs_dir is: $jobs_dir" >> $log_file
 
