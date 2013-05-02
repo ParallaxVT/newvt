@@ -893,8 +893,8 @@ add_list() {
 rm_old_xml_files() {
     if [ -d "$scenes_dir" ]; then
         if [ ! -z $1 ]; then
-            find $1 -type f -name "*.html" -exec rm -rf {} \;
-            # Remove any xml with date stamp: year 2000 onwards
+            find $1 -maxdepth 1 -type f -name "*.html" -exec rm -rf {} \;
+            # Remove any xml file which date stamp is year 2000 onwards
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
         else
