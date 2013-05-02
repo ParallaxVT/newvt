@@ -19,11 +19,13 @@ if ! [ $HOSTNAME = "RafaelGP" ]; then
 else
     mydrive=/media/g
 fi
+# origin directory paths
 orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
+# monitor script
 config=./vt_conf.sh
 krpano_version="1.16.2"
 # temp
