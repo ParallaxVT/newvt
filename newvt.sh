@@ -176,6 +176,7 @@ add_structure() {
     # include_plugin=$temp_folder/include_plugin.temp
     # include_data=$temp_folder/include_data.temp
 
+    > $temp_folder/scene_names
 
     mkdir -p $new_dir
     mkdir -p $dest_dir
