@@ -207,15 +207,6 @@ EOF
         echo "Sourced $scene_file" >> $log_file
     fi
 
-    if [ -f $jobs_dir/vt_conf.sh ]; then
-        mv $config $new_dir/
-    fi
-
-    if [ -f $jobs_dir/newvt.log ]; then
-        mv $log_file $new_dir/
-        log_file=$new_dir/newvt.log
-    fi
-
     echo "ADDED:          folder tree ..."
 }
 
