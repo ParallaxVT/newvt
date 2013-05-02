@@ -183,7 +183,11 @@ add_structure() {
 
     # devel.xml needs to be replaced always
     cp $orig_devel $dest_devel
-    echo "Copy $orig_devel to $dest_devel" >> $log_file
+    cat >> $log_file << EOF
+    COPY FILE $orig_devel
+    TO $dest_devel
+
+EOF
 
     # source scene names for .sh files in root dir
     scenes_file=./$scenes_dir'.sh'
