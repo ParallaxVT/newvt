@@ -207,7 +207,7 @@ EOF
         echo "Sourced $scene_file" >> $log_file
     fi
 
-    echo "ADDED:          folder tree ..."
+    echo_green "FOLDER TREE:" "added to $each_tour module"
 }
 
 add_custom_dir() {
