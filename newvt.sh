@@ -176,8 +176,6 @@ add_structure() {
     # include_plugin=$temp_folder/include_plugin.temp
     # include_data=$temp_folder/include_data.temp
 
-    > $temp_folder/scene_names
-
     mkdir -p $new_dir
     mkdir -p $dest_dir
     # Copy structure. Only files and forders newer than the destination will be created
@@ -234,10 +232,10 @@ add_custom_dir() {
 }
 
 add_temp() {
-    if [ ! -d $temp_folder ]; then
-        mkdir $temp_folder
-    fi
+    mkdir -p ./.src
+    mkdir -p $temp_folder
     > $temp_folder/plugins.temp
+    > $temp_folder/scene_names.temp
     > $temp_folder/tiles.temp
     echo -e "\nMake directory $temp_folder" >> $log_file
 }
@@ -917,9 +915,8 @@ rm_old_xml_files() {
     fi
 }
 
-
 start () {
-    mkdir -p ./.src
+    add_temp
     mkdir -p $temp_folder
     echo -e "\norig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
@@ -966,7 +963,6 @@ start () {
         echo -e "\n    Contains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
 
         add_structure
-        add_temp
         add_scene_names
         add_scene_tiles
         add_include_plugin_and_data
