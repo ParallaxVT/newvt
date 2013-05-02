@@ -924,7 +924,8 @@ start () {
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
     fi
-    # Let me khow how many modules are in total
+    
+    # Let me khow how many tours are in total
     if [ ${#tours_array[@]} = 1 ]; then
         echo -e "\nThere is only ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
     else
