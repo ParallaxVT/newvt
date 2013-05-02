@@ -934,7 +934,6 @@ start () {
             echo -e "    $eachitem" >> $log_file
         done
     fi
-    exit 0
 
     for scenes_dir in "${tours_array[@]}"; do
 
