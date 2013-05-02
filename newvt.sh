@@ -946,6 +946,10 @@ start () {
     fi
 
     for scenes_dir in "${tours_array[@]}"; do
+        echo "TOUR NAME: $scenes_dir"
+        echo -e "\n---------------------------------" >> $log_file
+        echo -e "SCENE: $scenes_dir" >> $log_file
+        echo -e "---------------------------------\n" >> $log_file
 
         rm_old_xml_files $scenes_dir
 
@@ -957,8 +961,6 @@ start () {
             scenes_array=( "${scenes_array[@]}" "$each_pano")
         done
 
-        echo "GENERATING:     $(basename $scenes_dir)"
-        echo -e "\nNEW SCENE -> $(basename $scenes_dir)" >> $log_file
         echo -e "\n    Contains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
 
         add_structure
