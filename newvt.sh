@@ -949,7 +949,7 @@ start () {
 
         echo "GENERATING:     $(basename $scenes_dir)"
         echo -e "\nNEW SCENE -> $(basename $scenes_dir)" >> $log_file
-        echo -e "\nContains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
+        echo -e "\n    Contains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
 
         add_structure
         add_temp
