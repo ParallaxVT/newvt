@@ -65,7 +65,7 @@ conf_file_found () {
         log_file=$new_dir/newvt.log
         > $log_file
         echo "vt_conf.sh file found" >> $log_file
-        echo_green "FOUND:          vt_conf.sh ..."
+        echo "FOUND:          vt_conf.sh ..."
     fi
 }
 
