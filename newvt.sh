@@ -184,13 +184,13 @@ add_structure() {
     # To copy files from the template, delete the destination files
     rsync -zra --update $orig_dir/structure/ $dest_dir
 
-    echo -e "\nCopy $orig_dir/structure/ to $dest_dir" >> $log_file
     # Stop if there was a problem copying the files
     if [ $? != 0 ]; then
         echo_warning "Copy files from template FAILED"
         exit 1
     fi
 
+    echo -e "    COPY FOLDER structure TO $dest_dir\n" >> $log_file
 
     # devel.xml needs to be replaced always
     cp $orig_devel $dest_devel
