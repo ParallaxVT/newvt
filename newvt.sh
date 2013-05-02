@@ -30,6 +30,8 @@ config=./vt_conf.sh
 krpano_version="1.16.2"
 # temp
 temp_folder=./.src/temp
+include_plugin=$temp_folder/include_plugin
+include_data=$temp_folder/include_date
 
 echo_green() {
     echo -e "    \e[32m$1\e[0m    $2"
@@ -170,8 +172,10 @@ add_structure() {
     # krpano=$dest_files/tour.xml
     # krpano2=$dest_files/tour_clean.xml
 
-    include_plugin=$temp_folder/include_plugin.temp
-    include_data=$temp_folder/include_data.temp
+    # temp_folder=$orig_dir/temp/$scenes_dir
+    # include_plugin=$temp_folder/include_plugin.temp
+    # include_data=$temp_folder/include_data.temp
+
 
     mkdir -p $new_dir
     mkdir -p $dest_dir
