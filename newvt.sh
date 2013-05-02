@@ -26,6 +26,8 @@ orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
 config=./vt_conf.sh
 krpano_version="1.16.2"
+# temp
+temp_folder=./.src/temp
 
 echo_green() {
     echo -e "    \e[32m$1\e[0m    $2"
@@ -165,7 +167,6 @@ add_structure() {
     # config=$orig_include/vt_conf.sh
     # krpano=$dest_files/tour.xml
     # krpano2=$dest_files/tour_clean.xml
-    temp_folder=$orig_dir/temp/$scenes_dir
 
     include_plugin=$temp_folder/include_plugin.temp
     include_data=$temp_folder/include_data.temp
@@ -908,7 +909,8 @@ rm_old_xml_files() {
 
 
 start () {
-
+    mkdir -p ./.src
+    mkdir -p $temp_folder
     echo -e "\norig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
     echo "jobs_dir is: $jobs_dir" >> $log_file
