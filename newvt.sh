@@ -925,8 +925,8 @@ start () {
         done
     fi
     # Let me khow how many modules are in total
-    if [ ${#modules_array[@]} = 1 ]; then
-        echo -e "\nThere is ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
+    if [ ${#tours_array[@]} = 1 ]; then
+        echo -e "\nThere is only ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
     else
         echo -e "\nThere are ${#tours_array[@]} tours:" >> $log_file
         for eachitem in ${tours_array[@]} ; do
