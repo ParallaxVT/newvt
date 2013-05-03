@@ -207,7 +207,7 @@ EOF
         echo_attention "Unable to source scene.sh file"
     fi
 
-    echo_green "FOLDER TREE:" "added to $scenes_dir module"
+    echo_green "FOLDER TREE:" "added to $scenes_dir tour"
 }
 
 add_custom_dir() {
