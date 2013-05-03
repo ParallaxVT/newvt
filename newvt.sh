@@ -960,7 +960,10 @@ start () {
             scenes_array=( "${scenes_array[@]}" "$each_pano")
         done
 
-        echo -e "\n    Contains ${#scenes_array[@]} scenes: ${scenes_array[@]}" >> $log_file
+        echo -e "    Contains ${#scenes_array[@]} scenes:" >> $log_file
+        for eachitem in ${scenes_array[@]} ; do
+            echo -e "    $eachitem" >> $log_file
+        done
 
         add_structure
         add_scene_names
