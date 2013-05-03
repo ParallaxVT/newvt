@@ -947,7 +947,7 @@ start () {
     for scenes_dir in "${tours_array[@]}"; do
         echo "TOUR NAME: $scenes_dir"
         echo -e "\n---------------------------------" >> $log_file
-        echo -e "SCENE: $scenes_dir" >> $log_file
+        echo -e "TOUR: $scenes_dir" >> $log_file
         echo -e "---------------------------------\n" >> $log_file
 
         rm_old_xml_files $scenes_dir
