@@ -202,7 +202,7 @@ EOF
     scenes_file=./$scenes_dir'.sh'
     if [ -f $scenes_file ]; then
         source $scenes_file
-        echo "Sourced $scenes_file" >> $log_file
+        echo -e "    Sourced $scenes_file\n" >> $log_file
     else
         echo_attention "Unable to source scene.sh file"
     fi
