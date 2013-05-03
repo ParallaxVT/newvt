@@ -942,8 +942,6 @@ start () {
         echo -e "TOUR: $scenes_dir" >> $log_file
         echo -e "---------------------------------\n" >> $log_file
 
-        rm_old_xml_files $scenes_dir
-
         scenes_array=()
         for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
             each_pano=$(basename "$each_pano")
@@ -957,6 +955,7 @@ start () {
             echo -e "    $eachitem" >> $log_file
         done
 
+        rm_old_xml_files $scenes_dir
         add_structure
         add_scene_names
         add_scene_tiles
