@@ -272,7 +272,6 @@ EOF
     done
 }
 
-
 add_scene_tiles() {
 
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
@@ -925,7 +924,7 @@ start () {
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
     fi
-    
+
     # Let me khow how many tours are in total
     if [ ${#tours_array[@]} = 1 ]; then
         echo -e "\nThere is only ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
