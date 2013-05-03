@@ -235,7 +235,6 @@ add_temp() {
     mkdir -p ./.src
     mkdir -p $temp_folder
     > $temp_folder/plugins.temp
-    > $temp_folder/scene_names.temp
     > $temp_folder/tiles.temp
     echo -e "\nMake directory $temp_folder" >> $log_file
 }
@@ -256,27 +255,20 @@ add_scene_names_files () {
 add_scene_names() {
     > $temp_folder/scene_names.temp
     order=1
-        # for f in $dest_scenes/*.xml
-        # for f in $(find $dest_scenes/*.xml -maxdepth 0 ); do
-    for eachpano in $(find $panos_dir/*.jpg -maxdepth 0 ); do
-            # Get rid off the path and the extension
-        eachpano=$(basename "$eachpano")
-        extension="${eachpano##*.}"
-        eachpano="${eachpano%.*}"
-
+    for eachpano in ${scenes_array[@]} ; do
         panoname=scene$order
         pageurl=/scene$order/
-
-            # echo '<pano name="'$panoname'"
-        echo '<pano name="'$eachpano'"
-      scene="'$eachpano'"
-      pageurl="'$pageurl'"
-      pagetitle="'${!panoname}'"
-      title="'${!panoname}'"
+        cat >> $temp_folder/scene_names.temp << EOF
+<pano name="$eachpano"
+      scene="$eachpano"
+      pageurl="$pageurl"
+      pagetitle="${!panoname}"
+      title="${!panoname}"
       />
-     ' >> $temp_folder/scene_names.temp
+
+EOF
         order=$(expr $order + 1)
-        echo -e "\nAdded $panoname to $temp_folder/scene_names.temp" >> $log_file
+        echo -e "    Added $panoname TO $temp_folder/scene_names.temp" >> $log_file
     done
 }
 
