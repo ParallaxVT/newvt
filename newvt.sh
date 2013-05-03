@@ -188,7 +188,7 @@ add_structure() {
         exit 1
     fi
 
-    echo -e "    COPY STRUCTURE TO $dest_dir\n" >> $log_file
+    echo -e "\n    COPY STRUCTURE TO $dest_dir\n" >> $log_file
 
     # devel.xml needs to be replaced always
     cp $orig_devel $dest_devel
