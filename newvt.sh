@@ -477,40 +477,44 @@ add_hotspot() {
 add_info_btn() {
 
     if [ $info_btn = "y" ]; then
-        # echo '  <include url="%SWFPATH%/include/info_btn/index.xml" />' >> $include_plugin
-        # cp -r $orig_include/info_btn $dest_include
         # Add a set_sidebar_scene action per scene to content/info_btn.xml
         # Never overwrite content/info_btn.xml!!!
         if [ ! -f $dest_content/info_btn.xml ]; then
             order=1
             > $dest_content/info_btn.xml
+            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
             for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                 actionname=set_sidebar_scene$order
+                cat >> $dest_content/info_btn.xml << EOF
+  <action name="$actionname">
+      set(layer[sidebar_text].html,data:text1);
+      set(sidebar_btn, true);
+  </action>
 
-                echo '<action name="'$actionname'">
-    set(layer[sidebar_text].html,data:text1);
-    set(sidebar_btn, true);
-</action>
-' >> $dest_content/info_btn.xml
-
+EOF
                 order=$(expr $order + 1)
             done
+            echo "</krpano>" >> $dest_content/info_btn.xml
+            echo_green "ADDED  FILE:" "info_btn.xml"
         fi
         # Add some data with text per scene to content/info_btn_text.xml
         if [ ! -f $dest_content/info_btn_text.xml ]; then
             order=1
+            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
             for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                 textname=text$order
                 texttitle="Scene $order text"
+                cat >> $dest_content/info_btn_text.xml << EOF
+  <data name="$textname">
+      <h2>'$texttitle'</h2><br/>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  </data>
 
-                echo '<data name="'$textname'">
-    <h2>'$texttitle'</h2><br/>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-</data>
-' >> $dest_content/info_btn_text.xml
-
+EOF
                 order=$(expr $order + 1)
             done
+            echo "</krpano>" >> $dest_content/info_btn_text.xml
+            echo_green "ADDED  FILE:" "info_btn_text.xml"
         fi
     fi
 }
