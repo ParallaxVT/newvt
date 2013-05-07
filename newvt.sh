@@ -162,9 +162,45 @@ build_config_file () {
     echo "ADDED:          vt_conf.sh ..."
 }
 
+add_custom_dir() {
+    # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
+    # .custom contains custom plugins to be included in every scene
+    if [ ${#tours_array[@]} -gt "1" ]; then
+        if [ ! -d $new_dir/.custom ]; then
+            echo -e "\nCREATE FOLDER .custom directory" >> $log_file
+            mkdir $new_dir/.custom
+        else
+            echo -e "\n.custom directory already exists" >> $log_file
+        fi
+        if [ ! -d $new_dir/.custom/include ]; then
+            mkdir $new_dir/.custom/include
+        fi
+        # I used to call .custom/ just custom/. So if it exists change the name
+        if [ -d $new_dir/custom ]; then
+            mv $new_dir/custom $new_dir/.custom
+        fi
+    fi
+}
+
 # -------------------
 # STRUCTURE FUNCTIONS
 # -------------------
+
+rm_old_xml_files() {
+    if [ -d "$scenes_dir" ]; then
+        if [ ! -z $1 ]; then
+            find $1 -maxdepth 1 -type f -name "*.html" -exec rm -rf {} \;
+            # Remove any xml file which date stamp is year 2000 onwards
+            find $1 -name "tour20*.xml" -exec rm -rf {} \;
+            find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
+        else
+            echo_attention "rm_old_xml_files() -> \$1 not defined"
+            echo $1
+        fi
+    else
+        echo_warning "rm_old_xml_files() -> $scenes_dir folder doesn't exist"
+    fi
+}
 
 add_structure() {
 
@@ -218,27 +254,6 @@ EOF
     fi
 
     echo_green "FOLDER TREE:" "added to $scenes_dir tour"
-}
-
-add_custom_dir() {
-
-    # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
-    # .custom contains custom plugins to be included in every scene
-    if [ ${#tours_array[@]} -gt "1" ]; then
-        if [ ! -d $new_dir/.custom ]; then
-            echo -e "\nMake .custom directory" >> $log_file
-            mkdir $new_dir/.custom
-        else
-            echo -e "\n.custom directory already exists" >> $log_file
-        fi
-        if [ ! -d $new_dir/.custom/include ]; then
-            mkdir $new_dir/.custom/include
-        fi
-        # I used to call .custom/ just custom/. So if it exists change the name
-        if [ -d $new_dir/custom ]; then
-            mv $new_dir/custom $new_dir/.custom
-        fi
-    fi
 }
 
 add_temp() {
@@ -472,6 +487,23 @@ add_hotspot() {
             fi
         fi
     fi
+}
+
+add_plugins_in_custom() {
+    if [ -d $new_dir/.custom ]; then
+        if [ "$(ls -A $new_dir/.custom/include)" ]; then
+            echo "" >> $log_file
+            for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
+                cp -r $eachdirectory $dest_include
+                echo '  <include url="%SWFPATH%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
+                echo "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/" >> $log_file
+            done
+        else
+            echo -e "\n    .custom/include is empty" >> $log_file
+        fi
+    fi
+
+    echo_green "ADD  CUSTOM:" "to devel.xml"
 }
 
 add_info_btn() {
@@ -811,22 +843,6 @@ add_html() {
     echo "ADDED:          html files ..."
 }
 
-add_custom() {
-    if [ -d $new_dir/.custom ]; then
-        if [ "$(ls -A $new_dir/.custom/include)" ]; then
-            for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
-                cp -r $eachdirectory $dest_include
-                echo '  <include url="%SWFPATH%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
-                echo -e "\nADDED $(basename $eachdirectory) from .custom/include/" >> $log_file
-            done
-        else
-            echo -e "\n.custom/include is empty" >> $log_file
-        fi
-    fi
-
-    echo "ADDED:          custom plugins ..."
-}
-
 add_timestamp() {
     if [ $timestamp = "y" ]; then
         timestamp=$(date "+%Y%m%d%H%M%S").xml
@@ -919,22 +935,6 @@ add_list() {
     fi
 }
 
-rm_old_xml_files() {
-    if [ -d "$scenes_dir" ]; then
-        if [ ! -z $1 ]; then
-            find $1 -maxdepth 1 -type f -name "*.html" -exec rm -rf {} \;
-            # Remove any xml file which date stamp is year 2000 onwards
-            find $1 -name "tour20*.xml" -exec rm -rf {} \;
-            find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
-        else
-            echo_attention "rm_old_xml_files() -> \$1 not defined"
-            echo $1
-        fi
-    else
-        echo_warning "rm_old_xml_files() -> $scenes_dir folder doesn't exist"
-    fi
-}
-
 start () {
     add_temp
     mkdir -p $temp_folder
@@ -953,6 +953,7 @@ start () {
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
     fi
+    add_custom_dir
 
     # Let me khow how many tours are in total
     if [ ${#tours_array[@]} = 1 ]; then
@@ -991,8 +992,8 @@ start () {
         add_include_plugin_and_data
         add_info_btn
 
+        add_plugins_in_custom
         add_include_plugin
-        add_custom
         add_sa
         add_movecamera_coords
         add_logo
@@ -1013,7 +1014,6 @@ start () {
         add_list
     fi
 
-    add_custom_dir
     # NEED TO MAKE THIS WORK
     # add_scene_names_files
 
