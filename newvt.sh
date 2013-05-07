@@ -586,25 +586,19 @@ add_movecamera_coords()  {
     if [ ! -f $dest_content/coord.xml ]; then
         order=1
         > $dest_content/coord.xml
-        echo '<krpano>'  >> $dest_content/coord.xml
-        echo -e "\nCreated $dest_content/coord.xml" >> $log_file
-        # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
-        for eachpano in $(find $panos_dir/*.jpg -maxdepth 0 ); do
-            # Get rid off the path and the extension
-            eachpano=$(basename "$eachpano")
-            extension="${eachpano##*.}"
-            eachpano="${eachpano%.*}"
-
-            # actionname=movecamera_scene$order
-            # echo '<action name="'$actionname'">
-
-            echo '<action name="movecamera_'$eachpano'">
+        echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
+        echo -e "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
+        for eachpano in "${scenes_array[@]}"; do
+            cat >> $dest_content/coord.xml << EOF
+  <action name="movecamera_$eachpano">
     movecamera(0,0);
-</action>
-' >> $dest_content/coord.xml
+  </action>
+
+EOF
             order=$(expr $order + 1)
-            echo "Added $actionname to $dest_content/coord.xml" >> $log_file
+            echo -e "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
         done
+        echo_green "CREATE FILE:" "content/coord.xml"
         echo "</krpano>"  >> $dest_content/coord.xml
     fi
 }
