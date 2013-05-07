@@ -409,7 +409,6 @@ add_include_plugin_and_data() {
         echo '  <include url="%SWFPATH%/include/'$added_plugin'/index.xml" />' >> $include_plugin
         echo -e "    KEEP $dest_include/$added_plugin" >> $log_file
     done
-    # exit 1
 }
 
 add_logo() {
