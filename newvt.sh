@@ -568,7 +568,7 @@ add_include_plugin() {
 
 # Every function adds an <include /> line in the file include_data.temp
 # At the end it will host all the <include /> for the added data
-# devel.xml will have that file enbedede substituting [DATA]
+# devel.xml will have that file enbeded substituting [DATA]
 
 add_sa() {
 
