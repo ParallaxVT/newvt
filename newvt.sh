@@ -288,6 +288,7 @@ add_scene_names() {
       pageurl="$pageurl"
       pagetitle="${!panoname}"
       title="${!panoname}"
+      custom="$custom"
       />
 
 EOF
