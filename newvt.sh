@@ -40,8 +40,8 @@ orig_devel=$orig_structure/files/devel.xml
 config=./vt_conf.sh
 # temp
 temp_folder=./.src/temp
-include_plugin=$temp_folder/include_plugin
-include_data=$temp_folder/include_date
+include_plugin=$temp_folder/include_plugin.temp
+include_data=$temp_folder/include_data.temp
 
 echo_green() {
     echo -e "    \e[32m$1\e[0m    $2"
@@ -377,35 +377,29 @@ add_scene_tiles() {
 add_include_plugin_and_data() {
     > $include_plugin
     > $include_data
-    echo -e "\nCreate File $include_plugin" >> $log_file
-    echo "Create File $include_data" >> $log_file
-    # for D in $orig_include/*; do
+    echo -e "\n    CREATE file $include_plugin" >> $log_file
+    echo -e "    CREATE file $include_data\n" >> $log_file
     for D in $(find $orig_include/* -maxdepth 0 -type d ); do
         plugin=$(basename $D)
         plugin_value=${!plugin}
-        # echo $plugin : $plugin_value
         if [ "$plugin_value" = "y" ]; then
-            # echo '  <include url="%SWFPATH%/include/'$plugin'/index.xml" />' >> $include_plugin
             cp -r $orig_include/$plugin $dest_include
-            echo -e "\n    Copy $orig_include/$plugin to $dest_include" >> $log_file
-            # echo yes
+            echo -e "    COPY FOLDER $orig_include/$plugin \n      TO $dest_include" >> $log_file
+            # echo "y"
         fi
         if [ "$plugin_value" = "n" ]; then
             if [ -d $dest_include/$plugin ]; then
-                # sed -e '/$plugin/d' $temp_folder/devel5.temp > $temp_folder/devel6.temp
-                # mv $temp_folder/devel6.temp $temp_folder/devel5.temp
-                # echo -e "\nMove $temp_folder/devel6.temp to $temp_folder/devel5.temp" >> $log_file
                 rm -rf $dest_include/$plugin
-                echo -e "\nDelete $dest_include/$plugin" >> $log_file
-                # echo no
+                echo -e "\nDELETE $dest_include/$plugin" >> $log_file
             fi
+            # echo "n"
         fi
         if [ "$plugin_value" = "k" ]; then
-            # echo '  <include url="%SWFPATH%/'$plugin'/index.xml" />' >> $include_plugin
-            echo -e "\n    $dest_include/$plugin NOT MODIFIED" >> $log_file
-            # echo k
+            echo -e "    KEEP $dest_include/$plugin" >> $log_file
+            # echo "k"
         fi
     done
+    echo "" >> $log_file
     # Also include any folder manually added to the include/ directory
     # Will be duplicates, but they well be removed in 'add_include_plugin' function
     for dir_added in $(find $dest_include/* -maxdepth 0 -type d); do
@@ -413,7 +407,7 @@ add_include_plugin_and_data() {
         added_plugin=$(basename $dir_added)
         added_plugin_value=${!added_plugin}
         echo '  <include url="%SWFPATH%/include/'$added_plugin'/index.xml" />' >> $include_plugin
-        echo -e "\n    $dest_include/$added_plugin KEEPED" >> $log_file
+        echo -e "    KEEP $dest_include/$added_plugin" >> $log_file
     done
     # exit 1
 }
