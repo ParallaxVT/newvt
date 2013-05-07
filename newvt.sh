@@ -316,7 +316,7 @@ add_scene_tiles() {
         panofile=$panos_dir/$filename'.jpg'
         # Create tiles only if there isn't a folder in scenes/ or if it's empty
         if [ -d $dest_scenes/$filename ] && [ "$(ls -A $dest_scenes/$filename)" ]; then
-            echo -e "\n    $dest_scenes/$filename/ directory is OK" >> $log_file
+            echo -e "    $dest_scenes/$filename/ directory is OK" >> $log_file
         else
             echo -e "\n    $dest_scenes/$filename NOT FOUND or EMPTY" >> $log_file
             echo -e "\n    panofile is: $panofile" >> $log_file
