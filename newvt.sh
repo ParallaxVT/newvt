@@ -942,7 +942,8 @@ start () {
         echo -e "---------------------------------\n" >> $log_file
 
         scenes_array=()
-        for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*  -maxdepth 0 -name "*.jpg"); do
+        # Find ANY file. Panoramas extension will be checked later
+        for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*  -maxdepth 0); do
             each_pano=$(basename "$each_pano")
             extension="${each_pano##*.}"
             each_pano="${each_pano%.*}"
