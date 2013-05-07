@@ -19,6 +19,17 @@ if ! [ $HOSTNAME = "RafaelGP" ]; then
 else
     mydrive=/media/g
 fi
+# krpano tiles
+krpano_version="1.16.2"
+if [ $(uname -o) = "GNU/Linux" ]; then
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-linux-$krpano_version/kmakemultires"
+else
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
+fi
+krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
+# krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-1.16.1/kmakemultires.exe"
+# krconfig="-config=../krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
+
 # origin directory paths
 orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
 orig_content=$orig_dir/content
@@ -27,7 +38,6 @@ orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
 # monitor script
 config=./vt_conf.sh
-krpano_version="1.16.2"
 # temp
 temp_folder=./.src/temp
 include_plugin=$temp_folder/include_plugin
@@ -235,7 +245,6 @@ add_temp() {
     mkdir -p ./.src
     mkdir -p $temp_folder
     > $temp_folder/plugins.temp
-    > $temp_folder/tiles.temp
     echo -e "\nMake directory $temp_folder" >> $log_file
 }
 
@@ -272,68 +281,88 @@ EOF
     done
 }
 
+check_pano_images() {
+    # If variable $wrong_format is not empty,
+    # there are files with the wrong format
+    # tif files will stop the scrit
+    # JPG, JPEG and jpeg files will be coverted to jpg
+    wrong_format=$(find $1/* ! -name *.jpg)
+    if [ ! -z "$wrong_format" ]; then
+        weird_format=$(find $1/* ! -iname "*.jp*")
+        if [ ! -z "$weird_format" ]; then
+            echo_warning "The following files have the WRONG FORMAT:"
+            echo "$weird_format"
+            exit 1
+        else
+            echo_warning "Converted the following files  to the right format:"
+            rename -f 's/\.JPG$/\.jpg/' $panos_dir/*
+            rename -f 's/\.JPEG$/\.jpg/' $panos_dir/*
+            rename -f 's/\.jpeg$/\.jpg/' $panos_dir/*
+        fi
+    else
+        echo_green "CHECK  PANO:" "$(basename $1)"
+    fi
+}
+
 add_scene_tiles() {
-
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
-    krconfig="C:\Users\rafaelgp\work\documents\software\virtual_tours\krpano\krpano_conf\templates\tv_tiles_2_levels_all_devices.config"
-    # krconfig="-config=templates/tv_tiles_2_levels_all_devices.config"
-
     # If scenes directory doesn't exists, create it
     if [ ! -d $dest_scenes ]; then
         mkdir -p $dest_scenes
-        echo -e "\nMake directory $dest_scenes" >> $log_file
+        echo -e "\n    Make directory $dest_scenes" >> $log_file
     fi
-    # Create tiles only if there isn't a folder in scenes/
-    # with the same name as the scene#.jpg
-    for panoimage in $(find $panos_dir/*.jpg -maxdepth 0 ); do
-    # for panoimage in $panos_dir
-    # Get rid off the path and the extension
-        # echo "+++++++ $panoimage"
-        filename=$(basename "$panoimage")
-        extension="${filename##*.}"
-        filename="${filename%.*}"
-        if [ ! -d $dest_scenes/$filename ]; then
-            cygwin_dir=$panoimage
-            echo -e "\ncygwin_dir is $cygwin_dir" >> $log_file
-            if [ $HOSTNAME = "RafaLaptop" ]; then
-                # Replace /cygwin/c/ with C:/
-                win_path=$(echo $cygwin_dir | sed -e 's/\/media\/c/C\:/g')
-            else
-                # Replace /cygwin/g/ with G:/
-                win_path=$(echo $cygwin_dir | sed -e 's/\/media\/g/G\:/g')
+    for filename in ${scenes_array[@]} ; do
+        # No need to check if jpg file exists as scenes_array is created basend on jpg files
+        panofile=$panos_dir/$filename'.jpg'
+        # Create tiles only if there isn't a folder in scenes/ or if it's empty
+        if [ -d $dest_scenes/$filename ] && [ "$(ls -A $dest_scenes/$filename)" ]; then
+            echo -e "\n    $dest_scenes/$filename/ directory is OK" >> $log_file
+        else
+            echo -e "\n    $dest_scenes/$filename NOT FOUND or EMPTY" >> $log_file
+            echo -e "\n    panofile is: $panofile" >> $log_file
+            if [ $HOSTNAME = "RafaelGP" ]; then
+                # Replace /media/g/ with G:/
+                win_path=$(echo $panofile | sed -e 's/\/media\/g/G\:/g')
             fi
-            echo "win_path is $win_path" >> $log_file
+            if [ $HOSTNAME = "RafaLaptop" ]; then
+                # Replace /media/c/ with C:/
+                win_path=$(echo $panofile | sed -e 's/\/media\/c/C\:/g')
+            fi
+            if [ $HOSTNAME = "debian" ]; then
+                # Don't do anything
+                win_path=$panofile
+            fi
+            check_pano_images "$panos_dir"
+            echo "    win_path is: $win_path" >> $log_file
             $krpath $krconfig $win_path
 
             if [ $? != 0 ]; then
-                echo_warning  "Krpano tiles FILED while processing: $each_scene"
+                echo_warning  "Krpano tiles FAILED while processing: $each_scene"
                 exit 1
             else
                 mv $panos_dir/output/scenes/$filename $dest_scenes
                 mv $panos_dir/output/$filename.xml $dest_scenes
+                # Replace '/scenes' for '%SWFPATH%/scenes'
                 sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
                 mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
             fi
-            echo -e "MADE TILES FOR: $(basename $scenes_dir)/$filename ..."
-            echo -e "\nMove $panos_dir/output/scenes/$filename to $dest_scenes" >> $log_file
-            echo "Move $panos_dir/output/$filename.xml to $dest_scenes" >> $log_file
+            echo_green "MADE TILES FOR: $(basename $scenes_dir)/$filename ..."
+            echo -e "\n    MOVE $panos_dir/output/scenes/$filename TO $dest_scenes" >> $log_file
+            echo "    MOVE $panos_dir/output/$filename.xml TO $dest_scenes" >> $log_file
         fi
     done
-
-    # Replace '/scenes' for '%SWFPATH%/scenes' in all xml files in scenes in order to give it a valid path
-    # for each_tiles_file in $(find $dest_scenes/*.xml -maxdepth 0 ); do
-    # done
 
     # Delete output dirertory
     if [ -d $panos_dir/output ]; then
         rm -r $panos_dir/output
-        echo -e "\nDelete directory  $panos_dir/output" >> $log_file
+        echo -e "\n    DELETE directory  $panos_dir/output" >> $log_file
     fi
 
-    for f in $(find $dest_scenes/*.xml -maxdepth 0 ); do
+    # Merge all tiles code
+    > $temp_folder/tiles.temp
+    for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
-    echo -e "\nCreate File $temp_folder/tiles.temp" >> $log_file
+    echo -e "\n    CREATE file $temp_folder/tiles.temp" >> $log_file
 }
 
 # -------------------
