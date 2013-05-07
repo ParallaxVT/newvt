@@ -571,15 +571,13 @@ add_include_plugin() {
 # devel.xml will have that file enbeded substituting [DATA]
 
 add_sa() {
-
-    # overwrite content/sa.xml!!!
-    # if [ ! -f $dest_content/sa.xml ]; then
-        # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
+    # Always overwrite content/sa.xml!!!
     cp -r $orig_content/sa.xml $dest_content/sa.xml
+    # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
     sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
     sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
-    echo -e "\n++++ Copied $orig_content/sa.xml to $dest_content/sa.xml" >> $log_file
-    # fi
+    echo_green "CREATE FILE:" "content/sa.xml"
+    echo -e "\n    COPY FILE $orig_content/sa.xml TO $dest_content/sa.xml" >> $log_file
 }
 
 add_movecamera_coords()  {
