@@ -519,16 +519,15 @@ EOF
     fi
 }
 
-# Replace the line containing [PLUGINS] with temp/include_plugin_sort.temp
 add_include_plugin() {
     # Remove duplicated lines
     include_plugin_sort=$temp_folder/include_plugin_sort.temp
     sort -u $include_plugin > $include_plugin_sort
-    # cp $include_plugin_sort $include_plugin
+    # Replace the line containing [PLUGINS] with .src/temp/include_plugin_sort.temp
     sed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
     sed -i -e '/\[PLUGINS\]/d' $dest_devel
-    echo "ADDED:          plugins ..."
-    echo -e "\n---> Added $include_plugin to $dest_devel" >> $log_file
+    echo_green "ADD PLUGINS:" "to devel.xml"
+    echo -e "\n    ADDED $include_plugin_sort\n       TO $dest_devel" >> $log_file
 }
 
 # -------------------
