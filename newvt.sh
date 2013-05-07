@@ -277,8 +277,9 @@ add_scene_names() {
 
 EOF
         order=$(expr $order + 1)
-        echo -e "    Added $panoname TO $temp_folder/scene_names.temp" >> $log_file
+        echo -e "    ADDED $panoname TO $temp_folder/scene_names.temp" >> $log_file
     done
+    echo "" >> $log_file
 }
 
 check_pano_images() {
