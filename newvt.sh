@@ -708,11 +708,14 @@ add_tour() {
     done < $temp_folder"/devel5.temp"
 # exit 1
 
-    # Add tiles code
+    # Merge all tiles code
     > $temp_folder/tiles.temp
-    for f in $(find $dest_scenes -type f -name \*.xml); do
+    for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
+    echo -e "\n    CREATE file $temp_folder/tiles.temp" >> $log_file
+
+    # Add tiles code
     cat $temp_folder/tiles.temp >> $tour_file
 
     # Delete all the lines beginning with <?xml, <krpano </krpano
