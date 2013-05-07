@@ -507,6 +507,7 @@ add_plugins_in_custom() {
     echo_green "ADD  CUSTOM:" "to devel.xml"
 }
 
+
 add_info_btn() {
 
     if [ $info_btn = "y" ]; then
@@ -516,7 +517,8 @@ add_info_btn() {
             order=1
             > $dest_content/info_btn.xml
             echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
-            for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            for eachpano in ${scenes_array[@]} ; do
                 actionname=set_sidebar_scene$order
                 cat >> $dest_content/info_btn.xml << EOF
   <action name="$actionname">
@@ -534,7 +536,8 @@ EOF
         if [ ! -f $dest_content/info_btn_text.xml ]; then
             order=1
             echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
-            for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            for eachpano in ${scenes_array[@]} ; do
                 textname=text$order
                 texttitle="Scene $order text"
                 cat >> $dest_content/info_btn_text.xml << EOF
