@@ -267,15 +267,6 @@ remove_temp() {
     rm -r $temp_folder
 }
 
-add_scene_names_files () {
-    if [ ! -d $new_dir/$(basename $scenes_dir)'.sh' ]; then
-        > $new_dir/$(basename $scenes_dir)'.sh'
-    fi
-    for scene in "${scenes_array[@]}"; do
-        echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
-    done
-}
-
 add_scene_names() {
     > $temp_folder/scene_names.temp
     order=1
@@ -296,6 +287,15 @@ EOF
         echo -e "    ADDED $panoname TO $temp_folder/scene_names.temp" >> $log_file
     done
     echo "" >> $log_file
+}
+
+add_scene_names_files () {
+    if [ ! -d $new_dir/$(basename $scenes_dir)'.sh' ]; then
+        > $new_dir/$(basename $scenes_dir)'.sh'
+    fi
+    for scene in "${scenes_array[@]}"; do
+        echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
+    done
 }
 
 check_pano_images() {
@@ -383,7 +383,7 @@ add_scene_tiles() {
 }
 
 # -------------------
-# devel.xml FUNCTIONS FOR PLUGINS
+# include_plugin.temp
 # -------------------
 
 # Every function embeds an <include /> in include_plugin.temp
@@ -425,6 +425,122 @@ add_include_plugin_and_data() {
         echo '  <include url="%SWFPATH%/include/'$added_plugin'/index.xml" />' >> $include_plugin
         echo -e "    KEEP $dest_include/$added_plugin" >> $log_file
     done
+}
+
+add_plugins_in_custom() {
+    if [ -d $new_dir/.custom ]; then
+        if [ "$(ls -A $new_dir/.custom/include)" ]; then
+            echo "" >> $log_file
+            for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
+                cp -r $eachdirectory $dest_include
+                echo '  <include url="%SWFPATH%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
+                echo "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/" >> $log_file
+            done
+        else
+            echo -e "\n    .custom/include is empty" >> $log_file
+        fi
+    fi
+
+    echo_green "ADD  CUSTOM:" "to devel.xml"
+}
+
+
+add_include_plugin() {
+    # Remove duplicated lines
+    include_plugin_sort=$temp_folder/include_plugin_sort.temp
+    sort -u $include_plugin > $include_plugin_sort
+    # Replace the line containing [PLUGINS] with .src/temp/include_plugin_sort.temp
+    sed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
+    sed -i -e '/\[PLUGINS\]/d' $dest_devel
+    echo_green "ADD PLUGINS:" "to devel.xml"
+    echo -e "\n    ADDED $include_plugin_sort\n       TO $dest_devel" >> $log_file
+}
+
+# -------------------
+# include_data.temp
+# -------------------
+
+# Every function adds an <include /> line in the file include_data.temp
+# At the end it will host all the <include /> for the added data
+# devel.xml will have that file enbeded substituting [DATA]
+
+add_info_btn() {
+
+    if [ $info_btn = "y" ]; then
+        # Add a set_sidebar_scene action per scene to content/info_btn.xml
+        # Never overwrite content/info_btn.xml!!!
+        if [ ! -f $dest_content/info_btn.xml ]; then
+            order=1
+            > $dest_content/info_btn.xml
+            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
+            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            for eachpano in ${scenes_array[@]} ; do
+                actionname=set_sidebar_scene$order
+                cat >> $dest_content/info_btn.xml << EOF
+  <action name="$actionname">
+      set(layer[sidebar_text].html,data:text1);
+      set(sidebar_btn, true);
+  </action>
+
+EOF
+                order=$(expr $order + 1)
+            done
+            echo "</krpano>" >> $dest_content/info_btn.xml
+            echo_green "ADDED  FILE:" "info_btn.xml"
+        fi
+        # Add some data with text per scene to content/info_btn_text.xml
+        if [ ! -f $dest_content/info_btn_text.xml ]; then
+            order=1
+            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
+            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
+            for eachpano in ${scenes_array[@]} ; do
+                textname=text$order
+                texttitle="Scene $order text"
+                cat >> $dest_content/info_btn_text.xml << EOF
+  <data name="$textname">
+      <h2>$texttitle</h2><br/>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  </data>
+
+EOF
+                order=$(expr $order + 1)
+            done
+            echo "</krpano>" >> $dest_content/info_btn_text.xml
+            echo_green "ADDED  FILE:" "info_btn_text.xml"
+        fi
+    fi
+}
+
+add_sa() {
+    # Always overwrite content/sa.xml!!!
+    cp -r $orig_content/sa.xml $dest_content/sa.xml
+    # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
+    sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
+    sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
+    echo_green "CREATE FILE:" "content/sa.xml"
+    echo -e "\n    COPY FILE $orig_content/sa.xml TO $dest_content/sa.xml" >> $log_file
+}
+
+add_movecamera_coords()  {
+    # Never overwrite content/coord.xml!!!
+    if [ ! -f $dest_content/coord.xml ]; then
+        order=1
+        > $dest_content/coord.xml
+        echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
+        echo -e "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
+        for eachpano in "${scenes_array[@]}"; do
+            cat >> $dest_content/coord.xml << EOF
+  <action name="movecamera_$eachpano">
+    movecamera(0,0);
+  </action>
+
+EOF
+            order=$(expr $order + 1)
+            echo -e "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
+        done
+        echo_green "CREATE FILE:" "content/coord.xml"
+        echo "</krpano>"  >> $dest_content/coord.xml
+    fi
 }
 
 add_logo() {
@@ -487,122 +603,6 @@ add_hotspot() {
                 sed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
         fi
-    fi
-}
-
-add_plugins_in_custom() {
-    if [ -d $new_dir/.custom ]; then
-        if [ "$(ls -A $new_dir/.custom/include)" ]; then
-            echo "" >> $log_file
-            for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
-                cp -r $eachdirectory $dest_include
-                echo '  <include url="%SWFPATH%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
-                echo "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/" >> $log_file
-            done
-        else
-            echo -e "\n    .custom/include is empty" >> $log_file
-        fi
-    fi
-
-    echo_green "ADD  CUSTOM:" "to devel.xml"
-}
-
-
-add_info_btn() {
-
-    if [ $info_btn = "y" ]; then
-        # Add a set_sidebar_scene action per scene to content/info_btn.xml
-        # Never overwrite content/info_btn.xml!!!
-        if [ ! -f $dest_content/info_btn.xml ]; then
-            order=1
-            > $dest_content/info_btn.xml
-            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
-            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
-            for eachpano in ${scenes_array[@]} ; do
-                actionname=set_sidebar_scene$order
-                cat >> $dest_content/info_btn.xml << EOF
-  <action name="$actionname">
-      set(layer[sidebar_text].html,data:text1);
-      set(sidebar_btn, true);
-  </action>
-
-EOF
-                order=$(expr $order + 1)
-            done
-            echo "</krpano>" >> $dest_content/info_btn.xml
-            echo_green "ADDED  FILE:" "info_btn.xml"
-        fi
-        # Add some data with text per scene to content/info_btn_text.xml
-        if [ ! -f $dest_content/info_btn_text.xml ]; then
-            order=1
-            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
-            # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
-            for eachpano in ${scenes_array[@]} ; do
-                textname=text$order
-                texttitle="Scene $order text"
-                cat >> $dest_content/info_btn_text.xml << EOF
-  <data name="$textname">
-      <h2>$texttitle</h2><br/>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-  </data>
-
-EOF
-                order=$(expr $order + 1)
-            done
-            echo "</krpano>" >> $dest_content/info_btn_text.xml
-            echo_green "ADDED  FILE:" "info_btn_text.xml"
-        fi
-    fi
-}
-
-add_include_plugin() {
-    # Remove duplicated lines
-    include_plugin_sort=$temp_folder/include_plugin_sort.temp
-    sort -u $include_plugin > $include_plugin_sort
-    # Replace the line containing [PLUGINS] with .src/temp/include_plugin_sort.temp
-    sed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
-    sed -i -e '/\[PLUGINS\]/d' $dest_devel
-    echo_green "ADD PLUGINS:" "to devel.xml"
-    echo -e "\n    ADDED $include_plugin_sort\n       TO $dest_devel" >> $log_file
-}
-
-# -------------------
-# devel.xml FUNCTIONS FOR DATA
-# -------------------
-
-# Every function adds an <include /> line in the file include_data.temp
-# At the end it will host all the <include /> for the added data
-# devel.xml will have that file enbeded substituting [DATA]
-
-add_sa() {
-    # Always overwrite content/sa.xml!!!
-    cp -r $orig_content/sa.xml $dest_content/sa.xml
-    # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
-    sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
-    sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
-    echo_green "CREATE FILE:" "content/sa.xml"
-    echo -e "\n    COPY FILE $orig_content/sa.xml TO $dest_content/sa.xml" >> $log_file
-}
-
-add_movecamera_coords()  {
-    # Never overwrite content/coord.xml!!!
-    if [ ! -f $dest_content/coord.xml ]; then
-        order=1
-        > $dest_content/coord.xml
-        echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
-        echo -e "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
-        for eachpano in "${scenes_array[@]}"; do
-            cat >> $dest_content/coord.xml << EOF
-  <action name="movecamera_$eachpano">
-    movecamera(0,0);
-  </action>
-
-EOF
-            order=$(expr $order + 1)
-            echo -e "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
-        done
-        echo_green "CREATE FILE:" "content/coord.xml"
-        echo "</krpano>"  >> $dest_content/coord.xml
     fi
 }
 
@@ -723,7 +723,7 @@ add_plugins_data() {
 }
 
 # -------------------
-# tour.xml FUNCTIONS
+# tour.xml
 # -------------------
 
 # tour.xml is made stripping out devel.xml
@@ -981,21 +981,24 @@ start () {
             echo -e "    $eachitem" >> $log_file
         done
 
+        # ADD ESTRUCTURE AND TILES
         rm_old_xml_files $scenes_dir
         add_structure
         add_scene_names
         add_scene_tiles
+        # include_plugin.temp
         add_include_plugin_and_data
-        add_info_btn
-
         add_plugins_in_custom
         add_include_plugin
+        # include_data.temp
+        add_info_btn
         add_sa
         add_movecamera_coords
         add_logo
         add_hotspot
         add_scroll
         add_plugins_data
+        # tour.xml
         add_tour "tour"
         add_tour_clean
         add_html
