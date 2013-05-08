@@ -159,7 +159,7 @@ build_config_file () {
     # Source vt_conf.sh, which doesn't have any features yet
     source $config
 
-    echo "ADDED:          vt_conf.sh ..."
+    echo "CREATE FILE:          vt_conf.sh ..."
 }
 
 add_custom_dir() {
