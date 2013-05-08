@@ -990,9 +990,6 @@ start () {
         add_list
     fi
 
-    # NEED TO MAKE THIS WORK
-    # add_scene_names_files
-
 }
 
 if [ -f $config ]; then
