@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage:
-#    ???  
+#    ???
 #
 # Scroll options:
 #    scroll=n              -> delete any folder named 'scroll', including any copied from .custom/
