@@ -615,12 +615,11 @@ remove_scroll () {
         rm -r $dest_include/scroll
         sed -i -e '/scroll\/index.xml/d' $dest_devel
     fi
+    echo -e "    REMOVE PLUGIN: scroll" >> $log_file
 }
 
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
-    echo "SCENES:         $number_of_scenes"
-
     if [ "$scroll" != "n" ]; then
         if [ "$scroll_more" = "title" ]; then
             scroll_swf='scroll_'$number_of_scenes'_title'
@@ -629,6 +628,8 @@ add_scroll () {
             scroll_swf='scroll_'$number_of_scenes
         fi
         if [ ${#scenes_array[@]} -gt "1" ]; then
+            echo_green "ADD  PLUGIN:" "scroll - $number_of_scenes scenes"
+            echo -e "\n    ADD PLUGIN: scroll - $number_of_scenes scenes" >> $log_file
             add_scroll_data
         else
             remove_scroll
@@ -637,62 +638,41 @@ add_scroll () {
 }
 
 add_scroll_data() {
-    # if [ "$scroll" = "y" ]; then
-
-        # count number of xml files in scenes directory
-    # if [ "$scroll" = "y" ]; then
-        # scroll_swf='scroll_'$number_of_scenes'_title'
-    # fi
-    # if [ "$scroll" = "custom" ]; then
-        # scroll_swf='scroll_'$number_of_scenes'_title'
-    # fi
-    # if [ "$scroll" = "notitle" ]; then
-        # scroll_swf='scroll_'$number_of_scenes
-    # fi
-    # if [ "$scroll" = "custom_notitle" ]; then
-        # scroll_swf='scroll_'$number_of_scenes
-    # fi
-
-        # Replace the word [SWF_FILE] with the swf file name, in include/scroll/index.xml
+    # Replace the word [SWF_FILE] with the swf file name, in include/scroll/index.xml
     sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
-        # Copy the corresponding swf file for the number of scenes
+    # Copy the corresponding swf file for the number of scenes
     cp -r $orig_content'/scroll/'$scroll_swf.swf  $dest_include'/scroll'
 
-        # Make content/scroll_thumbs/ directory if doesn't exists
+     # Make content/scroll_thumbs/ directory if doesn't exists
     if [ ! -d $dest_content'/scroll_thumbs' ]; then
         mkdir $dest_content'/scroll_thumbs'
     fi
-
-        # Create content/scroll.xml
-        # if [ ! -f $dest_content/scroll.xml ]; then
+    # Always overwrite content/scroll.xml
     > $dest_content/scroll.xml
     order=1
-    echo '<content>' >> $dest_content/scroll.xml
+    echo -e "<content>\n" >> $dest_content/scroll.xml
     for file_name in ${scenes_array[@]}; do
-            # file_name=scene$order
-                # scene_name="Scene $order"
-        echo '<item>
-    <path>files/content/scroll_thumbs/'$file_name'.jpg</path>
-    <foldername>'$file_name'</foldername>
-    <data>'${!file_name}'</data>
+        cat >> $dest_content/scroll.xml << EOF
+  <item>
+    <path>files/content/scroll_thumbs/$file_name.jpg</path>
+    <foldername>$file_name</foldername>
+    <data>${!file_name}</data>
     <type>image</type>
-    <order>'$order'</order>
-</item>
-' >> $dest_content/scroll.xml
+    <order>$order</order>
+  </item>
 
+EOF
        # Make a thumbnail for each pano, only if it doesn't exists already
         if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
             convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
+            echo -e "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg" >> $log_file
         fi
-
         order=$(expr $order + 1)
     done
     echo '</content>' >> $dest_content/scroll.xml
-        # fi
-
-    # fi
-
+    echo -e "    ADD FILE: content/scroll.xml" >> $log_file
 }
+
 add_plugins_data() {
     for f in $dest_content/*.xml; do
         # Get rid off the path and the extension
