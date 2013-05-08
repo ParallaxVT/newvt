@@ -1,0 +1,74 @@
+<krpano>
+
+  <addlogoclient enabled="true" />
+
+  <action name="add_logoclient">
+    if(device.iphone,
+    set(layer[logo_client].scale,1.4);
+    set(layer[logo_client].x,30);
+    set(layer[logo_client].y,-120);
+    tween(layer[logo_client].y,30,.3,easeoutquad);
+    ,
+    tween(layer[logo_client].y,20,.3,easeoutquad);
+    );
+  </action>
+
+  <style name       ="addoctor"
+         onclick    ="openurl(http://www.addoctor.co.uk/,_blank);"
+         url        ="%SWFPATH%/include/logo_client/addoctor.png"
+         width      =""
+         height     =""
+         />
+
+  <style name       ="creare"
+         onclick    ="openurl(http://www.creare-webdesign.co.uk/,_blank);"
+         onhover    ="showtext(Virtual tour by: www.creareweb.co.uk);"
+         url        ="%SWFPATH%/include/logo_client/creare.png"
+         width      =""
+         height     =""
+         />
+
+  <style name       ="llama"
+         onclick    ="openurl(http://www.llamadigital.co.uk/,_blank);"
+         url        ="%SWFPATH%/include/logo_client/llama.png"
+         height     =""
+         width      =""
+         />
+
+  <style name       ="other"
+         onclick    ="openurl(http://www.webaddress.co.uk/,_blank);"
+         url        ="%SWFPATH%/include/logo_client/other.png"
+         />
+
+  <layer name       ="logo_client"
+         alpha      =".6"
+         align      ="lefttop"
+         children   ="false"
+         edge       ="topleft"
+         handcursor ="true"
+         keep       ="true"
+         onover     ="tween(layer[logo_client].alpha,1,.3,easeoutquad);"
+         onout      ="tween(layer[logo_client].alpha,.6,.3,easeoutquad);"
+         style      ="CLIENTNAME"
+         visible    ="true"
+         x          ="30"
+         y          ="-60"
+         zorder     ="10"
+         />
+
+  <textstyle name="DEFAULT"
+             alpha="1"
+             background="true"
+             backgroundcolor="0x000000"
+             border="true"
+             bordercolor="0xFFFFFF"
+             bold="false"
+             font="verdana"
+             fontsize="12"
+             origin="cursor"
+             textcolor="0xFFFFFF"
+             xoffset="20"
+             yoffset="-10"
+             />
+
+</krpano>

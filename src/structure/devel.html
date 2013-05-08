@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TourVista Virtual Tour</title>
+    <meta name="author" content="TourVista, Virtual Tour and panoramic photography www.tourvista.co.uk"/>
+    <meta name="copyright" content="TourVista"/>
+    <meta name="keywords" content="virtualtour, virtual tour, flash, 360 degrees, TourVista"/>
+    <meta name="description" content="Virtual Tour created by www.tourvista.co.uk"/>
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <style>
+      @media only screen and (min-device-width: 800px) { html { overflow:hidden; } }
+      html { height:100%; }
+      body { height:100%; overflow: hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#ffffff; }
+      a{ color:#AAAAAA; text-decoration:underline; }
+      a:hover{ color:#FFFFFF; text-decoration:underline; }
+      p{ color:#666666; font-size:16px;}
+      #align_centre { width: 40%; float: left; margin: 15% 30% 0 30%; border: 1px solid #d8d8d8; background: #f9f9f9; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; -moz-box-shadow: inset 0 0 0 1px #fff; -webkit-box-shadow: inset 0 0 0 1px #fff; box-shadow: inset 0 0 0 1px #fff; text-align:center;}
+    </style>
+  </head>
+  <body>
+    <script src="files/devel.js"></script>
+    <script src="files/plugins/swfaddress.js?tracker=null"></script>
+    <div id="pano" style="width:100%; height:100%;">
+      <noscript>
+        <div id="align_centre"> <b>Attention:</b><br/> <p>Your browser's Javascript is not activated.</p> <p>Please activate it to see the virtual tour.</p><br/> </div>
+      </noscript>
+      <script>
+        embedpano({swf:"files/devel.swf", xml:"files/devel.xml", target:"pano", html5:"auto", passQueryParameters:true});
+      </script>
+    </div>
+  </body>
+</html>

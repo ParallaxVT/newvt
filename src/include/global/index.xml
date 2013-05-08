@@ -1,0 +1,40 @@
+<krpano>
+
+
+  <events onpreviewcomplete="if(develmode.enabled!=true,delayedcall(5, set(autorotate.enabled,true)));
+                             if(device.flash,delayedcall(4, set(display.flash10,on)));" />
+
+  <addglobal enabled="true"/>
+
+  <display fps="30"
+           details="20"
+           tessmode="0"
+           movequality="low"
+           stillquality="high"
+           flash10="off"
+           movequality10="best"
+           stillquality10="best"
+           stilltime="0.25"
+           />
+
+  <autorotate enabled="false" waittime="7" horizon="off" speed="6"/>
+
+  <progress showload="none" showwait="none" showreloads="false" parent="" />
+
+  <control mousefovchange="0"/>
+
+  <data name="custom_fov">95</data>
+
+  <view hlookat="0"
+        vlookat="0"
+        fov="95"
+        fovmin="25"
+        fovmax="110"
+        limitfov="true"
+        fovtype="MFOV"
+        />
+
+  <network downloadqueues="6" decodequeues="2"/>
+
+</krpano>
+

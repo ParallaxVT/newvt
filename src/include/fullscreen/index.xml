@@ -1,0 +1,50 @@
+<krpano>
+
+  <addfullscreen enabled="true" />
+
+  <action name="add_fullscreen">
+    if(device.iphone,
+    tween(layer[fullscreen_btn].y,30,.3,easeoutquad);
+    ,
+    tween(layer[fullscreen_btn].y,20,.3,easeoutquad);
+    );
+  </action>
+
+  <action name="hide_full_screen_btn">
+    tween(layer[fullscreen_btn].y,-100,.3,easeoutquad);
+  </action>
+  <action name="show_full_screen_btn">
+    add_fullscreen();
+  </action>
+
+  <layer name       ="fullscreen_btn"
+         align      ="rightbottom"
+         alpha      ="1"
+         crop       ="0|0|150|35"
+         children   ="false"
+         edge       ="bottomright"
+         first_time ="true"
+         handcursor ="true"
+         keep       ="true"
+         onclick    ="set(fullscreen,true);"
+         onover     ="set(crop,150|0|150|35);"
+         onout      ="set(crop,0|0|150|35);"
+         url        ="%SWFPATH%/include/fullscreen/fs.png"
+         visible    ="true"
+         x          ="20"
+         y          ="-100"
+         zorder     ="10"
+         altonloaded="if(device.iphone,mul(scale,1.6));"
+         />
+
+  <events onenterfullscreen="set(plugin[fullscreen_btn].crop,0|35|150|35);
+                             set(plugin[fullscreen_btn].onclick,set(fullscreen, false));
+                             set(plugin[fullscreen_btn].onover,set(crop,150|35|150|35));
+                             set(plugin[fullscreen_btn].onout,set(crop,0|35|150|35));"
+          onexitfullscreen="set(plugin[fullscreen_btn].crop,0|0|150|35);
+                            set(plugin[fullscreen_btn].onclick,set(fullscreen, true));
+                            set(plugin[fullscreen_btn].onover,set(crop,150|0|150|35));
+                            set(plugin[fullscreen_btn].onout,set(crop,0|0|150|35));"
+          />
+
+</krpano>

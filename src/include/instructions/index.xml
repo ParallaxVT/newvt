@@ -1,0 +1,95 @@
+<krpano>
+
+  <addinstructions enabled="true" />
+
+  <action name="add_instructions">
+    <!-- Show instructions only if  gyro is not loaded -->
+    if(layer[gyro].loaded === null,
+    set(layer[instructions].visible,true);
+    tween(layer[instructions].alpha,1,1,easeoutquad);
+    );
+    delayedcall(10,remove_instructions());
+  </action>
+
+  <action name="remove_instructions">
+    set(plugin[instructions_close_btn].enabled,false);
+    tween(plugin[instructions].alpha,0,0.5,easeoutquad);
+    delayedcall(1,
+    removelayer(instructions);
+    removelayer(instructions_bg);
+    removelayer(instructions_close_btn);
+    );
+  </action>
+
+  <layer name       ="instructions"
+         align      ="topcentre"
+         alpha      ="0"
+         bgalpha    ="0"
+         bgcapture  ="true"
+         bgcolor    ="#fff"
+         devices    ="flash"
+         edge       ="centre"
+         handcursor ="false"
+         height     ="180"
+         keep       ="true"
+         type       ="container"
+         visible    ="false"
+         width      ="350"
+         y          ="30%"
+         zorder     ="10"
+         >
+
+    <layer name       ="instructions_bg"
+           align      ="topcentre"
+           autoalpha  ="true"
+           crop       ="0|0|350|180"
+           handcursor ="false"
+           keep       ="true"
+           onclick    ="remove_instructions();"
+           url        ="%SWFPATH%/include/instructions/instructions.png"
+           zorder     ="15"
+           />
+
+    <layer name     ="instructions_close_btn"
+           align    ="righttop"
+           crop     ="350|0|30|30"
+           edge     ="righttop"
+           keep     ="true"
+           onclick  ="remove_instructions();"
+           url      ="%SWFPATH%/include/instructions/instructions.png"
+           x        ="15"
+           y        ="15"
+           zorder   ="20"
+           />
+  </layer>
+
+  <layer name     ="instructions"
+         crop     ="0|0|310|180"
+         devices  ="ipad"
+         style    ="instructions_style"
+         url      ="%SWFPATH%/include/instructions/instructions_touch.png"
+         y        ="30%"
+         />
+
+  <layer name     ="instructions"
+         crop     ="0|0|310|180"
+         devices  ="iphone"
+         scale    ="1.6"
+         style    ="instructions_style"
+         url      ="%SWFPATH%/include/instructions/instructions_touch.png"
+         y        ="20%"
+         />
+
+  <style name       ="instructions_style"
+         align      ="centertop"
+         alpha      ="0"
+         autoalpha  ="true"
+         edge       ="centertop"
+         handcursor ="false"
+         keep       ="true"
+         onclick    ="remove_instructions();"
+         visible    ="false"
+         zorder     ="10"
+         />
+
+</krpano>

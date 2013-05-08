@@ -1,0 +1,31 @@
+<krpano>
+
+  <action name="startup">
+    set(current_scene,%1);
+
+    if(device.flash,trace(Agent is Flash));
+    if(device.webgl,trace(Agent is WebGL));
+    if(device.css3e,trace(Agent is CSS 3D));
+
+    if(addinstructions.enabled == true, add_instructions());
+    if(addfullscreen.enabled   == true, add_fullscreen());
+    if(addtitle.enabled        == true, add_title());
+    if(addscroll.enabled       == true, add_scroll());
+    if(addlogoclient.enabled   == true, add_logoclient());
+
+    if(addhs.enabled           == true, add_hs_%1());
+
+    if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
+    if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
+  </action>
+
+  <action name="move_camera">
+    if(addmovecamera.enabled   == true, movecamera_%1());
+  </action>
+
+  <events name="vt_events" keep="true"
+          onxmlcomplete="delayedcall(3,startup(get(xml.scene)));"
+          />
+
+</krpano>
+

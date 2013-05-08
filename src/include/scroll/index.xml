@@ -1,0 +1,253 @@
+<krpano>
+
+  <!-- This file is a copy used for hrowen showroom -->
+  <!-- It probably needs some editing to make it standard -->
+  
+  <addscroll enabled = "true" />
+
+  <action name="add_scroll">
+    tween(layer[scroll].y,0,0.5,easeoutquad);
+    <!-- if(layer[scroll].status == show, hide_menu()); -->
+    if(layer[scroll].status == first, delayedcall(3,set(layer[scroll].status,show)));
+    if(device.html5, buildthumbs());
+  </action>
+
+  <action name="tween_left">
+    if(device.html5,
+    add(total_x,get(thumbbarwidth),220);
+    ,
+    add(total_x,get(layer[scroll_swf].width),220);
+    );
+    mul(dest_x,get(total_x),-1);
+    tween(layer[%1].x,get(dest_x),1,easeoutquad);
+    tween(layer[%1].alpha,0,1,easeoutquad);
+  </action>
+
+  <action name="hide_menu">
+    set(layer[scroll_swf].enabled,false);
+
+    if(divice.html5,
+    add(scenes_btn_x,get(thumbbarwidth),130);
+    ,
+    add(scenes_btn_x,get(layer[scroll_swf].width),130);
+    );
+    set(layer[scroll_btn_scenes].x,get(scenes_btn_x));
+
+    set(scroll_swf_x,get(layer[scroll_swf].x));
+    set(thumbs_container_x,get(layer[thumbs_container].x));
+    set(scroll_btn_close_x,get(layer[scroll_btn_close].x));
+    set(scroll_btn_scenes_x,get(layer[scroll_btn_scenes].x));
+
+    tween_left(scroll_swf);
+    tween_left(thumbs_container);
+    tween_left(scroll_btn_close);
+    tween(layer[scroll_bg].x,-1520,1,easeoutquad);
+    tween(layer[scroll_btn_scenes].x,20,.5,easeoutquad);
+
+    set(layer[scroll_btn_scenes].visible,true);
+    tween(layer[scroll_btn_scenes].alpha,1,.5,easeoutquad);
+
+    set(layer[scroll].status,hide);
+  </action>
+
+  <action name="show_menu">
+    if(divice.html5,
+    tween(layer[thumbs_container].x,get(thumbs_container_x),.5,easeoutquad);
+    ,
+    tween(layer[scroll_swf].x,get(scroll_swf_x),.5,easeoutquad);
+    );
+    tween(layer[scroll_btn_close].x,get(scroll_btn_close_x),.5,easeoutquad);
+    tween(layer[scroll_btn_scenes].x,get(scroll_btn_scenes_x),.5,easeoutquad);
+
+    tween(layer[scroll_swf].alpha,1,.5,easeoutquad);
+    tween(layer[thumbs_container].alpha,1,.5,easeoutquad);
+    tween(layer[scroll_btn_close].alpha,1,.5,easeoutquad);
+    tween(layer[scroll_btn_scenes].alpha,1,.5,easeoutquad);
+    tween(layer[scroll_bg].x,0,.5,easeoutquad);
+    tween(layer[scroll_btn_scenes].alpha,0,.5,easeoutquad);
+
+    delayedcall(.5,
+    set(layer[scroll_swf].enabled,true);
+    set(layer[scroll].status,show);
+    );
+  </action>
+
+  <action name="set_iphone_gui">
+  set(layer[scroll_bg].height,140);
+  set(layer[scroll_btn_close].visible,false);
+  set(layer[thumbs_container].x,0);
+  set(layer[thumbs_container].height,120);
+</action>
+  
+  <layer name         ="scroll"
+         align        ="bottomleft"
+         alpha        ="1"
+         bgalpha      ="0"
+         bgcapture    ="true"
+         children     ="true"
+         edge         ="bottomleft"
+         handcursor   ="false"
+         height       ="80"
+         keep         ="true"
+         status       ="show"
+         type         ="container"
+         width        ="100%"
+         x            ="0"
+         y            ="-120"
+         zorder       ="1"
+         >
+    <layer name       ="scroll_bg"
+           align      ="leftbottom"
+           alpha      =".8"
+           children   ="false"
+           edge       =""
+           handcursor ="false"
+           height     ="80"
+           keep       ="true"
+           url        ="%SWFPATH%/include/scroll/scroll_bg.png"
+           width      ="1500"
+           x          ="0"
+           zorder     ="4"
+           />
+
+    <layer name       ="scroll_btn_scenes"
+           crop       ="0|0|80|35"
+           onclick    ="show_menu();"
+           onout      ="set(crop,0|0|80|35);"
+           onover     ="set(crop,80|0|80|35);"
+           style      ="scroll_btn_style"
+           x          =""
+           alpha      ="0"
+           visible    ="false"
+           />
+
+    <layer name       ="scroll_btn_close"
+           crop       ="0|35|80|35"
+           onclick    ="hide_menu();"
+           onout      ="set(crop,0|35|80|35);"
+           onover     ="set(crop,80|35|80|35);"
+           style      ="scroll_btn_style"
+           x          ="20"
+           />
+
+    <layer name       ="scroll_swf"
+           align      ="topleft"
+           children   ="true"
+           devices    ="flash"
+           edge       ="topleft"
+           keep       ="true"
+           url        ="%SWFPATH%/include/scroll/[SWF_FILE].swf"
+           x          ="115"
+           y          ="15"
+           zorder     ="30"
+           />
+
+    <!-- Add to only devices with gyro -->
+    <layer name         ="thumbs_container"
+           align        ="bottomleft"
+           edge         ="bottomleft"
+           handcursor   ="false"
+           height       ="80"
+           keep         ="true"
+           maskchildren ="true"
+           type         ="container"
+           width        ="100%"
+           x            ="110"
+           y            ="0"
+           zorder       ="30"
+           >
+
+      <layer name         ="scroll_container"
+             align        ="bottomleft"
+             direction    ="h"
+             edge         ="bottomleft"
+             handcursor   ="false"
+             height       ="100%"
+             keep         ="true"
+             maskchildren ="true"
+             type         ="container"
+             url          ="%SWFPATH%/plugins/scrollarea.swf"
+             alturl       ="%SWFPATH%/plugins/scrollarea.js"
+             width        ="100%"
+             zorder       ="30"
+             >
+
+      </layer>
+
+    </layer>
+
+  </layer>
+
+  <style name         ="scroll_btn_style"
+         align        ="topleft"
+         children     ="false"
+         edge         ="topleft"
+         keep         ="true"
+         url          ="%SWFPATH%/include/scroll/scroll_btn.png"
+         y            ="22"
+         zorder       ="30"
+         altonloaded  ="if(device.iphone,set_iphone_gui());"
+         />
+
+  <skin_settings
+      thumbsheight="60"
+      thumbspadding="10"
+      thumbswidth="100"
+      />
+
+  <action name="buildthumbs">
+    copy(thumbwidth, skin_settings.thumbswidth);
+    copy(thumbheight, skin_settings.thumbsheight);
+    copy(thumbpadding, skin_settings.thumbspadding);
+    copy(thumbcrop, skin_settings.thumbscrop);
+
+    if(divice.mobile,
+    mul(thumbwidth,2);
+    mul(thumbheight,2);
+    mul(thumbpadding,2);
+    );
+
+    add(thumbxoffset, thumbwidth, thumbpadding);
+    mul(thumbxcenter, thumbxoffset, 0.5);
+    mul(thumbbarwidth, thumbxoffset, scene.count);
+    add(thumbbarwidth, thumbpadding);
+    add(custom_thumbbarwidth, thumbbarwidth, 120);
+    add(thumbbarheight, thumbpadding, thumbheight);
+    add(thumbbarheight, thumbpadding);
+    copy(layer[scroll_container].height, thumbbarheight);
+    copy(layer[scroll_container].width, custom_thumbbarwidth);
+
+    <!-- In our pruvious buildthumb each thumb was called thmub_1, thumb_2 -->
+    <!-- Now they're called skin_thumb_1, skin_thumb_2. MAYBE CHANGE THAT? -->
+    <!-- trace(get(scene.count)); showlog(); -->
+    for(set(i,0), i LT scene.count, inc(i),
+    <!-- trace(get(i)); showlog(); -->
+    txtadd(thumbname,'skin_thumb_',get(i));
+    add(i_plus_one, i, 1);
+    txtadd(thumburl,'%SWFPATH%/content/scroll_thumbs/scene', get(i_plus_one),'.jpg');
+    <!-- trace(get(thumburl)); showlog(); -->
+    addlayer(get(thumbname));
+    <!-- copy(layer[get(thumbname)].url, scene[get(i)].thumburl); -->
+    set(layer[get(thumbname)].url, get(thumburl));
+    set(layer[get(thumbname)].keep, true);
+    set(layer[get(thumbname)].parent, 'scroll_container');
+    <!-- set(layer[get(thumbname)].parent, 'skin_thumbs'); -->
+    set(layer[get(thumbname)].align, leftbottom);
+    set(layer[get(thumbname)].zorder,30);
+    copy(layer[get(thumbname)].crop, thumbcrop);
+    copy(layer[get(thumbname)].width, thumbwidth);
+    copy(layer[get(thumbname)].height, thumbheight);
+    mul(thumbx, i, thumbxoffset);
+    add(thumbx, thumbpadding);
+    copy(layer[get(thumbname)].x, thumbx);
+    copy(layer[get(thumbname)].y, thumbpadding);
+    <!-- add(scene[get(i)].thumbx, thumbx, thumbxcenter); -->
+    <!-- copy(scene[get(i)].thumby, thumbpadding); -->
+    set(layer[get(thumbname)].linkedscene, get(scene[get(i)].name) );
+    <!-- set(layer[get(thumbname)].onclick, copy(layer[skin_thumbborder].parent, name); loadscene(get(linkedscene), null, MERGE, BLEND(0.5)); ); -->
+    set(layer[get(thumbname)].onclick,activatepano(get(linkedscene)));
+    );
+  </action>
+
+
+</krpano>

@@ -1,0 +1,23 @@
+<content>
+<item>
+    <path>files/include/scroll/thumbs/scene1.jpg</path>
+<foldername>scene1</foldername>
+<data>Scene 1</data>
+<type>image</type>
+</item>
+
+<item>
+    <path>files/include/scroll/thumbs/scene2.jpg</path>
+<foldername>scene2</foldername>
+<data>Scene 2</data>
+<type>image</type>
+</item>
+
+<item>
+    <path>files/include/scroll/thumbs/scene3.jpg</path>
+<foldername>scene3</foldername>
+<data>Scene 3</data>
+<type>image</type>
+</item>
+
+</content>

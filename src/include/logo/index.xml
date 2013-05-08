@@ -1,0 +1,70 @@
+<krpano>
+
+  <!-- If title is included, the logo will be hidden in vertical position in iphones -->
+
+  <addlogo enabled="true" />
+
+  <action name="add_logo">
+    tween(layer[logo].y,20,.3,easeoutquad);
+    delayedcall(.3,set(layer[logo_hover].visible,true));
+  </action>
+
+  <style name        ="logo_style_iphone"
+         alpha       ="1"
+         scale       ="1.4"
+         y           ="-120"
+         />
+
+  <style name        ="logo_style"
+         align       ="lefttop"
+         children    ="false"
+         edge        ="topleft"
+         handcursor  ="true"
+         keep        ="true"
+         onloaded    ="add_logo"
+         url         ="%SWFPATH%/include/logo/logo.png"
+         x           ="20"
+         />
+
+  <layer name        ="logo"
+         alpha       =".8"
+         crop        ="0|0|123|40"
+         style       ="logo_style"
+         visible     ="true"
+         y           ="-60"
+         zorder      ="10"
+         />
+
+  <layer name        ="logo_hover"
+         alpha       ="0"
+         crop        ="123|0|123|40"
+         devices     ="desktop"
+         onclick     ="openurl(http://www.tourvista.co.uk/,_blank);"
+         onover      ="tween(layer[logo_hover].alpha,.7,0.5,easeoutquad);"
+         onout       ="tween(layer[logo_hover].alpha,0,0.5,easeoutquad));)"
+         style       ="logo_style"
+         visible     ="false"
+         y           ="20"
+         zorder      ="15"
+         altonloaded ="if(device.iphone,layer[logo_hover].loadstyle(logo_style_iphone););"
+         />
+
+  <layer name        ="logo"
+         alpha       =".8"
+         crop        ="123|0|123|40"
+         devices     ="iphone|ipad"
+         style       ="logo_style"
+         visible     ="true"
+         y           ="-60"
+         zorder      ="10"
+         altonloaded ="logo_orientation();"
+         />
+
+  <action name="logo_orientation">
+    if(device.iphone,
+    if(layer[orientation].portrait == true,set(layer[logo].visible,false));
+    if(layer[orientation].landscape == true,set(layer[logo].visible,true));
+    );
+  </action>
+
+</krpano>

@@ -1,0 +1,114 @@
+<krpano>
+
+  <contextmenu fullscreen="false">
+    <item name="coord_finder"
+          caption="Coordinates finder - ON"
+          onclick="action(run_hs_editor); "
+          />
+  </contextmenu>
+
+  <action name="run_hs_editor">
+
+    copy(Back_onviewchange,events.onviewchange);
+    copy(Back_onclick,events.onclick);
+
+    if(Back_onclick === undefined, set(Back_onclick,null));
+
+    set(events.onviewchange,action(buildtext););
+
+    addplugin(hs_editor);
+    set(plugin[hs_editor].align,center);
+    set(plugin[hs_editor].handcursor,false);
+    set(plugin[hs_editor].keep,true);
+    set(plugin[hs_editor].url,%SWFPATH%/include/coordfinder/cross.png);
+    set(plugin[hs_editor].zorder,5);
+    set(plugin[hs_editor].altonloaded, if(device.iphone, mul(scale,2)));
+
+    addplugin(click);
+    set(plugin[click].align,center);
+    set(plugin[click].edge,topleft);
+    set(plugin[click].keep,true);
+    set(plugin[click].onclick,action(close_hs_editor););
+    set(plugin[click].url,%SWFPATH%/include/coordfinder/click.png);
+    set(plugin[click].x,20);
+    set(plugin[click].y,10);
+    set(plugin[click].zorder,10);
+    set(plugin[click].altonloaded, if(device.iphone, mul(scale,2)));
+
+    set(contextmenu.item[coord_finder].caption,Coordinates finder - OFF);
+    set(contextmenu.item[coord_finder].onclick,action(close_hs_editor));
+
+    action(buildtext);
+
+  </action>
+
+  <action name="close_hs_editor">
+
+    set(events.onviewchange,get(Back_onviewchange));
+    set(events.onclick,get(Back_onclick));
+
+    removeplugin(hs_editor);
+    removeplugin(click);
+    removeplugin(hs_coordinates);
+
+    set(contextmenu.item[coord_finder].caption,Coordinates finder - ON);
+    set(contextmenu.item[coord_finder].onclick,action(run_hs_editor));
+
+  </action>
+
+  <data name="coordinates"></data>
+
+  <data name="hs_coord_css">
+    p { color:#000;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:12;
+    text-align:center;
+    margin-left:0;
+    margin-right:0;
+    }
+  </data>
+
+  <data name="hs_coord_css_js">
+    color:#222;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:24;
+    text-align:center;
+    margin-left:0;
+    margin-right:0;
+
+  </data>
+
+
+  <action name="buildtext">
+
+    mod(hdistance,get(view.hlookat),360);
+    roundval(hdistance,0);
+    set(vdistance,get(view.vlookat));
+    roundval(vdistance,0);
+
+    addplugin(hs_coordinates);
+    set(plugin[hs_coordinates].align,center);
+    set(plugin[hs_coordinates].background,false);
+    set(plugin[hs_coordinates].css, data:hs_coord_css);
+    set(plugin[hs_coordinates].height,50);
+    set(plugin[hs_coordinates].html,data:coordinates);
+    set(plugin[hs_coordinates].keep,true);
+    set(plugin[hs_coordinates].width,40);
+    set(plugin[hs_coordinates].x,65);
+    set(plugin[hs_coordinates].y,50);
+    set(plugin[hs_coordinates].url,%SWFPATH%/plugins/textfield.swf);
+    set(plugin[hs_coordinates].zorder,11);
+
+    if(device.iphone,
+    set(plugin[hs_coordinates].x,95);
+    set(plugin[hs_coordinates].y,65);
+    set(plugin[hs_coordinates].css, data:hs_coord_css_js);
+    );
+    txtadd(plugin[hs_coordinates].html,'[p]',get(hdistance),'[/p][p]', get(vdistance), '[/p]');
+
+  </action>
+
+</krpano>
+

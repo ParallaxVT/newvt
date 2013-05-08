@@ -1,0 +1,6 @@
+<krpano>
+
+  <layer url="%SWFPATH%/plugins/editor.swf" keep="true" devices="flash" />
+  <layer url="%SWFPATH%/plugins/options.swf" keep="true" devices="flash" />
+
+</krpano>

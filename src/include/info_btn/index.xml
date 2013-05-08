@@ -1,0 +1,186 @@
+<krpano>
+
+  <addinfobtn enabled="true" />
+
+  <action name="set_sidebar_btn">
+    if(sidebar_btn == true ,
+    if(layer[info_btn].first_time == true,
+    tween(layer[info_btn].y,20,.3,easeoutquad);
+    );
+    if(layer[info_btn].first_time == false,
+    tween(layer[info_btn].y,20,.3,easeoutquad);
+    );
+    );
+
+    if(sidebar_btn == false ,
+    hide_sidebar_btn();
+    );
+
+    set(layer[info_btn].first_time == false);
+    if(layer[sidebar].open == true,close_sidebar());
+  </action>
+
+  <action name="open_sidebar">
+    tween(layer[sidebar].x,350,.5,easeoutquad);
+    tween(layer[info_btn].y,-50,.3,easeoutquad);
+    delayedcall(.3,
+    layer[info_btn].loadstyle(close_btn_style);
+    set(layer[info_btn].x,370);
+    tween(layer[info_btn].y,20,.3,easeoutquad);
+    );
+    set(layer[sidebar].open,true);
+  </action>
+
+  <action name="close_sidebar">
+    <!-- disabled btn unil the tween has finished -->
+    set(layer[info_btn].enabled,false);
+    delayedcall(.6,set(layer[info_btn].enabled,true));
+    <!-- sidebar and btn tweens -->
+    tween(layer[sidebar].x,0,.5,easeoutquad);
+    tween(layer[info_btn].y,-50,.3,easeoutquad);
+    delayedcall(.3,
+    layer[info_btn].loadstyle(info_btn_style);
+    set(layer[info_btn].x,20);
+    tween(layer[info_btn].y,20,.3,easeoutquad);
+    );
+    set(layer[sidebar].open,false);
+  </action>
+
+  <action name="show_sidebar_btn">
+    layer[info_btn].loadstyle(info_btn_style);
+    tween(layer[info_btn].y,20,.3,easeoutquad);
+  </action>
+
+  <action name="hide_sidebar_btn">
+    tween(layer[info_btn].y,-50,.3,easeoutquad);
+    tween(layer[sidebar].x,0,.3,easeoutquad);
+    delayedcall(.3,
+    layer[info_btn].loadstyle(info_btn_style);
+    set(layer[info_btn].x,20);
+    );
+    set(layer[sidebar].open,false);
+  </action>
+  
+  <layer name       ="sidebar"
+         align      ="topright"
+         bgalpha    ="0"
+         bgcapture  ="true"
+         edge       ="topleft"
+         handcursor ="false"
+         height     ="100%"
+         keep       ="true"
+         open       ="false"
+         type       ="container"
+         width      ="350"
+         x          ="0"
+         y          ="0"
+         zorder     ="5"
+         >
+
+    <layer name       ="sidebar_mask"
+           align      ="topleft"
+           bgalpha    =".8"
+           bgcapture  ="true"
+           edge       ="topleft"
+           handcursor ="false"
+           keep       ="true"
+           url        ="%SWFPATH%/include/info_btn/mask.png"
+           zorder     ="10"
+           />
+
+    <layer name       ="dotted_line"
+           align      ="topleft"
+           edge       ="topleft"
+           handcursor ="false"
+           keep       ="true"
+           url        ="%SWFPATH%/include/info_btn/dotted_line.png"
+           zorder     ="15"
+           />
+
+    <layer name       ="sidebar_text"
+           align      ="topleft"
+           background ="false"
+           css        ="data:sidebar_css"
+           edge       ="topleft"
+           handcursor ="false"
+           height     ="500"
+           html       ="set_sidebar_btn()"
+           keep       ="true"
+           url        ="%SWFPATH%/plugins/textfield.swf"
+           width      ="310"
+           x          ="20"
+           y          ="20"
+           zorder     ="20"
+           />
+
+  </layer>
+
+  <layer name       ="info_btn"
+         align      ="topright"
+         children   ="false"
+         edge       ="topright"
+         first_time ="true"
+         handcursor ="true"
+         keep       ="true"
+         style      ="info_btn_style"
+         x          ="20"
+         y          ="-50"
+         zorder     ="10"
+         />
+
+
+  <style name="info_btn_style"
+         crop       ="0|0|92|45"
+         onclick    ="open_sidebar"
+         onout      ="set(crop,0|0|92|45);"
+         onover     ="set(crop,92|0|92|45);"
+         url        ="%SWFPATH%/include/info_btn/info_btn.png"
+         width      ="92"
+         />
+
+  <style name="close_btn_style"
+         crop       ="0|0|45|45"
+         onclick    ="close_sidebar"
+         onout      ="set(crop,0|0|45|45);"
+         onover     ="set(crop,45|0|45|45);"
+         url        ="%SWFPATH%/include/info_btn/close_btn.png"
+         width      ="45"
+         />
+
+
+  <data name="sidebar_css">
+    h1 { color:#ffcb25;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:16;
+    text-align:left;
+    }
+    h2 { color:#ffcb25;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:18;
+    text-align:left;
+    }
+    h3 { color:#ffcb25;
+    font-family:Arial;
+    font-weight:normal;
+    font-size:14;
+    text-align:left;
+    margin-left: 10px;
+    }
+    p { color:#ffffff;
+    font-family:Arial;
+    font-weight:none;
+    font-size:14;
+    text-align:left;
+    margin-left: 10px;
+    }
+    li { color:#ffffff;
+    font-family:Arial;
+    font-weight:none;
+    font-size:14;
+    text-align:left;
+    }
+  </data>
+
+</krpano>
