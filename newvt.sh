@@ -406,7 +406,7 @@ add_include_plugin_and_data() {
         if [ "$plugin_value" = "n" ]; then
             if [ -d $dest_include/$plugin ]; then
                 rm -rf $dest_include/$plugin
-                echo -e "\nDELETE $dest_include/$plugin" >> $log_file
+                echo -e "\n    DELETE $dest_include/$plugin" >> $log_file
             fi
             # echo "n"
         fi
