@@ -569,27 +569,30 @@ add_logo_client() {
     fi
 }
 
-add_hotspot() {
-
+add_hotspots() {
     if [ $hotspots = "y" ]; then
         if [ ${#scenes_array[@]} -gt "1" ]; then
+            # Never overwrite content/hs.xml
             if [ ! -f $dest_content/hs.xml ]; then
                 > $dest_content/hs.xml
-                echo '<krpano>'  >> $dest_content/hs.xml
+                echo -e "<krpano version=\"$krpano_version\">\n"  >> $dest_content/hs.xml
                 order=1
                 for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                     hs_action=add_hs_scene$order
                     scene_no=scene$order
+                    cat >> $dest_content/hs.xml << EOF
+  <action name="$hs_action">
+    hs(up, scene, get(layer[swfaddress].pano[scene].title),0,0,0,0);
+  </action>
 
-                    echo '<action name="'$hs_action'">
-    hs(up, '$scene_no', get(layer[swfaddress].pano['$scene_no'].title),0,0,0,0);
-</action>
-' >> $dest_content/hs.xml
-
+EOF
                     order=$(expr $order + 1)
                 done
                 echo "</krpano>"  >> $dest_content/hs.xml
             fi
+            echo -e "   ADD PLUGIN: hotspots" >> $log_file
+            echo_green "ADD  PLUGIN:" "hotspots"
+        # if $hotspots = "n" delete include/hs and content/ht.xml 
         else
             if [ -f $dest_content/hs.xml ]; then
                 rm $dest_content/hs.xml
@@ -598,6 +601,8 @@ add_hotspot() {
                 rm -r $dest_include/hotspots
                 sed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
+            echo -e "   REMOVE PLUGIN: hotspots" >> $log_file
+            echo_green "DEL  PLUGIN:" "hotspots"
         fi
     fi
 }
@@ -991,7 +996,7 @@ start () {
         add_sa
         add_movecamera_coords
         add_logo_client
-        add_hotspot
+        add_hotspots
         add_scroll
         add_plugins_data
         # tour.xml
