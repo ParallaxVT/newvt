@@ -679,28 +679,32 @@ add_plugins_data() {
         file_name=$(basename "$f")
         extension="${file_name##*.}"
         file_name="${file_name%.*}"
-
         echo '  <include url="%SWFPATH%/content/'$file_name'.xml" />' >> $include_data
     done
 
     # Replace the line containing [DATA] with content
     sed -i -e "/\[DATA\]/r $include_data" $dest_devel
     sed -i -e '/\[DATA\]/d' $dest_devel
-    echo -e "\n**** Added $include_data to $dest_devel" >> $log_file
+    
+    echo_green "ADD    DATA:" "to devel.xml"
+    echo -e "\n    ADD $include_data\n    TO $dest_devel" >> $log_file
 
     # Replace the line containing [TILES] with content in temp/each_tiles_files.temp
     # I haven't created tiles.xml because that would add <include url="scenes/scene1.xml" />
     # and then the tiles path would be relative to devel.xml and it'd be
     # a wrong path (/files/scenes/scenes/scene1/...)
     > $temp_folder/all_tiles_files.temp
-    for each_tiles_file in $(find $dest_scenes/*.xml -maxdepth 0 ); do
-        echo '  <include url="%SWFPATH%/scenes/'$(basename $each_tiles_file)'" />' >> $temp_folder/all_tiles_files.temp
+    # for each_tiles_file in $(find $dest_scenes/*.xml -maxdepth 0 ); do
+    #     echo '  <include url="%SWFPATH%/scenes/'$(basename $each_tiles_file)'" />' >> $temp_folder/all_tiles_files.temp
+    # done
+    for each_tiles_file in ${scenes_array[@]} ; do
+        echo "  <include url=\"%SWFPATH%/scenes/$each_tiles_file.xml\" />" >> $temp_folder/all_tiles_files.temp
     done
     sed -i -e "/\[TILES\]/r $temp_folder/all_tiles_files.temp" $dest_devel
     sed -i -e '/\[TILES\]/d' $dest_devel
 
-    echo "ADDED:          data ..."
-    echo -e "\nAdded $temp_folder/tiles.temp to $dest_devel" >> $log_file
+    echo_green "ADD   TILES:" "to devel.xml"
+    echo -e "\n    ADD $temp_folder/tiles.temp\n    TO $dest_devel" >> $log_file
 }
 
 # -------------------
