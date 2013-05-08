@@ -499,6 +499,10 @@ EOF
 }
 
 add_sa() {
+    # Remove sa_bck.xml if exists, so it's not included in devel.xml
+    if [ -f $dest_content/sa_bck.xml ]; then
+        rm $dest_content/sa_bck.xml
+    fi
     # Always overwrite content/sa.xml!!!
     cp -r $orig_content/sa.xml $dest_content/sa.xml
     # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
