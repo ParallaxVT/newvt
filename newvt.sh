@@ -1,10 +1,7 @@
 #!/bin/bash
 
 # Usage:
-# 1- Execute this a first time from inside jobs/job_folder/
-#    Inside this directory, put the panoramas in panos/virtual_tour_name/
-# 2- Then go to g/virtual_tours/project_folder/ and edit vt_conf.sh to add/remove features
-#    Once finished run the script again.
+#    ???  
 #
 # Scroll options:
 #    scroll=n              -> delete any folder named 'scroll', including any copied from .custom/
@@ -27,8 +24,6 @@ else
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
 fi
 krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
-# krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-1.16.1/kmakemultires.exe"
-# krconfig="-config=../krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
 # origin directory paths
 orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
