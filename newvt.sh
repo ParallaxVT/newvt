@@ -774,8 +774,6 @@ add_tour() {
 }
 
 add_tour_clean() {
-    # Duplicate tour.xml and rename it as tour2.xml
-    # cp $krpano $krpano2
     # Make a backup of sa.xml containing the swfaddress plugin
     mv $dest_content/sa.xml $dest_content/sa_bck.xml
     # Delete content/sa.xml and create a new one without the swf address plugin
