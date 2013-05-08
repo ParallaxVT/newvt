@@ -807,13 +807,12 @@ add_tour_clean() {
 
 add_html() {
     for item in "${scenes_array[@]}"; do
-    # echo "$item.html = $item"
         cp -r $orig_content/scene.html $dest_dir/$item.html
         sed -i "s/SCENENAME/$item/g" $dest_dir/$item.html
         sed -i "s|files|$domain_url|g" $dest_dir/$item.html
         echo -e "\nMade $item.html file" >> $log_file
     done
-    echo "ADDED:          html files ..."
+    echo_green "HTML  FILES:" "done"
 }
 
 add_timestamp() {
