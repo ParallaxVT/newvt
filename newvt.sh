@@ -548,7 +548,7 @@ add_logo_client() {
         # If $client_logo_name variable is not defined in vt_conf.sh
         if [ -z $logo_client_name ]; then
             sed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
-            echo -e "   ADD PLUGIN: logo client - other" >> $log_file
+            echo -e "    ADD PLUGIN: logo client - other" >> $log_file
         else
         # Possible values for variable client_logo_name:
         # 1 - Creare
@@ -563,7 +563,7 @@ add_logo_client() {
             if [ $logo_client_name = "3" ]; then
                 sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
             fi
-            echo -e "   ADD PLUGIN: logo client - option $logo_client_name" >> $log_file
+            echo -e "    ADD PLUGIN: logo client - option $logo_client_name" >> $log_file
         fi
         echo_green "ADD  PLUGIN:" "logo client"
     fi
