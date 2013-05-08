@@ -411,6 +411,12 @@ add_include_plugin_and_data() {
 add_plugins_in_custom() {
     if [ -d $new_dir/.custom ]; then
         if [ "$(ls -A $new_dir/.custom/include)" ]; then
+            # Make sure all the xml files have the latest version in the header
+            for each_custom_xml_file in $(find ./.custom/include/ -type f  -name "*.xml"); do
+                sed -i '/^<krpano/d' $each_custom_xml_file
+                sed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
+            done
+            # For each directory add a <include/> line to $include_pluging file>
             echo "" >> $log_file
             for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
                 cp -r $eachdirectory $dest_include
