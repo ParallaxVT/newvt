@@ -844,7 +844,7 @@ add_version() {
     for each_xml_file in $(find $scenes_dir/files/ -type f  -name "*.xml"); do
         sed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
     done
-    echo "ADDED:          version $krpano_version  ..."
+    echo_green "GET VERSION:" "krpano $krpano_version"
 }
 
 add_list() {
