@@ -992,6 +992,11 @@ start () {
 
 }
 
+
+if [ $(uname -o) = "GNU/Linux" ]; then
+    clear
+fi
+
 if [ -f $config ]; then
     conf_file_found
     start $1
