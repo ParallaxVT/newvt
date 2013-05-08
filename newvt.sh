@@ -836,6 +836,7 @@ add_timestamp() {
             sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
             sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
         done
+        echo_green "TIME  STAMP:" "done"
     fi
 }
 
