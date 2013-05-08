@@ -866,10 +866,10 @@ add_list() {
         cp $template_file $index_file
         mkdir -p $temp_dir
         > $content_file
-
+        echo "List file contains:" >> $log_file
         for tour in .src/panos/*; do
             tour_name="$(basename $tour)"
-            echo $tour_name
+            echo "    $tour_name" >> $log_file
             tour_title="${tour_name//_/ }"
             all_brands_array=( $tour_title )
             tour_title="${all_brands_array[@]^}"
@@ -881,7 +881,7 @@ add_list() {
                 scene_name="$(basename $scene_html)"
                 extension="${scene_name##*.}"
                 scene_name="${scene_name%.*}"
-                echo "    $scene_name"
+                echo "      $scene_name" >> $log_file
                 scene_fancy_name="${scene_name//_/ }"
                 all_words_array=( $scene_fancy_name )
                 scene_fancy_name="${all_words_array[@]^}"
@@ -905,6 +905,7 @@ add_list() {
         sed -i -e '/\[CONTENT\]/d' $index_file
 
         rm -r $temp_dir
+        echo_green "CREATE LIST:" "done"
     fi
 }
 
