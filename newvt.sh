@@ -121,7 +121,6 @@ build_config_file () {
     base="coordfinder|editor_and_options|global|gyro|movecamera|sa|startup"
     echo "# ========== Base =========="     >> $config
     for d in $orig_include/*; do
-    # for d in $orig_include/@($base); do
         plugin=$(basename $d)
         [[ ! $plugin =~ ^($base)$ ]] && continue
         echo "$plugin=y"                    >> $config
@@ -129,33 +128,20 @@ build_config_file () {
     echo ''                                 >> $config
 
     # 3- Optional: There are 2 types.
-    # echo "Basic features [1] No features [2]"
-
-    # read features
     echo "# ========== Optional ==========" >> $config
-    #    -Basic: with instructions and full screen button. Logo is included but not displayed
-    # if [ $features = "1" ]; then
-        # echo "fullscreen=y"                 >> $config
-        # echo "instructions=y"               >> $config
-        # echo "logo=n"                       >> $config
-        # echo "logo_client=n"                >> $config
-        # echo "Generated vt_conf.sh with basic features" >> $log_file
-    # fi
-    #    - No fuatures: all the values are set to 'n'
-    # if [ $features = "2" ]; then
     for d in $orig_include/*; do
-    # for d in $orig_include/!($base); do
         optional_plugins=$(basename $d)
         [[ $optional_plugins =~ ^($base)$ ]] && continue
-        echo "$optional_plugins=n"                    >> $config
+        echo "$optional_plugins=n"          >> $config
     done
     echo ''                                 >> $config
     echo "# ========== Options =========="  >> $config
-    echo "timestamp=n"                   >> $config
-    echo "list=y"                         >> $config
+    echo "scroll_more=title"                >> $config
+    echo "timestamp=n"                      >> $config
+    echo "list=y"                           >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
-    # fi
+
     # Source vt_conf.sh, which doesn't have any features yet
     source $config
 
@@ -685,7 +671,7 @@ add_plugins_data() {
     # Replace the line containing [DATA] with content
     sed -i -e "/\[DATA\]/r $include_data" $dest_devel
     sed -i -e '/\[DATA\]/d' $dest_devel
-    
+
     echo_green "ADD    DATA:" "to devel.xml"
     echo -e "\n    ADD $include_data\n    TO $dest_devel" >> $log_file
 
