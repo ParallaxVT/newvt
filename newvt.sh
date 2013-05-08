@@ -518,7 +518,7 @@ add_sa() {
     sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
     sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
     echo_green "CREATE FILE:" "content/sa.xml"
-    echo -e "\n    COPY FILE $orig_content/sa.xml TO $dest_content/sa.xml" >> $log_file
+    echo -e "\n    COPY FILE $orig_content/sa.xml\n      TO $dest_content/sa.xml\n" >> $log_file
 }
 
 add_movecamera_coords()  {
