@@ -543,33 +543,29 @@ EOF
     fi
 }
 
-add_logo() {
-
-    # if [ $logo = "y" ]; then
-        # echo '  <include url="%SWFPATH%/include/logo/index.xml" />' >> $include_plugin;
-        # cp -r $orig_include/logo $dest_include;
-    # fi
-
+add_logo_client() {
     if [ $logo_client = "y" ]; then
-        # echo '  <include url="%SWFPATH%/include/logo_client/index.xml" />' >> $include_plugin;
-        # cp -r $orig_include/logo_client $dest_include;
-
-        # echo "Choose the client logo:"
-        # echo "Creare [1] Addoctor [2] Llama Digital [3] Other[4]"
-        # read logo_client_name
-        if [ $logo_client_name = "1" ]; then
-            sed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
-        fi
-        if [ $logo_client_name = "2" ]; then
-            sed -i "s/CLIENTNAME/addoctor/g" $dest_include"/logo_client/index.xml"
-        fi
-        if [ $logo_client_name = "3" ]; then
-            sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
-        fi
-        if [ $logo_client_name = "4" ]; then
+        # If $client_logo_name variable is not defined in vt_conf.sh
+        if [ -z $logo_client_name ]; then
             sed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
+            echo -e "   ADD PLUGIN: logo client - other" >> $log_file
+        else
+        # Possible values for variable client_logo_name:
+        # 1 - Creare
+        # 2 - Addoctor
+        # 3 - Llama Digital
+            if [ $logo_client_name = "1" ]; then
+                sed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
+            fi
+            if [ $logo_client_name = "2" ]; then
+                sed -i "s/CLIENTNAME/addoctor/g" $dest_include"/logo_client/index.xml"
+            fi
+            if [ $logo_client_name = "3" ]; then
+                sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
+            fi
+            echo -e "   ADD PLUGIN: logo client - option $logo_client_name" >> $log_file
         fi
-        # echo -e "\n Added LOGO CLIENT"
+        echo_green "ADD  PLUGIN:" "logo client"
     fi
 }
 
@@ -994,7 +990,7 @@ start () {
         add_info_btn
         add_sa
         add_movecamera_coords
-        add_logo
+        add_logo_client
         add_hotspot
         add_scroll
         add_plugins_data
