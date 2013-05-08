@@ -607,18 +607,22 @@ remove_scroll () {
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
     if [ "$scroll" != "n" ]; then
-        if [ "$scroll_more" = "title" ]; then
-            scroll_swf='scroll_'$number_of_scenes'_title'
-        fi
-        if [ "$scroll_more" = "notitle" ]; then
-            scroll_swf='scroll_'$number_of_scenes
-        fi
-        if [ ${#scenes_array[@]} -gt "1" ]; then
-            echo_green "ADD  PLUGIN:" "scroll - $number_of_scenes scenes"
-            echo -e "\n    ADD PLUGIN: scroll - $number_of_scenes scenes" >> $log_file
-            add_scroll_data
+        if [ -z $scroll_more ]; then
+            echo_attention "scroll_more variable is not defined."
         else
-            remove_scroll
+            if [ "$scroll_more" = "title" ]; then
+                scroll_swf='scroll_'$number_of_scenes'_title'
+            fi
+            if [ "$scroll_more" = "notitle" ]; then
+                scroll_swf='scroll_'$number_of_scenes
+            fi
+            if [ ${#scenes_array[@]} -gt "1" ]; then
+                echo_green "ADD  PLUGIN:" "scroll - $number_of_scenes scenes"
+                echo -e "\n    ADD PLUGIN: scroll - $number_of_scenes scenes" >> $log_file
+                add_scroll_data
+            else
+                remove_scroll
+            fi
         fi
     fi
 }
