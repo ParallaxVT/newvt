@@ -709,7 +709,6 @@ add_tour() {
     # Copy devel.xml replacing any existing one
     cp $dest_devel $temp_folder"/devel1.temp"
     > $tour_file
-
     # Make a temp file with all the files url's
     grep -o 'url=['"'"'"][^"'"'"']*['"'"'"]' $temp_folder"/devel1.temp" > $temp_folder"/devel2.temp"
     # Delete lines containing 'editor_and_options'
@@ -725,22 +724,22 @@ add_tour() {
 
     # Merge all the files into tour.xml
     while read line; do
-        # cat $dest_files"/"$line >> $tour_file
         cat $dest_files$line >> $tour_file
         # echo $dest_files$line
         # echo $line
     done < $temp_folder"/devel5.temp"
-# exit 1
+    echo -e "\n    ADD $temp_folder/devel5.temp\n    TO $tour_file" >> $log_file
 
     # Merge all tiles code
     > $temp_folder/tiles.temp
     for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
-    echo -e "\n    CREATE file $temp_folder/tiles.temp" >> $log_file
+    echo -e "\n    CREATE FILE $temp_folder/tiles.temp" >> $log_file
 
     # Add tiles code
     cat $temp_folder/tiles.temp >> $tour_file
+    echo -e "\n    ADD $temp_folder/tiles.temp\n    TO $tour_file" >> $log_file
 
     # Delete all the lines beginning with <?xml, <krpano </krpano
     sed -i '/^<?xml/d' $tour_file
@@ -763,21 +762,15 @@ add_tour() {
     # Delete commented lines
     sed -i '/-->/d' $tour_file
 
-    # if [ -f "$krpano2" ]; then
-        # echo "ADDED:          krpano2.xml ..."
-    # else
-    # file_generated=tour.xml
-    echo "ADDED:          $1 ..."
-    # file_generated=krpano2.xml
-    # fi
-    if [ -f $dest_content/sa_bck.xml ]; then
+    echo_green "CREATE FILE:" "$1.xml"
+
     # If there is a sa_bck.xml file then:
     # Restore sa.xml with swfaddress plugin, so the next time I run the script
     # tour.xml will have swfaddress plugin included.
     # Otherwise tour.xml would always include the deleted swfaddress plugin version
+    if [ -f $dest_content/sa_bck.xml ]; then
         mv $dest_content/sa_bck.xml $dest_content/sa.xml
     fi
-
 }
 
 add_tour_clean() {
