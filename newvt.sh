@@ -590,9 +590,9 @@ EOF
                 done
                 echo "</krpano>"  >> $dest_content/hs.xml
             fi
-            echo -e "   ADD PLUGIN: hotspots" >> $log_file
+            echo -e "\n    ADD PLUGIN: hotspots" >> $log_file
             echo_green "ADD  PLUGIN:" "hotspots"
-        # if $hotspots = "n" delete include/hs and content/ht.xml 
+        # if $hotspots = "n" delete include/hs and content/hs.xml
         else
             if [ -f $dest_content/hs.xml ]; then
                 rm $dest_content/hs.xml
@@ -601,7 +601,7 @@ EOF
                 rm -r $dest_include/hotspots
                 sed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
-            echo -e "   REMOVE PLUGIN: hotspots" >> $log_file
+            echo -e "    REMOVE PLUGIN: hotspots" >> $log_file
             echo_green "DEL  PLUGIN:" "hotspots"
         fi
     fi
