@@ -982,9 +982,10 @@ start () {
         add_timestamp
         add_version
 
-        # LAST BUT NOT LEAST
-        remove_temp
     done
+
+    # LAST BUT NOT LEAST
+    remove_temp
 
     if [ -z $1 ]; then
         add_list
