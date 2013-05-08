@@ -669,6 +669,12 @@ EOF
 }
 
 add_plugins_data() {
+
+    # Make sure all the xml files, apart from scroll.xml, have the latest version in the header
+    for f in $(find $dest_content/*.xml ! -iname "scroll.xml") ; do
+        sed -i '/^<krpano/d' $f
+        sed -i "1i<krpano version=\"$krpano_version\">" $f
+    done
     for f in $dest_content/*.xml; do
         # Get rid off the path and the extension
         file_name=$(basename "$f")
