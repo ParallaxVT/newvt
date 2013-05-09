@@ -360,7 +360,7 @@ add_scene_tiles() {
     for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
-    echo -e "\n    CREATE file $temp_folder/tiles.temp" >> $log_file
+    echo -e "\n    CREATE FILE $temp_folder/tiles.temp" >> $log_file
 }
 
 # -------------------
