@@ -919,12 +919,23 @@ start () {
     # Any trailing back slash at the end is automatically removed
     if [ ! -z $1 ]; then
         declare -a tours_array=( ${1%/})
+        # Stop the script if the given directory doesn't exist
+        if [ ! -d ".src/panos/$1" ]; then
+            echo_warning ".src/panos/$1 directory NOT FOUND"
+            exit 1
+        fi
     else
+        subfolder=$(find $jobs_dir/.src/panos/* -maxdepth 0 -type d)
+        if [ -z $subfolder ]; then
+            echo_warning "There are no scene folders in .src/panos/"
+            exit 1
+        fi
         for each_tour in $(find $jobs_dir/.src/panos/* -maxdepth 0 -type d ); do
             each_tour=$(basename "$each_tour")
             tours_array=( "${tours_array[@]}" "$each_tour")
         done
     fi
+
     add_custom_dir
 
     # Let me khow how many tours are in total
