@@ -723,7 +723,7 @@ add_plugins_data() {
 
 add_tour() {
 
-    tour_file=$dest_files/$1.xml
+    tour_file=$dest_files/tour.xml
     # Copy devel.xml replacing any existing one
     cp $dest_devel $temp_folder"/devel1.temp"
     > $tour_file
@@ -764,13 +764,9 @@ add_tour() {
     sed -i '/^<krpano/d' $tour_file
     sed -i '/^<\/krpano/d' $tour_file
 
+    echo_green "-> TOUR.XML:" "Remove krpano tags"
+
     # Add krpano tags at the beginning of tour.xml
-    # If it's tour_clean.xml,then add an onstart action to load scene1'
-    if [ $1 = "tour_clean" ]; then
-        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_file
-    else
-        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
-    fi
     sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
 
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
