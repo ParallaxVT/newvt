@@ -487,8 +487,8 @@ EOF
                 texttitle="Scene $order text"
                 cat >> $dest_content/info_btn_text.xml << EOF
   <data name="$textname">
-      <h2>$texttitle</h2><br/>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <h2>$texttitle</h2><br/>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
   </data>
 
 EOF
