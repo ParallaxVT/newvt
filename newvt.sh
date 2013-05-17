@@ -284,15 +284,14 @@ check_pano_images() {
     # there are files with the wrong format
     # tif files will stop the scrit
     # JPG, JPEG and jpeg files will be coverted to jpg
-    wrong_format=$(find $1/* ! -name *.jpg)
+    wrong_format=$(find $1/* -type f ! -name "*.jpg")
     if [ ! -z "$wrong_format" ]; then
-        weird_format=$(find $1/* ! -iname "*.jp*")
+        weird_format=$(find $1/* -type f ! -iname "*.jp*")
         if [ ! -z "$weird_format" ]; then
-            echo_warning "The following files have the WRONG FORMAT:"
-            echo "$weird_format"
+            echo_warning "File $weird_format has a WRONG FORMAT:"
             exit 1
         else
-            echo_warning "Converted the following files  to the right format:"
+            echo_warning "Convert the file $weird_format to the right format"
             rename -f 's/\.JPG$/\.jpg/' $panos_dir/*
             rename -f 's/\.JPEG$/\.jpg/' $panos_dir/*
             rename -f 's/\.jpeg$/\.jpg/' $panos_dir/*
