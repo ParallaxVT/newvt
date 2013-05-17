@@ -136,11 +136,9 @@ build_config_file () {
     echo "list=n"                           >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
-
-    # Source vt_conf.sh, which doesn't have any features yet
-    source $config
-
     echo "CREATE FILE:          vt_conf.sh ..."
+    echo "Edit vt_conf.sh file and run the script again"
+    exit 0
 }
 
 add_custom_dir() {
