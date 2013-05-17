@@ -176,8 +176,6 @@ rm_old_xml_files() {
             echo_attention "rm_old_xml_files() -> \$1 not defined"
             echo $1
         fi
-    else
-        echo_warning "rm_old_xml_files() -> $scenes_dir folder doesn't exist"
     fi
 }
 
