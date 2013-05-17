@@ -771,8 +771,12 @@ add_tour() {
     else
         sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
     fi
+    sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
+
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
     echo '</krpano>' >> $tour_file
+
+    echo_green "-> TOUR.XML:" "Add new krpano tags"
 
     # Delete empty lines
     sed -i '/^$/d' $tour_file
@@ -780,31 +784,27 @@ add_tour() {
     # Delete commented lines
     sed -i '/-->/d' $tour_file
 
-    echo_green "CREATE FILE:" "$1.xml"
+    # Delete indentation
+    sed -i -r 's/^[[:blank:]]+//' $tour_file
 
-    # If there is a sa_bck.xml file then:
-    # Restore sa.xml with swfaddress plugin, so the next time I run the script
-    # tour.xml will have swfaddress plugin included.
-    # Otherwise tour.xml would always include the deleted swfaddress plugin version
-    if [ -f $dest_content/sa_bck.xml ]; then
-        mv $dest_content/sa_bck.xml $dest_content/sa.xml
-    fi
+    echo_green "-> TOUR.XML:" "Remove empty lines, comments and indentation"
+
+    echo_green "CREATE FILE:" "tour.xml"
+
 }
 
 add_tour_clean() {
-    # Make a backup of sa.xml containing the swfaddress plugin
-    mv $dest_content/sa.xml $dest_content/sa_bck.xml
-    # Delete content/sa.xml and create a new one without the swf address plugin
-    > $dest_content/sa.xml
-    echo '<layer name="swfaddress" keep="true">' >> $dest_content/sa.xml
-    cat $temp_folder/scene_names.temp >> $dest_content/sa.xml
-    echo '</layer>' >> $dest_content/sa.xml
-    # then build tour.xml again, this time without sa.swf, and call it tour_clean.xml
-    add_tour "tour_clean"
-    # Source config again so domain_url can get $scenes_dir value
-    source $config
-    # Replace %SWFPATH% with the value of $domain_url
-    sed -i "s|\%SWFPATH\%|$domain_url|g" $dest_files/tour_clean.xml
+    tour_clean="$dest_files/tour_clean.xml"
+    cp $tour_file $tour_clean
+    startdel="oninvalidaddress"
+    finishdel="style\=\"mode_auto"
+    # Delete any lines between $startdel and $finishdel, both included
+    sed -i -e "/^$startdel/,/^$finishdel/d" $tour_clean
+    # Delete the line with <krpnano at the beginning
+    sed -i '/^<krpano/d' $tour_clean
+    # Add krpano tag with onstart action on line number 2
+    sed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
+    echo_green "CREATE FILE:" "tour_clean.xml"
 }
 
 add_html() {
@@ -979,7 +979,7 @@ start () {
         add_scroll
         add_plugins_data
         # tour.xml
-        add_tour "tour"
+        add_tour
         add_tour_clean
         add_html
         add_timestamp
