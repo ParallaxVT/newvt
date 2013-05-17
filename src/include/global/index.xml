@@ -36,5 +36,9 @@
 
   <network downloadqueues="6" decodequeues="2"/>
 
+  <security>
+    <crossdomainxml url="%SWFPATH%/crossdomain.xml" />
+  </security>
+
 </krpano>
 
