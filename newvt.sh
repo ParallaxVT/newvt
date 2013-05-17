@@ -660,11 +660,11 @@ add_scroll_data() {
 
 EOF
        # Make a thumbnail for each pano, only if it doesn't exists already
-        if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
-            convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
-            echo -e "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg" >> $log_file
-        fi
-        order=$(expr $order + 1)
+       if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
+           convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
+           echo -e "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg" >> $log_file
+       fi
+       order=$(expr $order + 1)
     done
     echo '</content>' >> $dest_content/scroll.xml
     echo -e "    ADD FILE: content/scroll.xml" >> $log_file
