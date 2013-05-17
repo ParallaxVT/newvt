@@ -345,7 +345,7 @@ add_scene_tiles() {
                 sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
                 mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
             fi
-            echo_green "MAKE  TILES: $(basename $scenes_dir)/$filename ..."
+            echo_green "MAKE  TILES: " "$(basename $scenes_dir)/$filename ..."
             echo -e "\n    MOVE $panos_dir/output/scenes/$filename TO $dest_scenes" >> $log_file
             echo "    MOVE $panos_dir/output/$filename.xml TO $dest_scenes" >> $log_file
         fi
