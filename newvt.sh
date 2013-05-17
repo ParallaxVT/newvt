@@ -315,22 +315,25 @@ add_scene_tiles() {
             echo -e "    $dest_scenes/$filename/ directory is OK" >> $log_file
         else
             echo -e "\n    $dest_scenes/$filename NOT FOUND or EMPTY" >> $log_file
-            echo -e "\n    panofile is: $panofile" >> $log_file
+            echo -e "\n    panofile IS:\n    $panofile" >> $log_file
             if [ $HOSTNAME = "RafaelGP" ]; then
                 # Replace /media/g/ with G:/
-                win_path=$(echo $panofile | sed -e 's/\/media\/g/G\:/g')
+                pano_path=$(echo $panofile | sed -e 's/\/media\/g/G\:/g')
             fi
             if [ $HOSTNAME = "RafaLaptop" ]; then
                 # Replace /media/c/ with C:/
-                win_path=$(echo $panofile | sed -e 's/\/media\/c/C\:/g')
+                pano_path=$(echo $panofile | sed -e 's/\/media\/c/C\:/g')
             fi
             if [ $HOSTNAME = "debian" ]; then
                 # Don't do anything
-                win_path=$panofile
+                pano_path=$panofile
             fi
             check_pano_images "$panos_dir"
-            echo "    win_path is: $win_path" >> $log_file
-            $krpath $krconfig $win_path
+
+            echo -e "    krpath IS:\n    $krpath" >> $log_file
+            echo -e "    krconfig IS:\n    $krconfig" >> $log_file
+            echo -e "    pano_path IS:\n    $pano_path" >> $log_file
+            $krpath $krconfig $pano_path
 
             if [ $? != 0 ]; then
                 echo_warning  "Krpano tiles FAILED while processing: $each_scene"
