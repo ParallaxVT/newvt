@@ -563,7 +563,7 @@ add_logo_client() {
 }
 
 add_hotspots() {
-    if [ $hotspots = "y" ]; then
+    if [ "$hotspots" = "y" ]; then
         if [ ${#scenes_array[@]} -gt "1" ]; then
             # Never overwrite content/hs.xml
             if [ ! -f $dest_content/hs.xml ]; then
@@ -594,8 +594,8 @@ EOF
                 rm -r $dest_include/hotspots
                 sed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
-            echo -e "    REMOVE PLUGIN: hotspots" >> $log_file
-            echo_green "DEL  PLUGIN:" "hotspots"
+            echo -e "    REMOVE PLUGIN: hotspots (Only 1 scene)" >> $log_file
+            echo_green "DEL  PLUGIN:" "hotspots (Only 1 scene)"
         fi
     fi
 }
