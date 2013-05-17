@@ -133,7 +133,7 @@ build_config_file () {
     echo "# ========== Options =========="  >> $config
     echo "scroll_more=title"                >> $config
     echo "timestamp=n"                      >> $config
-    echo "list=y"                           >> $config
+    echo "list=n"                           >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
 
