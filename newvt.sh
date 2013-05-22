@@ -29,6 +29,7 @@ krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/t
 orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
+orig_html=$orig_dir/html
 orig_structure=$orig_dir/structure
 orig_devel=$orig_structure/files/devel.xml
 # monitor script
@@ -67,6 +68,10 @@ conf_file_found () {
         exit 1
     elif [ -z $list ]; then
         echo_warning "list variable not defined"
+        exit 1
+    elif [ -z $copyhtml ]; then
+        echo $copyhtml
+        echo_warning "copyhtml variable not defined"
         exit 1
     else
         log_file=$new_dir/newvt.log
@@ -134,6 +139,7 @@ build_config_file () {
     echo "scroll_more=title"                >> $config
     echo "timestamp=n"                      >> $config
     echo "list=n"                           >> $config
+    echo "copyhtlmfiles=y"                  >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
     echo "CREATE FILE:          vt_conf.sh ..."
@@ -209,6 +215,13 @@ add_structure() {
     if [ $? != 0 ]; then
         echo_warning "Copy files from template FAILED"
         exit 1
+    fi
+
+    if [ $copyhtml = "y" ]; then
+        cp $orig_html/*.html $dest_dir/
+        echo "    COPY html files TO $dest_dir\n " >> $log_file
+    else
+        echo "    DON'T COPY html files TO $dest_dir\n " >> $log_file
     fi
 
     echo -e "\n    COPY STRUCTURE TO $dest_dir\n" >> $log_file
