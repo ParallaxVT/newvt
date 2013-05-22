@@ -52,7 +52,7 @@ echo_attention() {
 conf_file_found () {
     if ! [ $HOSTNAME = "RafaelGP" ]; then
         # echo "is c"
-       # Replace /media/g with /media/c
+        # Replace /media/g with /media/c
         sed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
     else
         # echo "is g"
@@ -105,7 +105,7 @@ build_config_file () {
     # $config will be difined again in add_structure to add a relative path to it
     > $config
 
-     # Config file has three sections:
+    # Config file has three sections:
 
     # 1- Folder paths: input and output directories
     echo '#!/bin/bash'                      >> $config
@@ -556,10 +556,10 @@ add_logo_client() {
             sed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
             echo -e "    ADD PLUGIN: logo client - other" >> $log_file
         else
-        # Possible values for variable client_logo_name:
-        # 1 - Creare
-        # 2 - Addoctor
-        # 3 - Llama Digital
+            # Possible values for variable client_logo_name:
+            # 1 - Creare
+            # 2 - Addoctor
+            # 3 - Llama Digital
             if [ $logo_client_name = "1" ]; then
                 sed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
             fi
@@ -598,7 +598,7 @@ EOF
             fi
             echo -e "\n    ADD PLUGIN: hotspots" >> $log_file
             echo_green "ADD  PLUGIN:" "hotspots"
-        # if $hotspots = "n" delete include/hs and content/hs.xml
+            # if $hotspots = "n" delete include/hs and content/hs.xml
         else
             if [ -f $dest_content/hs.xml ]; then
                 rm $dest_content/hs.xml
@@ -653,7 +653,7 @@ add_scroll_data() {
     # Copy the corresponding swf file for the number of scenes
     cp -r $orig_content'/scroll/'$scroll_swf.swf  $dest_include'/scroll'
 
-     # Make content/scroll_thumbs/ directory if doesn't exists
+    # Make content/scroll_thumbs/ directory if doesn't exists
     if [ ! -d $dest_content'/scroll_thumbs' ]; then
         mkdir $dest_content'/scroll_thumbs'
     fi
@@ -744,7 +744,7 @@ add_tour() {
     grep -o 'url=['"'"'"][^"'"'"']*['"'"'"]' $temp_folder"/devel1.temp" > $temp_folder"/devel2.temp"
     # Delete lines containing 'editor_and_options'
     sed -e '/editor_and_options/d' $temp_folder/devel2.temp > $temp_folder/devel3.temp
-     # Delete lines containing 'scene'
+    # Delete lines containing 'scene'
     sed -e '/scenes/d' $temp_folder/devel3.temp > $temp_folder/devel4.temp
     # Strip off everything to leave just the url's'
     sed -e 's/^url=["'"'"']//' -e 's/["'"'"']$//' $temp_folder"/devel4.temp" > $temp_folder"/devel5.temp"
@@ -830,18 +830,18 @@ add_timestamp() {
     if [ $timestamp = "y" ]; then
         timestamp=$(date "+%Y%m%d%H%M%S").xml
         for each_tour_xml in $(find . -name tour.xml); do
-        # Get rid off the extension
+            # Get rid off the extension
             extension="${each_tour_xml##*.}"
             each_tour_xml="${each_tour_xml%.*}"
             mv  $each_tour_xml.xml $each_tour_xml$timestamp
-        # echo "$each_tour_xml.xml -> $each_tour_xml$timestamp"
+            # echo "$each_tour_xml.xml -> $each_tour_xml$timestamp"
         done
         for each_tour_clean_xml in $(find . -name tour_clean.xml); do
-        # Get rid off the extension
+            # Get rid off the extension
             extension="${each_tour_clean_xml##*.}"
             each_tour_clean_xml="${each_tour_clean_xml%.*}"
             mv  $each_tour_clean_xml.xml $each_tour_clean_xml$timestamp
-        # echo "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp"
+            # echo "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp"
         done
         for each_html_file in $(find . -name "*.html"); do
             sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
