@@ -69,10 +69,6 @@ conf_file_found () {
     elif [ -z $list ]; then
         echo_warning "list variable not defined"
         exit 1
-    elif [ -z $copyhtml ]; then
-        echo $copyhtml
-        echo_warning "copyhtml variable not defined"
-        exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
@@ -139,7 +135,6 @@ build_config_file () {
     echo "scroll_more=title"                >> $config
     echo "timestamp=n"                      >> $config
     echo "list=n"                           >> $config
-    echo "copyhtlmfiles=y"                  >> $config
 
     echo "Generated vt_conf.sh without any features" >> $log_file
     echo "CREATE FILE:          vt_conf.sh ..."
@@ -150,13 +145,16 @@ build_config_file () {
 add_custom_dir() {
     # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
     # .custom contains custom plugins to be included in every scene
+    if [ ! -d $new_dir/.custom ]; then
+        echo -e "\nCREATE FOLDER .custom directory" >> $log_file
+        mkdir $new_dir/.custom
+    else
+        echo -e "\n.custom directory already exists" >> $log_file
+    fi
+    if [ ! -d $new_dir/.custom/html ]; then
+        mkdir $new_dir/.custom/html
+    fi
     if [ ${#tours_array[@]} -gt "1" ]; then
-        if [ ! -d $new_dir/.custom ]; then
-            echo -e "\nCREATE FOLDER .custom directory" >> $log_file
-            mkdir $new_dir/.custom
-        else
-            echo -e "\n.custom directory already exists" >> $log_file
-        fi
         if [ ! -d $new_dir/.custom/include ]; then
             mkdir $new_dir/.custom/include
         fi
@@ -215,13 +213,6 @@ add_structure() {
     if [ $? != 0 ]; then
         echo_warning "Copy files from template FAILED"
         exit 1
-    fi
-
-    if [ $copyhtml = "y" ]; then
-        cp $orig_html/*.html $dest_dir/
-        echo "    COPY html files TO $dest_dir\n " >> $log_file
-    else
-        echo "    DON'T COPY html files TO $dest_dir\n " >> $log_file
     fi
 
     echo -e "\n    COPY STRUCTURE TO $dest_dir\n" >> $log_file
@@ -424,8 +415,14 @@ add_include_plugin_and_data() {
 }
 
 add_plugins_in_custom() {
-    if [ -d $new_dir/.custom ]; then
-        if [ "$(ls -A $new_dir/.custom/include)" ]; then
+    # Check if .custom directory exists and is not empty
+    if [ -d $new_dir/.custom ] && [ "$(ls -A $new_dir/.custom)" ]; then
+        # Check if .custom/html directory exists and it's not empty
+        if [ -d $new_dir/.custom/html ] && [ "$(ls -A $new_dir/.custom/html)" ]; then
+            cp $new_dir/.custom/html/*.html $dest_dir
+        fi
+        # Check if .custom/include directory exists and it's not empty
+        if [ -d $new_dir/.custom/include ] &&  [ "$(ls -A $new_dir/.custom/include)" ]; then
             # Make sure all the xml files have the latest version in the header
             for each_custom_xml_file in $(find ./.custom/include/ -type f  -name "*.xml"); do
                 sed -i '/^<krpano/d' $each_custom_xml_file
