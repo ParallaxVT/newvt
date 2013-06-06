@@ -533,10 +533,7 @@ add_movecamera_coords()  {
         echo -e "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
         for eachpano in "${scenes_array[@]}"; do
             cat >> $dest_content/coord.xml << EOF
-  <action name="movecamera_$eachpano">
-    movecamera(0,0);
-  </action>
-
+  <action name="movecamera_$eachpano">movecamera(0,0);</action>
 EOF
             order=$(expr $order + 1)
             echo -e "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
