@@ -2,7 +2,7 @@
 
   <action name="run_once">
     <!-- This avoid run startup twice in devel mode -->
-    if(run !== null,
+    if(run === null,
     startup(%1);
     );
     set(run,false);
