@@ -77,8 +77,9 @@
     set(hotspot[arrow_%2].width,35);
     set(hotspot[arrow_%2].zorder,10);
 
-    if(device.iphone,
-    mul(hotspot[arrow_%2].scale,2);
+    if(device.mobile,
+    mul(hotspot[arrow_%2].scale,2.5);
+    sub(hotspot[arrow_%2].ath,-4);
     );
 
     if(device.ipad,
