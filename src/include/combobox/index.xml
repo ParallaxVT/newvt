@@ -36,7 +36,7 @@
     for(set(i,0), i LT scene.count, inc(i),
 
     set(scene_name,get(scene[get(i)].name));
-    set(scene_title,get(layer[swfaddress].pano[get(scene_name)].title));
+    set(scene_title,get(layer[panolist].pano[get(scene_name)].title));
     txtadd(scene_action,'activatepano(' , get(scene_name) , ');');
 
     addIdItem(get(scene_name),get(scene_title),get(scene_action));

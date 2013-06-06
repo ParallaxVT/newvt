@@ -184,7 +184,7 @@ add_custom_dir() {
 rm_old_xml_files() {
     if [ -d "$scenes_dir" ]; then
         if [ ! -z $1 ]; then
-            find $1 -maxdepth 1 -type f -name "*.html" -exec rm -rf {} \;
+            find $1 -maxdepth 2 -type f -name "*.html" -exec rm -rf {} \;
             # Remove any xml file which date stamp is year 2000 onwards
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
@@ -271,13 +271,13 @@ add_scene_names() {
         panoname=scene$order
         pageurl=/scene$order/
         cat >> $temp_folder/scene_names.temp << EOF
-<pano name="$eachpano"
-      scene="$eachpano"
-      pageurl="$pageurl"
-      pagetitle="${!panoname}"
-      title="${!panoname}"
-      custom="$custom"
-      />
+  <pano name="$eachpano"
+        scene="$eachpano"
+        pageurl="$pageurl"
+        pagetitle="${!panoname}"
+        title="${!panoname}"
+        custom="$custom"
+        />
 
 EOF
         order=$(expr $order + 1)
@@ -523,17 +523,20 @@ EOF
 }
 
 add_sa() {
-    # Remove sa_bck.xml if exists, so it's not included in devel.xml
-    if [ -f $dest_content/sa_bck.xml ]; then
-        rm $dest_content/sa_bck.xml
+    # Backwards compatibility: delete file content/sa.xml if exists
+    if [ -f $dest_content/sa.xml ]; then
+        rm $dest_content/sa.xml
     fi
-    # Always overwrite content/sa.xml!!!
-    cp -r $orig_content/sa.xml $dest_content/sa.xml
+    # Always overwrite content/panolist.xml!!!
+    > $dest_content/panolist.xml
+    printf '<krpano>\n\n' >> $dest_content/panolist.xml
+    printf '  <layer name="panolist" keep="true">\n\n[SCENE_NAMES]\n' >> $dest_content/panolist.xml
+    printf '  </layer>\n\n</krpano>\n' >> $dest_content/panolist.xml
     # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
-    sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
-    sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
-    echo_ok "Created FILE: content/sa.xml"
-    printf "\n    COPY FILE $orig_content/sa.xml\n      TO $dest_content/sa.xml\n" >> $log_file
+    sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/panolist.xml
+    sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/panolist.xml
+    echo_ok "Created FILE: content/panolist.xml"
+    printf "\n    COPY FILE $orig_content/panolist.xml\n      TO $dest_content/panolist.xml\n" >> $log_file
 }
 
 add_movecamera_coords()  {
@@ -594,7 +597,7 @@ add_hotspots() {
                     scene_no=scene$order
                     cat >> $dest_content/hs.xml << EOF
   <action name="$hs_action">
-    hs(up, scene, get(layer[swfaddress].pano[scene].title),0,0,0,0);
+    hs(up, scene, get(layer[panolist].pano[scene].title),0,0,0,0);
   </action>
 
 EOF
@@ -666,7 +669,7 @@ add_scroll_data() {
     # Always overwrite content/scroll.xml
     > $dest_content/scroll.xml
     order=1
-    printf "<content>\n" >> $dest_content/scroll.xml
+    printf "<content>\n\n" >> $dest_content/scroll.xml
     for file_name in ${scenes_array[@]}; do
         cat >> $dest_content/scroll.xml << EOF
   <item>
@@ -741,7 +744,6 @@ add_plugins_data() {
 # Then add krpano tags one at the top and one at the bottom
 
 add_tour() {
-
     tour_file=$dest_files/tour.xml
     # Copy devel.xml replacing any existing one
     cp $dest_devel $temp_folder"/devel1.temp"
@@ -811,26 +813,55 @@ add_tour() {
 add_tour_clean() {
     tour_clean="$dest_files/tour_clean.xml"
     cp $tour_file $tour_clean
-    startdel="oninvalidaddress"
-    finishdel="style\=\"mode_auto"
-    # Delete any lines between $startdel and $finishdel, both included
-    sed -i -e "/^$startdel/,/^$finishdel/d" $tour_clean
     # Delete the line with <krpnano at the beginning
     sed -i '/^<krpano/d' $tour_clean
     # Add krpano tag with onstart action on line number 2
+    # I thin we still need onstart-activatepano to ensure backward compatibility
     sed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
     echo_ok "Created FILE: tour_clean.xml"
 }
 
+count_files() {
+    printf "[\e[92m$1 of ${#scenes_array[@]}\e[0m] $2\r"
+    if [ $counter -lt ${#scenes_array[@]} ]; then
+        counter=$(expr $counter + 1)
+    fi
+}
+
 add_html() {
     printf "\n" >> $log_file
-    for item in "${scenes_array[@]}"; do
-        cp -r $orig_content/scene.html $dest_dir/$item.html
-        sed -i "s/SCENENAME/$item/g" $dest_dir/$item.html
-        sed -i "s|files|$domain_url|g" $dest_dir/$item.html
-        printf "Made $item.html file\n" >> $log_file
+    # index.html
+    cp $orig_dir/html/index.html $dest_dir/
+    sed -i "s/SCENENAME/${scenes_array[0]}/g" $dest_dir/index.html
+    echo_ok "Created index.html file"
+    # Scenes
+    counter="1"
+    for scene_item in "${scenes_array[@]}"; do
+        cp -r $orig_dir/html/scene.html $dest_dir/$scene_item.html
+        sed -i "s/SCENENAME/$scene_item/g" $dest_dir/$scene_item.html
+        sed -i "s|files|$domain_url|g" $dest_dir/$scene_item.html
+        printf "Made $scene_item.html file\n" >> $log_file
+        count_files "$counter" "Created scenes HTML FILE"
     done
-    echo_ok "Created HTML FILES"
+    echo_ok "Created scenes HTML files"
+    # Devel
+    cp -r $orig_dir/html/devel $dest_dir/
+    for devel_item in $(find $dest_dir/devel/*.html); do
+        sed -i "s/SCENENAME/${scenes_array[0]}/g" $dest_dir/devel/$(basename $devel_item)
+    done
+    echo_ok "Created devel HTML files"
+    # Devel html files will be named devel/1.html, devel/2.html, etc...
+    # This way it's easier to change between scenes
+    mv $dest_dir/devel/devel.html $dest_dir/devel/index.html
+    counter="2"
+    for scene_devel_item in "${scenes_array[@]}"; do
+        cp -r $orig_dir/html/devel/devel.html $dest_dir/devel/$counter.html
+        sed -i "s/SCENENAME/$scene_devel_item/g" $dest_dir/devel/$counter.html
+        sed -i "s|files|$domain_url|g" $dest_dir/devel/$counter.html
+        printf "Made $scene_devel_item.html file\n" >> $log_file
+        count_files "$counter" "Created devel scenes HTML file"
+    done
+    echo_ok "Created devel scenes HTML files"
 }
 
 add_timestamp() {

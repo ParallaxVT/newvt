@@ -1,15 +1,5 @@
 <krpano>
 
-  <style name="mode_auto"
-         mode="auto"
-         onurlchange="activatepano(%PANOID);"
-         />
-
-  <style name="mode_manual"
-         mode="manual"
-         onurlchange="activatepano(scene1);"
-         />
-
   <action name="activatepano_scenevariation">
     loadscene(%1,null,KEEPVIEW|MERGE,BLEND(1));
     move_camera(get(xml.scene));
@@ -18,10 +8,6 @@
   <action name="activatepano">
     loadscene(%1,null,MERGE,BLEND(1));
     move_camera(get(xml.scene));
-  </action>
-
-  <action name="paramschangeaction">
-    ifnot (plugin[swfaddress].hasparams === false, parseparams(); plugin[swfaddress].removeparams(););
   </action>
 
 </krpano>

@@ -47,10 +47,10 @@
 
 
     <!-- path to the krpano viewer files (keep the file order! when these files are merged into one .js file, then just include that one file) -->
-    <script src="files/devel.js"></script>
-    <script src="files/plugins/swfaddress.js?tracker=null"></script>
-    <!-- <script src="files/touriphone.license.js"></script> -->
-    <!-- <script src="files/touriphone.js"></script> -->
+    <script src="../files/devel.js"></script>
+    <!-- <script src="../files/plugins/swfaddress.js?tracker=null"></script> -->
+    <!-- <script src="../files/touriphone.license.js"></script> -->
+    <!-- <script src="../files/touriphone.js"></script> -->
 
 
     <script>
@@ -92,9 +92,10 @@
       krpano.unload();
       }
 
-      var viewer = createPanoViewer({swf:"files/devel.swf", id:"krpanoSWFObject", html5:"always", html5licenseload:false});
-      viewer.addVariable("xml", "files/devel.xml");
+      var viewer = createPanoViewer({swf:"../files/devel.swf", id:"krpanoSWFObject", html5:"always", html5licenseload:false});
+      viewer.addVariable("xml", "../files/devel.xml");
       viewer.addVariable("simulatedevice", viewerdevice);
+      viewer.addVariable("onstart", "activatepano(SCENENAME);");
       viewer.embed("krpanoDIV");
       }
       }

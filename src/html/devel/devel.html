@@ -20,14 +20,15 @@
     </style>
   </head>
   <body>
-    <script src="files/devel.js"></script>
-    <script src="files/plugins/swfaddress.js?tracker=null"></script>
+    <script src="../files/devel.js"></script>
     <div id="pano" style="width:100%; height:100%;">
       <noscript>
         <div id="align_centre"> <b>Attention:</b><br/> <p>Your browser's Javascript is not activated.</p> <p>Please activate it to see the virtual tour.</p><br/> </div>
       </noscript>
       <script>
-        embedpano({swf:"files/devel.swf", xml:"files/devel.xml", target:"pano", html5:"auto", passQueryParameters:true});
+        var variables = {};
+        variables["onstart"] = "activatepano(SCENENAME);";
+        var viewer = embedpano({swf:"../files/devel.swf", xml:"../files/devel.xml", target:"pano", html5:"auto", vars:variables, passQueryParameters:true});
       </script>
     </div>
   </body>

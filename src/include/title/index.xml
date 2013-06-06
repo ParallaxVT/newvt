@@ -3,7 +3,7 @@
   <addtitle enabled="true" />
 
   <action name="add_title">
-    txtadd(layer[title_text].html,'[p]',get(layer[swfaddress].pano[get(current_scene)].title),'[/p]');
+    txtadd(layer[title_text].html,'[p]',get(layer[panolist].pano[get(current_scene)].title),'[/p]');
     tween(layer[title].y,0,.3,easeoutquad);
     set(layer[title].width,get(layer[title_text].width));
   </action>
