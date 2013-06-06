@@ -917,6 +917,7 @@ add_list() {
 start () {
     add_temp
     mkdir -p $temp_folder
+    mkdir -p ./.src/panos
     echo -e "\norig_dir is: $orig_dir" >> $log_file
     echo "new_dir is: $new_dir" >> $log_file
     echo "jobs_dir is: $jobs_dir" >> $log_file
@@ -932,15 +933,22 @@ start () {
             exit 1
         fi
     else
-        subfolder=$(find $jobs_dir/.src/panos/* -maxdepth 0 -type d)
-        if [ -z $subfolder ]; then
-            echo_warning "There are no scene folders in .src/panos/"
+        if [ ! -d ".src/panos" ]; then
+            echo_warning ".src/panos directory NOT FOUND"
             exit 1
+        else
+            if [ $(ls -A $jobs_dir/.src/panos/) ]; then
+                for each_tour in $(find $jobs_dir/.src/panos/* -maxdepth 0 -type d ); do
+                    each_tour=$(basename "$each_tour")
+                    tours_array=( "${tours_array[@]}" "$each_tour")
+                done
+            else
+                mkdir $jobs_dir/.src/panos/$(basename $jobs_dir)
+                echo_warning "There are no Tour folders in .src/panos/"
+                printf "         Folder 'tour' has been created\n"
+                exit 1
+            fi
         fi
-        for each_tour in $(find $jobs_dir/.src/panos/* -maxdepth 0 -type d ); do
-            each_tour=$(basename "$each_tour")
-            tours_array=( "${tours_array[@]}" "$each_tour")
-        done
     fi
 
     add_custom_dir
