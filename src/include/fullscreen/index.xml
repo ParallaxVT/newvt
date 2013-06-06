@@ -1,10 +1,18 @@
 <krpano>
 
+  <!-- To leave fullscreen_btn on the bottom right -->
+  <!-- when scroll is only enabled for mobiles use: -->
+  <!-- <addscroll devices="mobile" enabled = "true" /> -->
+  <!-- in scroll/index.xml -->
+
   <addfullscreen enabled="true" />
 
   <action name="add_fullscreen">
-    if(device.iphone,
-    tween(layer[fullscreen_btn].y,30,.3,easeoutquad);
+    if(addscroll.enabled == true,
+    set(layer[fullscreen_btn].align,topright)
+    );
+    if(device.mobile,
+    tween(layer[fullscreen_btn].y,80,.3,easeoutquad);
     ,
     tween(layer[fullscreen_btn].y,20,.3,easeoutquad);
     );
@@ -13,6 +21,7 @@
   <action name="hide_full_screen_btn">
     tween(layer[fullscreen_btn].y,-100,.3,easeoutquad);
   </action>
+
   <action name="show_full_screen_btn">
     add_fullscreen();
   </action>
