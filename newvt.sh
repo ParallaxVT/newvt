@@ -39,48 +39,58 @@ temp_folder=./.src/temp
 include_plugin=$temp_folder/include_plugin.temp
 include_data=$temp_folder/include_data.temp
 
-echo_green() {
-    echo -e "    \e[32m$1\e[0m    $2"
+echo_done() {
+    printf "[ \e[92mdone\e[0m ] ...\n"
 }
-echo_warning() {
-    echo -e "\e[41mWARNING:\e[0m $1"
+
+echo_ok() {
+    printf "[  \e[92mok\e[0m  ] $1\n"
 }
-echo_attention() {
-    echo -e "    \e[93m> ATTENTION:   \e[0m $1"
+echo_info() {
+    printf "[ \e[96minfo\e[0m ] $1\n"
+}
+
+echo_warn() {
+    printf "[ \e[93mwarn\e[0m ] $1\n"
+}
+
+echo_fail() {
+    printf "[ \e[91mfail\e[0m ] $1\n"
+    exit 1
 }
 
 conf_file_found () {
     if ! [ $HOSTNAME = "RafaelGP" ]; then
-        # echo "is c"
+        # printf "is c\n"
         # Replace /media/g with /media/c
         sed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
     else
-        # echo "is g"
+        # printf "is g\n"
         # Replace /media/c with /media/g
         sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
     fi
     source $config
     if [ -z $timestamp ]; then
-        echo_warning "timestamp variable not defined"
+        echo_fail "timestamp variable not defined"
         exit 1
     elif [ -z $domain_url ]; then
-        echo_warning "domain_url variable not defined"
+        echo_fail "domain_url variable not defined"
         exit 1
     elif [ -z $list ]; then
-        echo_warning "list variable not defined"
+        echo_fail "list variable not defined"
         exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
-        echo "vt_conf.sh file found" >> $log_file
-        echo "FOUND: vt_conf.sh ..."
+        printf "vt_conf.sh file found\n" >> $log_file
+        printf "FOUND: vt_conf.sh ...\n"
     fi
 }
 
 build_config_file () {
     # Set folder paths for the input (jobs/) and the output (virtualtours/) directories
     # If it's a test use test directory as an output directory'
-    echo "Is this a test? [y/n]"
+    printf "Is this a test? [y/n]\n"
     read testing
     if [ $testing = "n" ]; then
         read -e -p "Path to virtual tour output folder: " -i "$mydrive/virtual_tours/" VTPATH
@@ -95,7 +105,7 @@ build_config_file () {
     log_file=$new_dir/newvt.log
     log_file=./newvt.log
     > $log_file
-    echo "vt_conf.sh file not found" >> $log_file
+    printf "vt_conf.sh file not found\n" >> $log_file
 
     # Define config var and create a dir.
     # $config will be difined again in add_structure to add a relative path to it
@@ -104,41 +114,43 @@ build_config_file () {
     # Config file has three sections:
 
     # 1- Folder paths: input and output directories
-    echo '#!/bin/bash'                      >> $config
-    echo ''                                 >> $config
-    echo "# ========== Paths =========="    >> $config
-    echo "testing=$testing"                 >> $config
-    echo "jobs_dir=$jobs_dir"               >> $config
-    echo "new_dir=$new_dir"                 >> $config
-    echo "domain_url=http://clients.tourvista.co.uk/vt/-----/files" >> $config
-    echo ''                                 >> $config
+    cat >> $config << EOF
+#!/bin/bash
 
+# ========== Paths ==========
+testing=$testing
+jobs_dir=$jobs_dir
+new_dir=$new_dir
+domain_url=http://clients.tourvista.co.uk/vt/-----/files" >> $config
+
+EOF
     # 2- Base: plugins that are always inculded in a virtual tour
     base="coordfinder|editor_and_options|global|gyro|movecamera|sa|startup"
-    echo "# ========== Base =========="     >> $config
+    printf "# ========== Base ==========\n" >> $config
     for d in $orig_include/*; do
         plugin=$(basename $d)
         [[ ! $plugin =~ ^($base)$ ]] && continue
-        echo "$plugin=y"                    >> $config
+        printf "$plugin=y\n"                >> $config
     done
-    echo ''                                 >> $config
+    printf '\n'                             >> $config
 
     # 3- Optional: There are 2 types.
-    echo "# ========== Optional ==========" >> $config
+    printf "# ========== Optional ==========\n" >> $config
     for d in $orig_include/*; do
         optional_plugins=$(basename $d)
         [[ $optional_plugins =~ ^($base)$ ]] && continue
-        echo "$optional_plugins=n"          >> $config
+        printf "$optional_plugins=n\n"      >> $config
     done
-    echo ''                                 >> $config
-    echo "# ========== Options =========="  >> $config
-    echo "scroll_more=title"                >> $config
-    echo "timestamp=n"                      >> $config
-    echo "list=n"                           >> $config
+    cat >> $config << EOF
 
-    echo "Generated vt_conf.sh without any features" >> $log_file
-    echo "CREATE FILE:          vt_conf.sh ..."
-    echo "Edit vt_conf.sh file and run the script again"
+# ========== Options ==========
+scroll_more=title
+timestamp=n
+list=n
+EOF
+    printf "Generated vt_conf.sh without any features\n" >> $log_file
+    echo_info "Created FILE: vt_conf.sh"
+    printf "Edit vt_conf.sh file and run the script again\n"
     exit 0
 }
 
@@ -146,10 +158,10 @@ add_custom_dir() {
     # Create .custom/include directories if there is more than 1 scene (scenes, not pano images)
     # .custom contains custom plugins to be included in every scene
     if [ ! -d $new_dir/.custom ]; then
-        echo -e "\nCREATE FOLDER .custom directory" >> $log_file
+        printf "\nCREATE FOLDER .custom directory\n" >> $log_file
         mkdir $new_dir/.custom
     else
-        echo -e "\n.custom directory already exists" >> $log_file
+        printf "\n.custom directory already exists\n" >> $log_file
     fi
     if [ ! -d $new_dir/.custom/html ]; then
         mkdir $new_dir/.custom/html
@@ -177,8 +189,8 @@ rm_old_xml_files() {
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
         else
-            echo_attention "rm_old_xml_files() -> \$1 not defined"
-            echo $1
+            echo_warn "rm_old_xml_files() -> \$1 not defined"
+            printf "$1"
         fi
     fi
 }
@@ -211,11 +223,11 @@ add_structure() {
 
     # Stop if there was a problem copying the files
     if [ $? != 0 ]; then
-        echo_warning "Copy files from template FAILED"
+        echo_fail "Copy files from template FAILED"
         exit 1
     fi
 
-    echo -e "\n    COPY STRUCTURE TO $dest_dir\n" >> $log_file
+    printf "\n    COPY STRUCTURE TO $dest_dir\n" >> $log_file
 
     # devel.xml needs to be replaced always
     cp $orig_devel $dest_devel
@@ -232,20 +244,20 @@ EOF
     fi
     if [ -f $scenes_file ]; then
         source $scenes_file
-        echo -e "    Sourced $scenes_file\n" >> $log_file
+        printf "    Sourced $scenes_file\n\n" >> $log_file
     else
         echo_warn "Scene file $scene_file NOT FOUND. Created one "
         > ./$scenes_file
     fi
 
-echo_green "FOLDER TREE:" "added to $scenes_dir tour"
+    echo_ok "Added FOLDER TREE to $scenes_dir tour"
 }
 
 add_temp() {
     mkdir -p ./.src
     mkdir -p $temp_folder
     > $temp_folder/plugins.temp
-    echo -e "\nMake directory $temp_folder" >> $log_file
+    printf "\nMake directory $temp_folder\n" >> $log_file
 }
 
 remove_temp() {
@@ -269,9 +281,9 @@ add_scene_names() {
 
 EOF
         order=$(expr $order + 1)
-        echo -e "    ADDED $panoname TO $temp_folder/scene_names.temp" >> $log_file
+        printf "    ADDED $panoname TO $temp_folder/scene_names.temp\n" >> $log_file
     done
-    echo "" >> $log_file
+    printf "\n" >> $log_file
 }
 
 add_scene_names_files () {
@@ -279,7 +291,7 @@ add_scene_names_files () {
         > $new_dir/$(basename $scenes_dir)'.sh'
     fi
     for scene in "${scenes_array[@]}"; do
-        echo $scene="SceneName" >> $new_dir/$(basename $scenes_dir)'.sh'
+        printf "$scene=\"SceneName\"\n" >> $new_dir/$(basename $scenes_dir)'.sh'
     done
 }
 
@@ -292,16 +304,16 @@ check_pano_images() {
     if [ ! -z "$wrong_format" ]; then
         weird_format=$(find $1/* -type f ! -iname "*.jp*")
         if [ ! -z "$weird_format" ]; then
-            echo_warning "File $weird_format has a WRONG FORMAT:"
+            echo_fail "File $weird_format has a WRONG FORMAT:"
             exit 1
         else
-            echo_warning "Convert the file $weird_format to the right format"
+            echo_info "Convert the file $weird_format to the right format"
             rename -f 's/\.JPG$/\.jpg/' $panos_dir/*
             rename -f 's/\.JPEG$/\.jpg/' $panos_dir/*
             rename -f 's/\.jpeg$/\.jpg/' $panos_dir/*
         fi
     else
-        echo_green "CHECK  PANO:" "$(basename $1)"
+        echo_ok "CHECKED pano images: $(basename $1)"
     fi
 }
 
@@ -309,24 +321,24 @@ add_scene_tiles() {
     # If scenes directory doesn't exists, create it
     if [ ! -d $dest_scenes ]; then
         mkdir -p $dest_scenes
-        echo -e "\n    Make directory $dest_scenes" >> $log_file
+        printf "\n    Make directory $dest_scenes\n" >> $log_file
     fi
     for filename in ${scenes_array[@]} ; do
         # No need to check if jpg file exists as scenes_array is created basend on jpg files
         panofile=$panos_dir/$filename'.jpg'
         # Create tiles only if there isn't a folder in scenes/ or if it's empty
         if [ -d $dest_scenes/$filename ] && [ "$(ls -A $dest_scenes/$filename)" ]; then
-            echo -e "    $dest_scenes/$filename/ directory is OK" >> $log_file
+            printf "    $dest_scenes/$filename/ directory is OK\n" >> $log_file
         else
-            echo -e "\n    $dest_scenes/$filename NOT FOUND or EMPTY" >> $log_file
-            echo -e "\n    panofile IS:\n    $panofile" >> $log_file
+            printf "\n    $dest_scenes/$filename NOT FOUND or EMPTY\n" >> $log_file
+            printf "\n    panofile IS:\n    $panofile\n" >> $log_file
             if [ $HOSTNAME = "RafaelGP" ]; then
                 # Replace /media/g/ with G:/
-                pano_path=$(echo $panofile | sed -e 's/\/media\/g/G\:/g')
+                pano_path=$(printf $panofile | sed -e 's/\/media\/g/G\:/g')
             fi
             if [ $HOSTNAME = "RafaLaptop" ]; then
                 # Replace /media/c/ with C:/
-                pano_path=$(echo $panofile | sed -e 's/\/media\/c/C\:/g')
+                pano_path=$(printf $panofile | sed -e 's/\/media\/c/C\:/g')
             fi
             if [ $HOSTNAME = "debian" ]; then
                 # Don't do anything
@@ -334,13 +346,13 @@ add_scene_tiles() {
             fi
             check_pano_images "$panos_dir"
 
-            echo -e "    krpath IS:\n    $krpath" >> $log_file
-            echo -e "    krconfig IS:\n    $krconfig" >> $log_file
-            echo -e "    pano_path IS:\n    $pano_path" >> $log_file
+            printf "    krpath IS:\n    $krpath\n" >> $log_file
+            printf "    krconfig IS:\n    $krconfig\n" >> $log_file
+            printf "    pano_path IS:\n    $pano_path\n" >> $log_file
             $krpath $krconfig $pano_path
 
             if [ $? != 0 ]; then
-                echo_warning  "Krpano tiles FAILED while processing: $each_scene"
+                echo_fail  "Krpano tiles FAILED while processing: $each_scene"
                 exit 1
             else
                 mv $panos_dir/output/scenes/$filename $dest_scenes
@@ -349,16 +361,16 @@ add_scene_tiles() {
                 sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
                 mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
             fi
-            echo_green "MAKE  TILES: " "$(basename $scenes_dir)/$filename ..."
-            echo -e "\n    MOVE $panos_dir/output/scenes/$filename TO $dest_scenes" >> $log_file
-            echo "    MOVE $panos_dir/output/$filename.xml TO $dest_scenes" >> $log_file
+            echo_ok "Made TILES: $(basename $scenes_dir)/$filename ..."
+            printf "\n    MOVE $panos_dir/output/scenes/$filename TO $dest_scenes\n" >> $log_file
+            printf "    MOVE $panos_dir/output/$filename.xml TO $dest_scenes\n" >> $log_file
         fi
     done
 
     # Delete output dirertory
     if [ -d $panos_dir/output ]; then
         rm -r $panos_dir/output
-        echo -e "\n    DELETE directory  $panos_dir/output" >> $log_file
+        printf "\n    DELETE directory  $panos_dir/output/n" >> $log_file
     fi
 
     # Merge all tiles code
@@ -366,7 +378,7 @@ add_scene_tiles() {
     for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
-    echo -e "\n    CREATE FILE $temp_folder/tiles.temp" >> $log_file
+    printf "\n    CREATE FILE $temp_folder/tiles.temp\n" >> $log_file
 }
 
 # -------------------
@@ -380,37 +392,37 @@ add_scene_tiles() {
 add_include_plugin_and_data() {
     > $include_plugin
     > $include_data
-    echo -e "\n    CREATE file $include_plugin" >> $log_file
-    echo -e "    CREATE file $include_data\n" >> $log_file
+    printf "\n    CREATE file $include_plugin\n" >> $log_file
+    printf "    CREATE file $include_data\n\n" >> $log_file
     for D in $(find $orig_include/* -maxdepth 0 -type d ); do
         plugin=$(basename $D)
         plugin_value=${!plugin}
         if [ "$plugin_value" = "y" ]; then
             cp -r $orig_include/$plugin $dest_include
-            echo -e "    COPY FOLDER $orig_include/$plugin \n      TO $dest_include" >> $log_file
-            # echo "y"
+            printf "    COPY FOLDER $orig_include/$plugin \n      TO $dest_include\n" >> $log_file
+            # printf "y\n"
         fi
         if [ "$plugin_value" = "n" ]; then
             if [ -d $dest_include/$plugin ]; then
                 rm -rf $dest_include/$plugin
-                echo -e "\n    DELETE $dest_include/$plugin" >> $log_file
+                printf "\n    DELETE $dest_include/$plugin\n" >> $log_file
             fi
-            # echo "n"
+            # printf "n\n"
         fi
         if [ "$plugin_value" = "k" ]; then
-            echo -e "    KEEP $dest_include/$plugin" >> $log_file
-            # echo "k"
+            printf "    KEEP $dest_include/$plugin\n" >> $log_file
+            # printf "k\n"
         fi
     done
-    echo "" >> $log_file
+    printf "\n" >> $log_file
     # Also include any folder manually added to the include/ directory
     # Will be duplicates, but they well be removed in 'add_include_plugin' function
     for dir_added in $(find $dest_include/* -maxdepth 0 -type d); do
-        # echo $dir_added
         added_plugin=$(basename $dir_added)
         added_plugin_value=${!added_plugin}
-        echo '  <include url="%SWFPATH%/include/'$added_plugin'/index.xml" />' >> $include_plugin
-        echo -e "    KEEP $dest_include/$added_plugin" >> $log_file
+        # The precent sign is espaped using the percent sign in printf
+        printf '  <include url="%%SWFPATH%%/include/'$added_plugin'/index.xml" />\n'>> $include_plugin
+        printf "    KEEP $dest_include/$added_plugin\n" >> $log_file
     done
 }
 
@@ -429,18 +441,18 @@ add_plugins_in_custom() {
                 sed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
             done
             # For each directory add a <include/> line to $include_pluging file>
-            echo "" >> $log_file
+            printf "\n" >> $log_file
             for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
                 cp -r $eachdirectory $dest_include
-                echo '  <include url="%SWFPATH%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
-                echo "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/" >> $log_file
+                printf '  <include url="%%SWFPATH%%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
+                printf "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/\n" >> $log_file
             done
         else
-            echo -e "\n    .custom/include is empty" >> $log_file
+            printf "\n    .custom/include is empty\n" >> $log_file
         fi
     fi
 
-    echo_green "ADD  CUSTOM:" "to devel.xml"
+    echo_ok "devel.xml -> Added CUSTOM"
 }
 
 
@@ -451,8 +463,8 @@ add_include_plugin() {
     # Replace the line containing [PLUGINS] with .src/temp/include_plugin_sort.temp
     sed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
     sed -i -e '/\[PLUGINS\]/d' $dest_devel
-    echo_green "ADD PLUGINS:" "to devel.xml"
-    echo -e "\n    ADDED $include_plugin_sort\n       TO $dest_devel" >> $log_file
+    echo_ok "devel.xml -> Added PLUGINS"
+    printf "\n    ADDED $include_plugin_sort\n       TO $dest_devel\n" >> $log_file
 }
 
 # -------------------
@@ -471,7 +483,7 @@ add_info_btn() {
         if [ ! -f $dest_content/info_btn.xml ]; then
             order=1
             > $dest_content/info_btn.xml
-            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
+            printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
             # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
             for eachpano in ${scenes_array[@]} ; do
                 actionname=set_sidebar_scene$order
@@ -484,13 +496,13 @@ add_info_btn() {
 EOF
                 order=$(expr $order + 1)
             done
-            echo "</krpano>" >> $dest_content/info_btn.xml
-            echo_green "ADDED  FILE:" "info_btn.xml"
+            printf "</krpano>\n" >> $dest_content/info_btn.xml
+            echo_ok "Created FILE: info_btn.xml"
         fi
         # Add some data with text per scene to content/info_btn_text.xml
         if [ ! -f $dest_content/info_btn_text.xml ]; then
             order=1
-            echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
+            printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
             # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
             for eachpano in ${scenes_array[@]} ; do
                 textname=text$order
@@ -504,8 +516,8 @@ EOF
 EOF
                 order=$(expr $order + 1)
             done
-            echo "</krpano>" >> $dest_content/info_btn_text.xml
-            echo_green "ADDED  FILE:" "info_btn_text.xml"
+            printf "</krpano>\n" >> $dest_content/info_btn_text.xml
+            echo_ok "Created FILE: info_btn_text.xml"
         fi
     fi
 }
@@ -520,8 +532,8 @@ add_sa() {
     # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
     sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/sa.xml
     sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/sa.xml
-    echo_green "CREATE FILE:" "content/sa.xml"
-    echo -e "\n    COPY FILE $orig_content/sa.xml\n      TO $dest_content/sa.xml\n" >> $log_file
+    echo_ok "Created FILE: content/sa.xml"
+    printf "\n    COPY FILE $orig_content/sa.xml\n      TO $dest_content/sa.xml\n" >> $log_file
 }
 
 add_movecamera_coords()  {
@@ -529,17 +541,17 @@ add_movecamera_coords()  {
     if [ ! -f $dest_content/coord.xml ]; then
         order=1
         > $dest_content/coord.xml
-        echo -e "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
-        echo -e "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
+        printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
+        printf "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
         for eachpano in "${scenes_array[@]}"; do
             cat >> $dest_content/coord.xml << EOF
   <action name="movecamera_$eachpano">movecamera(0,0);</action>
 EOF
             order=$(expr $order + 1)
-            echo -e "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
+            printf "   ADD movecamera_$eachpano\n   TO $dest_content/coord.xml" >> $log_file
         done
-        echo_green "CREATE FILE:" "content/coord.xml"
-        echo "</krpano>"  >> $dest_content/coord.xml
+        echo_ok "Created FILE: content/coord.xml"
+        printf "</krpano>\n"  >> $dest_content/coord.xml
     fi
 }
 
@@ -548,7 +560,7 @@ add_logo_client() {
         # If $client_logo_name variable is not defined in vt_conf.sh
         if [ -z $logo_client_name ]; then
             sed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
-            echo -e "    ADD PLUGIN: logo client - other" >> $log_file
+            printf "    ADD PLUGIN: logo client - other\n" >> $log_file
         else
             # Possible values for variable client_logo_name:
             # 1 - Creare
@@ -563,9 +575,9 @@ add_logo_client() {
             if [ $logo_client_name = "3" ]; then
                 sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
             fi
-            echo -e "    ADD PLUGIN: logo client - option $logo_client_name" >> $log_file
+            printf "    ADD PLUGIN: logo client - option $logo_client_name\n" >> $log_file
         fi
-        echo_green "ADD  PLUGIN:" "logo client"
+        echo_ok "Added PLUGIN: logo client"
     fi
 }
 
@@ -575,7 +587,7 @@ add_hotspots() {
             # Never overwrite content/hs.xml
             if [ ! -f $dest_content/hs.xml ]; then
                 > $dest_content/hs.xml
-                echo -e "<krpano version=\"$krpano_version\">\n"  >> $dest_content/hs.xml
+                printf "<krpano version=\"$krpano_version\">\n"  >> $dest_content/hs.xml
                 order=1
                 for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                     hs_action=add_hs_scene$order
@@ -588,10 +600,10 @@ add_hotspots() {
 EOF
                     order=$(expr $order + 1)
                 done
-                echo "</krpano>"  >> $dest_content/hs.xml
+                printf "</krpano>\n"  >> $dest_content/hs.xml
             fi
-            echo -e "\n    ADD PLUGIN: hotspots" >> $log_file
-            echo_green "ADD  PLUGIN:" "hotspots"
+            printf "\n    ADD PLUGIN: hotspots\n" >> $log_file
+            echo_ok "Added PLUGIN: hotspots"
             # if $hotspots = "n" delete include/hs and content/hs.xml
         else
             if [ -f $dest_content/hs.xml ]; then
@@ -601,8 +613,8 @@ EOF
                 rm -r $dest_include/hotspots
                 sed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
-            echo -e "    REMOVE PLUGIN: hotspots (Only 1 scene)" >> $log_file
-            echo_green "DEL  PLUGIN:" "hotspots (Only 1 scene)"
+            printf "    REMOVE PLUGIN: hotspots (Only 1 scene)\n" >> $log_file
+            echo_ok "Deleted PLUGIN: hotspots (Only 1 scene)"
         fi
     fi
 }
@@ -615,14 +627,14 @@ remove_scroll () {
         rm -r $dest_include/scroll
         sed -i -e '/scroll\/index.xml/d' $dest_devel
     fi
-    echo -e "    REMOVE PLUGIN: scroll" >> $log_file
+    printf "    REMOVE PLUGIN: scroll\n" >> $log_file
 }
 
 add_scroll () {
     number_of_scenes=${#scenes_array[@]}
     if [ "$scroll" != "n" ]; then
         if [ -z $scroll_more ]; then
-            echo_attention "scroll_more variable is not defined."
+            echo_warn "scroll_more variable is not defined."
         else
             if [ "$scroll_more" = "title" ]; then
                 scroll_swf='scroll_'$number_of_scenes'_title'
@@ -631,8 +643,8 @@ add_scroll () {
                 scroll_swf='scroll_'$number_of_scenes
             fi
             if [ ${#scenes_array[@]} -gt "1" ]; then
-                echo_green "ADD  PLUGIN:" "scroll - $number_of_scenes scenes"
-                echo -e "\n    ADD PLUGIN: scroll - $number_of_scenes scenes" >> $log_file
+                echo_ok "Added PLUGIN: scroll - $number_of_scenes scenes"
+                printf "\n    ADD PLUGIN: scroll - $number_of_scenes scenes\n" >> $log_file
                 add_scroll_data
             else
                 remove_scroll
@@ -654,7 +666,7 @@ add_scroll_data() {
     # Always overwrite content/scroll.xml
     > $dest_content/scroll.xml
     order=1
-    echo -e "<content>\n" >> $dest_content/scroll.xml
+    printf "<content>\n" >> $dest_content/scroll.xml
     for file_name in ${scenes_array[@]}; do
         cat >> $dest_content/scroll.xml << EOF
   <item>
@@ -669,12 +681,12 @@ EOF
         # Make a thumbnail for each pano, only if it doesn't exists already
         if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
             convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
-            echo -e "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg" >> $log_file
+            printf "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg\n" >> $log_file
         fi
         order=$(expr $order + 1)
     done
-    echo '</content>' >> $dest_content/scroll.xml
-    echo -e "    ADD FILE: content/scroll.xml" >> $log_file
+    printf "</content>\n" >> $dest_content/scroll.xml
+    printf "    ADD FILE: content/scroll.xml\n" >> $log_file
 }
 
 add_plugins_data() {
@@ -689,15 +701,15 @@ add_plugins_data() {
         file_name=$(basename "$f")
         extension="${file_name##*.}"
         file_name="${file_name%.*}"
-        echo '  <include url="%SWFPATH%/content/'$file_name'.xml" />' >> $include_data
+        printf '  <include url="%%SWFPATH%%/content/'$file_name'.xml" />' >> $include_data
     done
 
     # Replace the line containing [DATA] with content
     sed -i -e "/\[DATA\]/r $include_data" $dest_devel
     sed -i -e '/\[DATA\]/d' $dest_devel
 
-    echo_green "ADD    DATA:" "to devel.xml"
-    echo -e "\n    ADD $include_data\n    TO $dest_devel" >> $log_file
+    echo_ok "devel.xml -> Added DATA"
+    printf "\n    ADD $include_data\n    TO $dest_devel\n" >> $log_file
 
     # Replace the line containing [TILES] with content in temp/each_tiles_files.temp
     # I haven't created tiles.xml because that would add <include url="scenes/scene1.xml" />
@@ -705,16 +717,16 @@ add_plugins_data() {
     # a wrong path (/files/scenes/scenes/scene1/...)
     > $temp_folder/all_tiles_files.temp
     # for each_tiles_file in $(find $dest_scenes/*.xml -maxdepth 0 ); do
-    #     echo '  <include url="%SWFPATH%/scenes/'$(basename $each_tiles_file)'" />' >> $temp_folder/all_tiles_files.temp
+    #     printf '  <include url="%%SWFPATH%%/scenes/'$(basename $each_tiles_file)'" />' >> $temp_folder/all_tiles_files.temp
     # done
     for each_tiles_file in ${scenes_array[@]} ; do
-        echo "  <include url=\"%SWFPATH%/scenes/$each_tiles_file.xml\" />" >> $temp_folder/all_tiles_files.temp
+        printf '  <include url="%%SWFPATH%%/scenes/'$each_tiles_file'.xml" />\n' >> $temp_folder/all_tiles_files.temp
     done
     sed -i -e "/\[TILES\]/r $temp_folder/all_tiles_files.temp" $dest_devel
     sed -i -e '/\[TILES\]/d' $dest_devel
 
-    echo_green "ADD   TILES:" "to devel.xml"
-    echo -e "\n    ADD $temp_folder/tiles.temp\n    TO $dest_devel" >> $log_file
+    echo_ok "devel.xml -> Added TILES"
+    printf "    ADD $temp_folder/tiles.temp\n    TO $dest_devel\n" >> $log_file
 }
 
 # -------------------
@@ -750,36 +762,36 @@ add_tour() {
     # Merge all the files into tour.xml
     while read line; do
         cat $dest_files$line >> $tour_file
-        # echo $dest_files$line
-        # echo $line
+        # printf $dest_files$line\n
+        # printf $line\n
     done < $temp_folder"/devel5.temp"
-    echo -e "\n    ADD $temp_folder/devel5.temp\n    TO $tour_file" >> $log_file
+    printf "\n    ADD $temp_folder/devel5.temp\n    TO $tour_file\n" >> $log_file
 
     # Merge all tiles code
     > $temp_folder/tiles.temp
     for f in $(find $dest_scenes/*.xml -maxdepth 0 -type f ); do
         cat $f >> $temp_folder/tiles.temp
     done
-    echo -e "\n    CREATE FILE $temp_folder/tiles.temp" >> $log_file
+    printf "\n    CREATE FILE $temp_folder/tiles.temp\n" >> $log_file
 
     # Add tiles code
     cat $temp_folder/tiles.temp >> $tour_file
-    echo -e "\n    ADD $temp_folder/tiles.temp\n    TO $tour_file" >> $log_file
+    printf "\n    ADD $temp_folder/tiles.temp\n    TO $tour_file\n" >> $log_file
 
     # Delete all the lines beginning with <?xml, <krpano </krpano
     sed -i '/^<?xml/d' $tour_file
     sed -i '/^<krpano/d' $tour_file
     sed -i '/^<\/krpano/d' $tour_file
 
-    echo_green "-> TOUR.XML:" "Remove krpano tags"
+    echo_ok "tour.xml -> krpano tags removed"
 
     # Add krpano tags at the beginning of tour.xml
     sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
 
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
-    echo '</krpano>' >> $tour_file
+    printf "</krpano>\n" >> $tour_file
 
-    echo_green "-> TOUR.XML:" "Add new krpano tags"
+    echo_ok "tour.xml -> New krpano tags added"
 
     # Delete empty lines
     sed -i '/^$/d' $tour_file
@@ -790,9 +802,9 @@ add_tour() {
     # Delete indentation
     sed -i -r 's/^[[:blank:]]+//' $tour_file
 
-    echo_green "-> TOUR.XML:" "Remove empty lines, comments and indentation"
+    echo_ok "tour.xml ->  Empty lines, comments and indentation removed"
 
-    echo_green "CREATE FILE:" "tour.xml"
+    echo_ok "Created FILE: tour.xml"
 
 }
 
@@ -807,17 +819,18 @@ add_tour_clean() {
     sed -i '/^<krpano/d' $tour_clean
     # Add krpano tag with onstart action on line number 2
     sed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
-    echo_green "CREATE FILE:" "tour_clean.xml"
+    echo_ok "Created FILE: tour_clean.xml"
 }
 
 add_html() {
+    printf "\n" >> $log_file
     for item in "${scenes_array[@]}"; do
         cp -r $orig_content/scene.html $dest_dir/$item.html
         sed -i "s/SCENENAME/$item/g" $dest_dir/$item.html
         sed -i "s|files|$domain_url|g" $dest_dir/$item.html
-        echo -e "\nMade $item.html file" >> $log_file
+        printf "Made $item.html file\n" >> $log_file
     done
-    echo_green "HTML  FILES:" "done"
+    echo_ok "Created HTML FILES"
 }
 
 add_timestamp() {
@@ -828,20 +841,20 @@ add_timestamp() {
             extension="${each_tour_xml##*.}"
             each_tour_xml="${each_tour_xml%.*}"
             mv  $each_tour_xml.xml $each_tour_xml$timestamp
-            # echo "$each_tour_xml.xml -> $each_tour_xml$timestamp"
+            # printf "$each_tour_xml.xml -> $each_tour_xml$timestamp\n"
         done
         for each_tour_clean_xml in $(find . -name tour_clean.xml); do
             # Get rid off the extension
             extension="${each_tour_clean_xml##*.}"
             each_tour_clean_xml="${each_tour_clean_xml%.*}"
             mv  $each_tour_clean_xml.xml $each_tour_clean_xml$timestamp
-            # echo "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp"
+            # printf "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp\n"
         done
         for each_html_file in $(find . -name "*.html"); do
             sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
             sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
         done
-        echo_green "TIME  STAMP:" "done"
+        echo_ok "Added TIME-STAMP"
     fi
 }
 
@@ -849,7 +862,7 @@ add_version() {
     for each_xml_file in $(find $scenes_dir/files/ -type f  -name "*.xml"); do
         sed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
     done
-    echo_green "GET VERSION:" "krpano $krpano_version"
+    echo_info "Krpano VERSION: $krpano_version"
 }
 
 add_list() {
@@ -871,28 +884,28 @@ add_list() {
         cp $template_file $index_file
         mkdir -p $temp_dir
         > $content_file
-        echo "List file contains:" >> $log_file
+        printf "List file contains:\n" >> $log_file
         for tour in .src/panos/*; do
             tour_name="$(basename $tour)"
-            echo "    $tour_name" >> $log_file
+            printf "    $tour_name\n" >> $log_file
             tour_title="${tour_name//_/ }"
             all_brands_array=( $tour_title )
             tour_title="${all_brands_array[@]^}"
             temp_file="$temp_dir/tour_$tour_name"
             > $temp_file
-            echo "<h4><a href="$tour_name/index.html">$tour_title</a></h4>" >> $temp_file
-            echo "<ul>" >> $temp_file
+            printf "<h4><a href=\"$tour_name/index.html\">$tour_title</a></h4>\n" >> $temp_file
+            printf "<ul>\n" >> $temp_file
             for scene_html in ./.src/panos/$tour_name/*; do
                 scene_name="$(basename $scene_html)"
                 extension="${scene_name##*.}"
                 scene_name="${scene_name%.*}"
-                echo "      $scene_name" >> $log_file
+                printf "      $scene_name\n" >> $log_file
                 scene_fancy_name="${scene_name//_/ }"
                 all_words_array=( $scene_fancy_name )
                 scene_fancy_name="${all_words_array[@]^}"
-                echo "<li><a href=\"$tour_name/$scene_name.html\">$scene_fancy_name</a></li>" >> $temp_file
+                printf "<li><a href=\"$tour_name/$scene_name.html\">$scene_fancy_name</a></li>\n" >> $temp_file
             done
-            echo "</ul>" >> $temp_file
+            printf "</ul>\n" >> $temp_file
 
             cat $temp_dir/tour_$tour_name >> $content_file
 
@@ -910,7 +923,7 @@ add_list() {
         sed -i -e '/\[CONTENT\]/d' $index_file
 
         rm -r $temp_dir
-        echo_green "CREATE LIST:" "done"
+        echo_ok "Added HTML LIST"
     fi
 }
 
@@ -918,9 +931,9 @@ start () {
     add_temp
     mkdir -p $temp_folder
     mkdir -p ./.src/panos
-    echo -e "\norig_dir is: $orig_dir" >> $log_file
-    echo "new_dir is: $new_dir" >> $log_file
-    echo "jobs_dir is: $jobs_dir" >> $log_file
+    printf "\norig_dir is: $orig_dir\n" >> $log_file
+    printf "new_dir is: $new_dir\n" >> $log_file
+    printf "jobs_dir is: $jobs_dir\n" >> $log_file
 
     tours_array=()
     # To run the script for a particular tour, enter its folder name as a param
@@ -929,12 +942,12 @@ start () {
         declare -a tours_array=( ${1%/})
         # Stop the script if the given directory doesn't exist
         if [ ! -d ".src/panos/$1" ]; then
-            echo_warning ".src/panos/$1 directory NOT FOUND"
+            echo_fail ".src/panos/$1 directory NOT FOUND"
             exit 1
         fi
     else
         if [ ! -d ".src/panos" ]; then
-            echo_warning ".src/panos directory NOT FOUND"
+            echo_fail ".src/panos directory NOT FOUND"
             exit 1
         else
             if [ $(ls -A $jobs_dir/.src/panos/) ]; then
@@ -944,7 +957,7 @@ start () {
                 done
             else
                 mkdir $jobs_dir/.src/panos/$(basename $jobs_dir)
-                echo_warning "There are no Tour folders in .src/panos/"
+                echo_fail "There are no Tour folders in .src/panos/"
                 printf "         Folder 'tour' has been created\n"
                 exit 1
             fi
@@ -955,24 +968,24 @@ start () {
 
     # Let me khow how many tours are in total
     if [ ${#tours_array[@]} = 1 ]; then
-        echo -e "\nThere is only ${#tours_array[@]} tour: ${tours_array[@]}" >> $log_file
+        printf "\nThere is only ${#tours_array[@]} tour: ${tours_array[@]}\n" >> $log_file
     else
-        echo -e "\nThere are ${#tours_array[@]} tours:" >> $log_file
+        printf "\nThere are ${#tours_array[@]} tours:\n" >> $log_file
         for eachitem in ${tours_array[@]} ; do
-            echo -e "    $eachitem" >> $log_file
+            printf "    $eachitem\n" >> $log_file
         done
     fi
 
     for scenes_dir in "${tours_array[@]}"; do
-        echo "TOUR NAME: $scenes_dir"
-        echo -e "\n---------------------------------" >> $log_file
-        echo -e "TOUR: $scenes_dir" >> $log_file
-        echo -e "---------------------------------\n" >> $log_file
+        printf "TOUR NAME: $scenes_dir\n"
+        printf "\n---------------------------------\n" >> $log_file
+        printf "TOUR: $scenes_dir\n" >> $log_file
+        printf "\---------------------------------\n" >> $log_file
 
         scenes_array=()
         # Make sure the tour folder is not empty
         if [ "$(ls -A $jobs_dir/.src/panos/$scenes_dir)" ]; then
-            # Build tour array with every jpg file found 
+            # Build tour array with every jpg file found
             for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*.jpg  -maxdepth 0); do
                 each_pano=$(basename "$each_pano")
                 extension="${each_pano##*.}"
@@ -980,13 +993,13 @@ start () {
                 scenes_array=( "${scenes_array[@]}" "$each_pano")
             done
         else
-            echo_warning "There are no scenes.jpg in .src/panos/$scenes_dir"
+            echo_fail "There are no scenes.jpg in .src/panos/$scenes_dir"
             exit 1
         fi
 
-        echo -e "    Contains ${#scenes_array[@]} scenes:" >> $log_file
+        printf "    Contains ${#scenes_array[@]} scenes:\n" >> $log_file
         for eachitem in ${scenes_array[@]} ; do
-            echo -e "    $eachitem" >> $log_file
+            printf "    $eachitem\n" >> $log_file
         done
 
         # ADD ESTRUCTURE AND TILES
@@ -1037,6 +1050,6 @@ else
     start $1
 fi
 
-echo -e "\nEOF" >> $log_file
-echo "EOF"
+printf "\nEOF\n" >> $log_file
+echo_done
 exit 0
