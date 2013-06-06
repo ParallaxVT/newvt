@@ -22,26 +22,14 @@
 
   <action name="open_sidebar">
     tween(layer[sidebar].x,350,.5,easeoutquad);
-    tween(layer[info_btn].y,-50,.3,easeoutquad);
-    delayedcall(.3,
-    layer[info_btn].loadstyle(close_btn_style);
-    set(layer[info_btn].x,370);
-    tween(layer[info_btn].y,20,.3,easeoutquad);
-    );
+    tween(layer[info_btn].x,-100,.3,easeoutquad);
     set(layer[sidebar].open,true);
   </action>
 
   <action name="close_sidebar">
-    <!-- disabled btn unil the tween has finished -->
-    set(layer[info_btn].enabled,false);
-    delayedcall(.6,set(layer[info_btn].enabled,true));
-    <!-- sidebar and btn tweens -->
     tween(layer[sidebar].x,0,.5,easeoutquad);
-    tween(layer[info_btn].y,-50,.3,easeoutquad);
-    delayedcall(.3,
-    layer[info_btn].loadstyle(info_btn_style);
-    set(layer[info_btn].x,20);
-    tween(layer[info_btn].y,20,.3,easeoutquad);
+    delayedcall(.2,
+    tween(layer[info_btn].x,20,.3,easeoutquad);
     );
     set(layer[sidebar].open,false);
   </action>
@@ -60,7 +48,7 @@
     );
     set(layer[sidebar].open,false);
   </action>
-  
+
   <layer name       ="sidebar"
          align      ="topright"
          bgalpha    ="0"
@@ -106,11 +94,29 @@
            height     ="500"
            html       ="set_sidebar_btn()"
            keep       ="true"
+           selectable ="false"
            url        ="%SWFPATH%/plugins/textfield.swf"
            width      ="310"
            x          ="20"
-           y          ="20"
+           y          ="30"
            zorder     ="20"
+           />
+
+    <layer name       ="close_btn"
+           align      ="topleft"
+           children   ="false"
+           crop       ="0|0|45|45"
+           edge       ="topleft"
+           first_time ="true"
+           handcursor ="true"
+           keep       ="true"
+           onclick    ="close_sidebar"
+           onovercrop ="45|0|45|45"
+           url        ="%SWFPATH%/include/info_btn/close_btn.png"
+           width      ="45"
+           x          ="275"
+           y          ="20"
+           zorder     ="30"
            />
 
   </layer>
@@ -118,35 +124,19 @@
   <layer name       ="info_btn"
          align      ="topright"
          children   ="false"
+         crop       ="0|0|92|45"
          edge       ="topright"
          first_time ="true"
          handcursor ="true"
          keep       ="true"
-         style      ="info_btn_style"
+         onclick    ="open_sidebar"
+         onovercrop ="92|0|92|45"
+         url        ="%SWFPATH%/include/info_btn/info_btn.png"
+         width      ="92"
          x          ="20"
          y          ="-50"
          zorder     ="10"
          />
-
-
-  <style name="info_btn_style"
-         crop       ="0|0|92|45"
-         onclick    ="open_sidebar"
-         onout      ="set(crop,0|0|92|45);"
-         onover     ="set(crop,92|0|92|45);"
-         url        ="%SWFPATH%/include/info_btn/info_btn.png"
-         width      ="92"
-         />
-
-  <style name="close_btn_style"
-         crop       ="0|0|45|45"
-         onclick    ="close_sidebar"
-         onout      ="set(crop,0|0|45|45);"
-         onover     ="set(crop,45|0|45|45);"
-         url        ="%SWFPATH%/include/info_btn/close_btn.png"
-         width      ="45"
-         />
-
 
   <data name="sidebar_css">
     h1 { color:#ffcb25;
