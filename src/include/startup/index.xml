@@ -1,5 +1,13 @@
 <krpano>
 
+  <action name="run_once">
+    <!-- This avoid run startup twice in devel mode -->
+    if(run !== null,
+    startup(%1);
+    );
+    set(run,false);
+  </action>
+  
   <action name="startup">
     set(current_scene,%1);
 
@@ -24,7 +32,7 @@
   </action>
 
   <events name="vt_events" keep="true"
-          onxmlcomplete="delayedcall(3,startup(get(xml.scene)));"
+          onxmlcomplete="delayedcall(3,run_once(get(xml.scene)));"
           />
 
 </krpano>
