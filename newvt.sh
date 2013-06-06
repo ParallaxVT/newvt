@@ -225,18 +225,18 @@ add_structure() {
 
 EOF
 
-# source scene names for .sh files in root dir
-scenes_file=./$scenes_dir'.sh'
-if [ $? != 0 ]; then
-    echo_attention "Unable to source scene.sh file"
-fi
-if [ -f $scenes_file ]; then
-    source $scenes_file
-    echo -e "    Sourced $scenes_file\n" >> $log_file
-else
-    echo_attention "$scene_file file NOT FOUND. Created one "
-    > ./$scenes_file
-fi
+    # source scene names for .sh files in root dir
+    scenes_file=./$scenes_dir'.sh'
+    if [ $? != 0 ]; then
+        echo_warn "Unable to source scene.sh file"
+    fi
+    if [ -f $scenes_file ]; then
+        source $scenes_file
+        echo -e "    Sourced $scenes_file\n" >> $log_file
+    else
+        echo_warn "Scene file $scene_file NOT FOUND. Created one "
+        > ./$scenes_file
+    fi
 
 echo_green "FOLDER TREE:" "added to $scenes_dir tour"
 }
