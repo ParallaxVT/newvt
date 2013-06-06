@@ -962,13 +962,19 @@ start () {
         echo -e "---------------------------------\n" >> $log_file
 
         scenes_array=()
-        # Find ANY file. Panoramas extension will be checked later
-        for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*.jpg  -maxdepth 0); do
-            each_pano=$(basename "$each_pano")
-            extension="${each_pano##*.}"
-            each_pano="${each_pano%.*}"
-            scenes_array=( "${scenes_array[@]}" "$each_pano")
-        done
+        # Make sure the tour folder is not empty
+        if [ "$(ls -A $jobs_dir/.src/panos/$scenes_dir)" ]; then
+            # Build tour array with every jpg file found 
+            for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*.jpg  -maxdepth 0); do
+                each_pano=$(basename "$each_pano")
+                extension="${each_pano##*.}"
+                each_pano="${each_pano%.*}"
+                scenes_array=( "${scenes_array[@]}" "$each_pano")
+            done
+        else
+            echo_warning "There are no scenes.jpg in .src/panos/$scenes_dir"
+            exit 1
+        fi
 
         echo -e "    Contains ${#scenes_array[@]} scenes:" >> $log_file
         for eachitem in ${scenes_array[@]} ; do
