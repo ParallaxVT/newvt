@@ -802,12 +802,14 @@ add_tour() {
     sed -i '/-->/d' $tour_file
 
     # Delete indentation
-    sed -i -r 's/^[[:blank:]]+//' $tour_file
+    sed -i -r 's/^[[:blank:]]+//g' $tour_file
+
+    # Delete empty spaces around any = signs
+    sed -i 's/\ *=\ */=/g' $tour_file
 
     echo_ok "tour.xml ->  Empty lines, comments and indentation removed"
 
     echo_ok "Created FILE: tour.xml"
-
 }
 
 add_tour_clean() {
