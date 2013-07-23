@@ -836,6 +836,40 @@ set_crossdomain() {
     find $dest_files/* -name "crossdomain.xml" -exec rm -rf {} \;
 }
 
+add_plugins_dir() {
+    # Get which plugins are loaded in tour.xml
+    awk '/\/plugins\// {sub(/.*\//, ""); sub(/(\);|")?$/, ""); arr[$0] = $0} END {for (i in arr) print arr[i]}' $tour_file > $temp_folder/plugins_list.temp
+    # Build an array with these plugins
+    declare -a plugins_array=()
+    while read line; do
+        plugins_array=( "${plugins_array[@]}" "$line")
+    done < $temp_folder/plugins_list.temp
+    plugins_array+=('options.swf')
+    plugins_array+=('editor.swf')
+    plugins_array+=('textfield.swf')
+    # Are or delete plugins depending if they are loaded by the tour
+    for each_plugin in $(find $orig_dir/plugins/* -maxdepth 0 -type f); do
+        plugin_file=$(basename $each_plugin)
+        case "${plugins_array[@]}" in
+            *"$plugin_file"*)
+                cp $each_plugin $dest_files/plugins/
+                ;;
+            *)
+                if [ -f $dest_files/plugins/$plugin_file ]; then
+                    rm $dest_files/plugins/$plugin_file
+                fi
+                ;;
+        esac
+    done
+    # Delete any files in $dest_dir/plugins that doesn't exist in $orig_dir/plugins
+    for each_plugin_item in $(find $dest_files/plugins/* -maxdepth 0 -type f); do
+        if [ ! -f $orig_dir/plugins/$(basename $each_plugin_item) ]; then
+            rm $each_plugin_item
+        fi
+    done
+    echo_ok "Removed unused plugins"
+}
+
 count_files() {
     printf "[\e[92m$1 of ${#scenes_array[@]}\e[0m] $2\r"
     if [ $counter -lt ${#scenes_array[@]} ]; then
@@ -1079,6 +1113,7 @@ start () {
         add_tour
         # add_tour_clean
         set_crossdomain
+        add_plugins_dir
         add_html
         add_html_in_custom
         add_timestamp
