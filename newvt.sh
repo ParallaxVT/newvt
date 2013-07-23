@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # Usage:
@@ -150,7 +151,7 @@ EOF
 # ========== Options ==========
 scroll_more=title
 timestamp=n
-list=n
+list=y
 EOF
     printf "Generated vt_conf.sh without any features\n" >> $log_file
     echo_info "Created FILE: vt_conf.sh"
@@ -878,6 +879,16 @@ add_html() {
     echo_ok "Created devel scenes HTML files"
 }
 
+add_html_in_custom() {
+    # Check if .custom/html directory exists and it's not empty
+    if [ -d $new_dir/.custom/html ] && [ "$(ls -A $new_dir/.custom/html)" ]; then
+        for eachhtmlfile in $(find $new_dir/.custom/html/* -maxdepth 0 -name "*.html" ); do
+            cp $eachhtmlfile $dest_dir
+        done
+    fi
+    echo_ok "Added HTML files in custom"
+}
+
 add_timestamp() {
     if [ $timestamp = "y" ]; then
         timestamp=$(date "+%Y%m%d%H%M%S").xml
@@ -1069,6 +1080,7 @@ start () {
         # add_tour_clean
         set_crossdomain
         add_html
+        add_html_in_custom
         add_timestamp
         add_version
 
