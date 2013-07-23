@@ -124,7 +124,7 @@ build_config_file () {
 testing=$testing
 jobs_dir=$jobs_dir
 new_dir=$new_dir
-domain_url=http://clients.tourvista.co.uk/vt/-----/files" >> $config
+domain_url=http://www.clients.tourvista.co.uk/vt/---/$-scenes_dir/files/
 crossdomain=http://www.clients.tourvista.co.uk/crossdomain.xml
 
 EOF
