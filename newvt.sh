@@ -1054,7 +1054,7 @@ start () {
         add_plugins_data
         # tour.xml
         add_tour
-        add_tour_clean
+        # add_tour_clean
         add_html
         add_timestamp
         add_version
