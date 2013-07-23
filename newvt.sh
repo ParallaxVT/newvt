@@ -79,6 +79,9 @@ conf_file_found () {
     elif [ -z $list ]; then
         echo_fail "list variable not defined"
         exit 1
+    elif [ -z $crossdomain ]; then
+        echo_fail "crossdomain variable not defined"
+        exit 1
     else
         log_file=$new_dir/newvt.log
         > $log_file
@@ -122,6 +125,7 @@ testing=$testing
 jobs_dir=$jobs_dir
 new_dir=$new_dir
 domain_url=http://clients.tourvista.co.uk/vt/-----/files" >> $config
+crossdomain=http://www.clients.tourvista.co.uk/crossdomain.xml
 
 EOF
     # 2- Base: plugins that are always inculded in a virtual tour
@@ -823,6 +827,14 @@ add_tour_clean() {
     echo_ok "Created FILE: tour_clean.xml"
 }
 
+set_crossdomain() {
+    source $config
+    sed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $tour_file
+    echo_ok "Set $crossdomain"
+    # Remove any orphan crossdomain.xml files
+    find $dest_files/* -name "crossdomain.xml" -exec rm -rf {} \;
+}
+
 count_files() {
     printf "[\e[92m$1 of ${#scenes_array[@]}\e[0m] $2\r"
     if [ $counter -lt ${#scenes_array[@]} ]; then
@@ -1055,6 +1067,7 @@ start () {
         # tour.xml
         add_tour
         # add_tour_clean
+        set_crossdomain
         add_html
         add_timestamp
         add_version
