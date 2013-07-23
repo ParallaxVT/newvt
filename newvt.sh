@@ -17,7 +17,7 @@ else
     mydrive=/media/g
 fi
 # krpano tiles
-krpano_version="1.16.2"
+krpano_version="1.16.4"
 if [ $(uname -o) = "GNU/Linux" ]; then
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-linux-$krpano_version/kmakemultires"
 else
