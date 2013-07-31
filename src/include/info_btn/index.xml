@@ -81,7 +81,9 @@
            edge       ="topleft"
            handcursor ="false"
            keep       ="true"
+           onloaded   ="set(layer[dotted_line].visible,true);"
            url        ="%SWFPATH%/include/info_btn/dotted_line.png"
+           visible    ="false"
            zorder     ="15"
            />
 
