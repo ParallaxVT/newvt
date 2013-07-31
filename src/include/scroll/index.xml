@@ -72,10 +72,10 @@
   </action>
 
   <action name="set_iphone_gui">
-    set(layer[scroll_bg].height,160);
+    set(layer[scroll_bg].height,140);
     set(layer[scroll_btn_close].visible,false);
     set(layer[thumbs_container].x,0);
-    set(layer[thumbs_container].height,140);
+    set(layer[thumbs_container].height,120);
   </action>
 
   <layer name         ="scroll"
@@ -92,7 +92,7 @@
          type         ="container"
          width        ="100%"
          x            ="0"
-         y            ="-170"
+         y            ="-140"
          zorder       ="1"
          >
     <layer name       ="scroll_bg"
