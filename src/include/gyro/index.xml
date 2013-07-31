@@ -211,6 +211,7 @@
          bgalpha    ="0"
          bgcapture  ="true"
          bgcolor    ="#000"
+         devices    ="ipad"
          edge       ="bottomleft"
          first_time ="true"
          handcursor ="false"
