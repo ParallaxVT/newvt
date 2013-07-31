@@ -39,5 +39,11 @@
     <crossdomainxml url="[SETCROSSDOMAIN]" />
   </security>
 
-</krpano>
+  <contextmenu>
+    <item name="build"
+          caption="Built by TourVista"
+          onclick="openurl(http://www.tourvista.co.uk,_blank);"
+          />
+  </contextmenu>
 
+</krpano>
