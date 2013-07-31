@@ -16,6 +16,8 @@
     if(device.webgl,trace(Agent is WebGL));
     if(device.css3e,trace(Agent is CSS 3D));
 
+    <!-- Actions for anything but gyro devices -->
+    if(addgyro.enabled == false,
     if(addinstructions.enabled == true, add_instructions());
     if(addfullscreen.enabled   == true, add_fullscreen());
     if(addtitle.enabled        == true, add_title());
@@ -26,6 +28,10 @@
 
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
+    );
+    <!-- Actions only for gyro devices -->
+    if(addgyro.enabled == true,
+    );
   </action>
 
   <action name="move_camera">
