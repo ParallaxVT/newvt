@@ -1,7 +1,7 @@
 <krpano>
 
   <!-- Next 2 lines control if I want the scroll for all devices or only mobiles -->
-  
+
   <addscroll devices="all" enabled = "true" />
   <!-- <addscroll devices="mobile" enabled = "true" /> -->
 
@@ -210,8 +210,11 @@
     mul(thumbxcenter, thumbxoffset, 0.5);
     mul(thumbbarwidth, thumbxoffset, scene.count);
     add(thumbbarwidth, thumbpadding);
-    <!-- For some reason I added 120 to thumbbarwidth. I deleted that -->
+    if(device.html5,
     add(custom_thumbbarwidth, thumbbarwidth, 0);
+    ,
+    add(custom_thumbbarwidth, thumbbarwidth, 120);
+    );
     add(thumbbarheight, thumbpadding, thumbheight);
     add(thumbbarheight, thumbpadding);
     copy(layer[scroll_container].height, thumbbarheight);
