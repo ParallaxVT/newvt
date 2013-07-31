@@ -149,6 +149,7 @@ EOF
     cat >> $config << EOF
 
 # ========== Options ==========
+logo_client_name=1
 scroll_more=title
 timestamp=n
 list=y
