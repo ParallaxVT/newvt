@@ -6,6 +6,11 @@
     set(layer[instructions].visible,true);
     tween(layer[instructions].alpha,1,1,easeoutquad);
     delayedcall(10,remove_instructions());
+    if(addintropanel.enabled == true,
+    if(device.ipad,
+    set(layer[instructions].x,250);
+    );
+    );
   </action>
 
   <action name="remove_instructions">
