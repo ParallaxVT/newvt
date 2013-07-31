@@ -5,7 +5,7 @@
   <addlogo enabled="true" />
 
   <action name="add_logo">
-    tween(layer[logo].y,20,.3,easeoutquad);
+    tween(layer[logo].y,20,.5,easeoutquad);
     delayedcall(.3,set(layer[logo_hover].visible,true));
   </action>
 

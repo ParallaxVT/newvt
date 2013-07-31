@@ -7,9 +7,9 @@
     set(layer[logo_client].scale,1.4);
     set(layer[logo_client].x,30);
     set(layer[logo_client].y,-120);
-    tween(layer[logo_client].y,30,.3,easeoutquad);
+    tween(layer[logo_client].y,30,.5,easeoutquad);
     ,
-    tween(layer[logo_client].y,20,.3,easeoutquad);
+    tween(layer[logo_client].y,20,.5,easeoutquad);
     );
   </action>
 
@@ -47,8 +47,8 @@
          edge       ="topleft"
          handcursor ="true"
          keep       ="true"
-         onover     ="tween(layer[logo_client].alpha,1,.3,easeoutquad);"
-         onout      ="tween(layer[logo_client].alpha,.6,.3,easeoutquad);"
+         onover     ="tween(layer[logo_client].alpha,1,.5,easeoutquad);"
+         onout      ="tween(layer[logo_client].alpha,.6,.5,easeoutquad);"
          style      ="CLIENTNAME"
          visible    ="true"
          x          ="30"
