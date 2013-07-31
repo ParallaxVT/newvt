@@ -992,7 +992,7 @@ add_list() {
         content_file="$temp_dir/content"
 
         # Get the template
-        cp -r $orig_dir/generate_html/template.html $src
+        cp -r $orig_dir/generate_html/ $src
         # Download style.css from tourvista
         if [ ! -f "./style.css" ]; then
             wget http://www.tourvista.co.uk/css/style.css
