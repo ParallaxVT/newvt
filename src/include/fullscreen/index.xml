@@ -34,8 +34,7 @@
          handcursor ="true"
          keep       ="true"
          onclick    ="set(fullscreen,true);"
-         onover     ="set(crop,150|0|150|35);"
-         onout      ="set(crop,0|0|150|35);"
+         onovercrop ="150|0|150|35"
          url        ="%SWFPATH%/include/fullscreen/fs.png"
          visible    ="true"
          x          ="20"
@@ -46,12 +45,10 @@
 
   <events onenterfullscreen="set(plugin[fullscreen_btn].crop,0|35|150|35);
                              set(plugin[fullscreen_btn].onclick,set(fullscreen, false));
-                             set(plugin[fullscreen_btn].onover,set(crop,150|35|150|35));
-                             set(plugin[fullscreen_btn].onout,set(crop,0|35|150|35));"
+                             set(plugin[fullscreen_btn].onovercrop,150|35|150|35);"
           onexitfullscreen="set(plugin[fullscreen_btn].crop,0|0|150|35);
                             set(plugin[fullscreen_btn].onclick,set(fullscreen, true));
-                            set(plugin[fullscreen_btn].onover,set(crop,150|0|150|35));
-                            set(plugin[fullscreen_btn].onout,set(crop,0|0|150|35));"
+                            set(plugin[fullscreen_btn].onovercrop,150|0|150|35);"
           />
 
 </krpano>
