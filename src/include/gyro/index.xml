@@ -24,6 +24,7 @@
   </action>
 
   <action name="show_nav_menu">
+    copy(side_panel_status,layer[side_panel].status);
     set(layer[nav_btn].onclick,hide_nav_menu());
     tween(layer[nav_icons_container].alpha,1,.5,easeoutquad);
 
@@ -58,6 +59,9 @@
     );
     if(layer[arrows_container].status == open, hide_nav_arrows());
     if(addfullscreen.enabled          == true,hide_full_screen_btn());
+    if(layer[side_panel].status       == open,
+    tween(layer[side_panel].x,-510,.5,easeoutquad);
+    set(layer[side_panel].status,close);
     );
   </action>
 
@@ -97,6 +101,11 @@
     if(addlogoclient.enabled   == true, add_client());
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
+    if(side_panel_status       == open,
+    tween(layer[side_panel].x,0,.5,easeoutquad);
+    set(layer[side_panel].status,open);
+    );
+    if(intro                   == yes, show_intro_panel(slide_1));
   </action>
 
   <action name="activate_gyro">

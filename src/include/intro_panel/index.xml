@@ -1,0 +1,222 @@
+<krpano>
+
+  <addintropanel enabled="true" />
+
+  <action name="start_slide">
+    set(layer[transparent_layer].visible,true);
+    get_mouse_pos();
+    focus(get(data[mouse_x_pos].content), get(data[mouse_y_pos].content));
+    show_intro_panel(%1);
+  </action>
+
+  <action name="show_intro_panel">
+    set(layer[side_panel].status,open);
+    set(layer[transparent_layer].visible,true);
+    <!-- hide restart btn at this point -->
+    set(layer[restart_btn].visible,false);
+    <!-- set continue_btn onclick action to close the panel -->
+    set(layer[continue_btn].onclick,hide_intro_panel());
+    <!-- Then set intro as no, to indicate this is not the intro panel -->
+    set(intro,no);
+    set(layer[continue_btn].crop,0|0|100|35);
+    set(layer[continue_btn].onovercrop,100|0|100|35);
+    <!-- I made side_panel not visible in order to get rid of the dottod line -->
+    set(layer[side_panel].visible,true);
+    <!-- Set html content -->
+    set(layer[side_panel_text].html,data:%1);
+    <!-- Wait some time to get the text loaded -->
+    delayedcall(.1,
+    <!-- Set continue_btn y value. -->
+    add(txt_height,get(layer[side_panel_text].y),get(layer[side_panel_text].height));
+    set(layer[continue_btn].y,get(txt_height));
+    set(layer[restart_btn].y,get(txt_height));
+    <!-- Open intro panel -->
+    set(layer[text_container].x,0);
+    set(layer[side_panel_text].x,25);
+    tween(layer[side_panel].x,0,1,easeoutquad);
+    );
+  </action>
+
+  <action name="hide_intro_panel">
+    set(layer[side_panel].status,close);
+    set(layer[transparent_layer].visible,false);
+    tween(layer[side_panel].x,-510,.5,easeoutquad);
+    <!-- show_nav_arrows(); -->
+    tween(view.fov, 95.0, 1);
+  </action>
+
+  <data name="mouse_x_pos"></data>
+  <data name="mouse_y_pos"></data>
+
+  <action name="get_mouse_pos">
+    screentosphere(mouse.x, mouse.y, m_ath, m_atv);
+    set(data[mouse_x_pos].content,m_ath);
+    set(data[mouse_y_pos].content,m_atv);
+  </action>
+
+  <action name="focus">
+    sub(adjust_focus_h, %1, 5);
+    add(adjust_focus_v, %2, 0);
+
+    if(istablet,
+    sub(adjust_focus_h, %1, 10);
+    add(adjust_focus_v, %2, -5);
+    );
+
+    lookto(get(adjust_focus_h), get(adjust_focus_v),60,tween(easeOutQuad,2));
+  </action>
+
+  <layer name       ="side_panel"
+         align      ="topleft"
+         bgalpha    ="0"
+         bgcapture  ="true"
+         edge       ="topleft"
+         handcursor ="false"
+         height     ="700"
+         keep       ="true"
+         type       ="container"
+         status     ="close"
+         visible    ="false"
+         width      ="500"
+         x          ="-500"
+         zorder     ="5"
+         >
+
+    <layer name       ="side_panel_bg"
+           align      ="topleft"
+           edge       ="topleft"
+           handcursor ="false"
+           height     ="700"
+           keep       ="true"
+           url        ="%SWFPATH%/include/intro_panel/mask.png"
+           width      ="500"
+           x          ="0"
+           y          ="0"
+           zorder     ="5"
+           />
+
+    <layer name       ="dotted_line"
+           align      ="topright"
+           edge       ="topright"
+           handcursor ="false"
+           keep       ="true"
+           onloaded   ="set(layer[dotted_line].visible,true);"
+           url        ="%SWFPATH%/include/intro_panel/dotted_line.png"
+           visible    ="false"
+           x          ="0"
+           y          ="0"
+           zorder     ="10"
+           />
+
+    <layer name       ="side_panel_text"
+           align      ="topleft"
+           autosize   ="center"
+           background ="false"
+           children   ="true"
+           css        ="data:infobox_css"
+           edge       ="topleft"
+           handcursor ="false"
+           keep       ="false"
+           selectable ="false"
+           url        ="%SWFPATH%/plugins/textfield.swf"
+           width      ="450"
+           wordwrap   ="true"
+           x          ="25"
+           y          ="30"
+           zorder     ="15"
+           altonloaded ="set(layer[side_panel_text].y,0);"
+           />
+
+    <layer name       ="continue_btn"
+           align      ="topleft"
+           children   ="true"
+           crop       ="0|0|100|35"
+           onovercrop ="100|0|100|35"
+           edge       ="topleft"
+           handcursor ="true"
+           keep       ="false"
+           onclick    =""
+           url        ="%SWFPATH%/include/intro_panel/continue_bnt.png"
+           oy         ="30"
+           x          ="25"
+           zorder     ="15"
+           />
+
+    <layer name       ="restart_btn"
+           align      ="topleft"
+           children   ="true"
+           crop       ="0|35|100|35"
+           onovercrop ="100|35|100|35"
+           edge       ="topleft"
+           handcursor ="true"
+           keep       ="false"
+           onclick    ="hide_intro_panel(); set(current_slide,); delayedcall(1,activatepano(scene1); startup());"
+           oy         ="30"
+           url        ="%SWFPATH%/include/intro_panel/continue_bnt.png"
+           visible    ="false"
+           x          ="150"
+           y          ="0"
+           zorder     ="15"
+           />
+
+  </layer>
+
+  <layer name       ="transparent_layer"
+         align      ="topleft"
+         alpha      ="1"
+         children   ="false"
+         edge       ="topleft"
+         handcursor ="false"
+         height     ="100%"
+         keep       ="true"
+         url        ="%SWFPATH%/include/intro_panel/transparent.png"
+         visible    ="true"
+         width      ="100%"
+         x          ="0"
+         y          ="0"
+         zorder     ="1"
+         />
+
+  <data name="infobox_css">
+    h1 { color:#93d6fd;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:18px;
+    text-align:left;
+    }
+    h2 { color:#93d6fd;
+    font-family:Arial;
+    font-weight:bold;
+    font-size:16px;
+    text-align:left;
+    }
+    h3 { color:#93d6fd;
+    font-family:Arial;
+    font-weight:normal;
+    font-size:14px;
+    text-align:left;
+    margin-left: 10px;
+    }
+    p { color:#ffffff;
+    font-family:Arial;
+    font-weight:normal;
+    font-size:14px;
+    text-align:left;
+    margin-left:0;
+    }
+    a { color:#93d6fd;
+    font-family:Arial;
+    font-weight:normal;
+    font-size:14px;
+    text-align:left;
+    margin-left:10px;
+    }
+    li { color:#ffffff;
+    font-family:Arial;
+    font-weight:normal;
+    font-size:14px;
+    text-align:left;
+    }
+  </data>
+
+</krpano>
