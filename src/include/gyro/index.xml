@@ -173,118 +173,120 @@
 
   </layer>
 
+  <addnavarrows enabled="true" />
+
+  <action name="show_nav_arrows">
+
+    if(device.desktop,
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    ,
+    <!-- I don't know why I did this but it's preventing showing -->
+    <!-- the arrows if I choose them at the beginning -->
+    <!-- if(layer[arrows_container].first_time == false, -->
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    <!-- ); -->
+    );
+    delayedcall(1,set(layer[arrows_container].first_time,false));
+  </action>
+
+  <action name="hide_nav_arrows">
+    tween(layer[arrows_container].x,-100,.5,easeoutquad);
+  </action>
+
   <layer name       ="arrows_container"
          align      ="bottomleft"
          alpha      ="1"
          autoalpha  ="true"
-         bgalpha    =".5"
+         bgalpha    ="0"
          bgcapture  ="true"
          bgcolor    ="#000"
          edge       ="bottomleft"
+         first_time ="true"
          handcursor ="false"
-         height     ="82"
+         height     ="62"
          keep       ="true"
          type       ="container"
          visible    ="true"
-         width      ="154"
-         x          ="-200"
-         y          ="80"
-         zorder     ="10"
+         width      ="390"
+         x          ="-100"
+         y          ="383"
+         zorder     ="18"
          >
+
     <layer name       ="arrow_left"
            align      ="leftcentre"
            crop       ="0|0|42|42"
-           cropover   ="0|42|42|42"
+           onovercrop ="0|42|42|42"
            edge       ="leftcentre"
-           ondown    ="set(hlookat_moveforce,-1);"
-           onup      ="set(hlookat_moveforce,0);"
+           ondown     ="set(hlookat_moveforce,-1);"
+           onup       ="set(hlookat_moveforce,0);"
            style      ="arrow_style"
-           x          ="20"
-           y          ="0"
+           x          ="18"
+           y          ="18"
            />
 
     <layer name       ="arrow_right"
            align      ="leftcentre"
            crop       ="42|0|42|42"
-           cropover   ="42|42|42|42"
+           onovercrop ="42|42|42|42"
            edge       ="leftcentre"
-           ondown    ="set(hlookat_moveforce,+1);"
-           onup      ="set(hlookat_moveforce,0);"
+           ondown     ="set(hlookat_moveforce,+1);"
+           onup       ="set(hlookat_moveforce,0);"
            style      ="arrow_style"
-           x          ="87"
-           y          ="0"
+           x          ="18"
+           y          ="78"
            />
 
-  </layer>
-
-  <layer name       ="zoom_container"
-         align      ="bottomright"
-         alpha      ="1"
-         autoalpha  ="true"
-         bgalpha    =".5"
-         bgcapture  ="true"
-         bgcolor    ="#000"
-         edge       ="bottomright"
-         handcursor ="false"
-         height     ="288"
-         keep       ="true"
-         type       ="container"
-         visible    ="true"
-         width      ="82"
-         x          ="-90"
-         y          ="80"
-         zorder     ="10"
-         >
-
     <layer name       ="arrow_up"
-           align      ="topcentre"
+           align      ="leftcentre"
            crop       ="84|0|42|42"
-           cropover   ="84|42|42|42"
-           edge       ="topcentre"
-           ondown    ="set(vlookat_moveforce,-1);"
-           onup      ="set(vlookat_moveforce,0);"
+           onovercrop ="84|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(vlookat_moveforce,-1);"
+           onup       ="set(vlookat_moveforce,0);"
            style      ="arrow_style"
-           x          ="0"
-           y          ="20"
+           x          ="18"
+           y          ="138"
            />
 
     <layer name       ="arrow_down"
-           align      ="topcentre"
+           align      ="leftcentre"
            crop       ="126|0|42|42"
-           cropover   ="126|42|42|42"
-           edge       ="topcentre"
-           ondown    ="set(vlookat_moveforce,+1);"
-           onup      ="set(vlookat_moveforce,0);"
+           onovercrop ="126|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(vlookat_moveforce,+1);"
+           onup       ="set(vlookat_moveforce,0);"
            style      ="arrow_style"
-           x          ="0"
-           y          ="87"
+           x          ="18"
+           y          ="198"
            />
 
     <layer name       ="zoom_in"
-           align      ="topcentre"
+           align      ="leftcentre"
            crop       ="168|0|42|42"
-           cropover   ="168|42|42|42"
-           edge       ="topcentre"
-           ondown    ="set(fov_moveforce,-1);"
-           onup      ="set(fov_moveforce,0);"
+           onovercrop ="168|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(fov_moveforce,-1);"
+           onup       ="set(fov_moveforce,0);"
            style      ="arrow_style"
-           x          ="0"
-           y          ="155"
+           x          ="18"
+           y          ="258"
            />
 
     <layer name       ="zoom_out"
-           align      ="topcentre"
+           align      ="leftcentre"
            crop       ="210|0|42|42"
-           cropover   ="210|42|42|42"
-           edge       ="topcentre"
-           ondown    ="set(fov_moveforce,+1);"
-           onup      ="set(fov_moveforce,0);"
+           onovercrop ="210|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(fov_moveforce,+1);"
+           onup       ="set(fov_moveforce,0);"
            style      ="arrow_style"
-           x          ="0"
-           y          ="223"
+           x          ="18"
+           y          ="318"
            />
 
   </layer>
+
 
   <layer name       ="nav_btn"
          children   ="false"
