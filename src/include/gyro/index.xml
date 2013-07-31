@@ -326,7 +326,7 @@
          enabled    ="false"
          friction   =".5"
          keep       ="true"
-         url        ="%SWFPATH%/include/gyro/gyro.js"
+         url        ="%SWFPATH%/plugins/gyro.js"
          velastic   =".2"
          onavailable="add_gyro();"
          />
