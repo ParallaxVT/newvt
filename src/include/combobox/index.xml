@@ -3,7 +3,7 @@
   <addcombobox enabled="true"/>
 
   <action name="add_combobox">
-    tween(layer[box].y,20,.3,easeoutquad);
+    tween(layer[box].y,20,.5,easeoutquad);
   </action>
 
   <style name="combobox"
