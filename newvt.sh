@@ -253,8 +253,13 @@ EOF
         source $scenes_file
         printf "    Sourced $scenes_file\n\n" >> $log_file
     else
-        echo_warn "Scene file $scene_file NOT FOUND. Created one "
-        > ./$scenes_file
+        echo_warn "File scene.sh NOT FOUND. Creating one"
+        > $scenes_file
+        order=1
+        for eachpano in ${scenes_array[@]} ; do
+            printf "scene$order=\"\"\n" >> $scenes_file
+            order=$(expr $order + 1)
+        done
     fi
 
     echo_ok "Added FOLDER TREE to $scenes_dir tour"
