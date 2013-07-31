@@ -703,6 +703,21 @@ EOF
         order=$(expr $order + 1)
     done
     printf "</content>\n" >> $dest_content/scroll.xml
+
+    # Duplicate scroll.xml and scroll_thumbs to make it work in devel mode
+    if [ ! -d $dest_dir/devel/files ]; then
+        mkdir $dest_dir/devel/files
+    fi
+    if [ ! -d $dest_dir/devel/files/content ]; then
+        mkdir $dest_dir/devel/files/content
+    fi
+    if [ ! -d $dest_dir/devel/files/scroll_thumbs ]; then
+        cp -r $dest_content/scroll_thumbs $dest_dir/devel/files/content/
+    fi
+    if [ ! -f $dest_dir/devel/files/scroll.xml ]; then
+        cp -r $dest_content/scroll.xml $dest_dir/devel/files/content/
+    fi
+
     printf "    ADD FILE: content/scroll.xml\n" >> $log_file
 }
 
