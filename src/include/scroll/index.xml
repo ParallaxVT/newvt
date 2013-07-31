@@ -221,7 +221,7 @@
     copy(layer[scroll_container].width, custom_thumbbarwidth);
 
     for(set(i,0), i LT scene.count, inc(i),
-    txtadd(thumbname,'skin_thumb_',get(i));
+    txtadd(thumbname,'thumb_',get(i));
     add(i_plus_one, i, 1);
     txtadd(thumburl,'%SWFPATH%/content/scroll_thumbs/scene', get(i_plus_one),'.jpg');
     addlayer(get(thumbname));
