@@ -1074,8 +1074,8 @@ start () {
                 done
             else
                 mkdir $jobs_dir/.src/panos/$(basename $jobs_dir)
-                echo_fail "There are no Tour folders in .src/panos/"
                 printf "         Folder 'tour' has been created\n"
+                echo_fail "There are no Tour folders in .src/panos/"
                 exit 1
             fi
         fi
