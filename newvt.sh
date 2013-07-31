@@ -901,11 +901,8 @@ count_files() {
 }
 
 add_html() {
+    source $config
     printf "\n" >> $log_file
-    # index.html
-    cp $orig_dir/html/index.html $dest_dir/
-    sed -i "s/SCENENAME/${scenes_array[0]}/g" $dest_dir/index.html
-    echo_ok "Created index.html file"
     # Scenes
     counter="1"
     for scene_item in "${scenes_array[@]}"; do
@@ -924,13 +921,13 @@ add_html() {
     echo_ok "Created devel HTML files"
     # Devel html files will be named devel/1.html, devel/2.html, etc...
     # This way it's easier to change between scenes
-    mv $dest_dir/devel/devel.html $dest_dir/devel/index.html
-    counter="2"
+    # mv $dest_dir/devel/devel.html $dest_dir/devel/1.html
+    counter="1"
     for scene_devel_item in "${scenes_array[@]}"; do
-        cp -r $orig_dir/html/devel/devel.html $dest_dir/devel/$counter.html
-        sed -i "s/SCENENAME/$scene_devel_item/g" $dest_dir/devel/$counter.html
-        sed -i "s|files|$domain_url|g" $dest_dir/devel/$counter.html
-        printf "Made $scene_devel_item.html file\n" >> $log_file
+        scene_counter=$(expr $counter - 1)
+        cp -r $orig_dir/html/devel.html $dest_dir/devel/$counter.html
+        sed -i "s/SCENENAME/${scenes_array[$scene_counter]}/g" $dest_dir/devel/$counter.html
+        printf "    Made devel/$scene_counter.html file\n" >> $log_file
         count_files "$counter" "Created devel scenes HTML file"
     done
     echo_ok "Created devel scenes HTML files"
