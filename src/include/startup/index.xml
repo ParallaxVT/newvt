@@ -35,10 +35,14 @@
 
   <!-- Triggered by sa/index.xml - activatepano() -->
   <action name="scene_setup">
+    if(addchangeviewbtn.enabled == true,
     if(layer[change_view_btn].movecamera == true, movecamera_%1());
+    ,
+    movecamera_%1();
+    );
     if(addhs.enabled == true, add_hs_%1());
     if(addtitle.enabled == true, add_title(); update_title(%1));
-    if(addviewbtn.enabled == true, load_view(); set(layer[change_view_btn].movecamera,true));
+    if(changeaddviewbtn.enabled == true, load_view(); set(layer[change_view_btn].movecamera,true));
   </action>
 
   <events name="vt_events" keep="true"

@@ -1,6 +1,6 @@
 <krpano>
 
-  <addviewbtn enabled="true" />
+  <addchangeviewbtn enabled="true" />
 
   <layer name       ="change_view_btn"
          align      ="bottomleft"
