@@ -11,9 +11,16 @@
     set(layer[nav_btn].edge,topleft);
     set(layer[scroll].visible,false);
     );
-    if(addfullscreen.enabled == true,
-    tween(layer[fullscreen_btn].alpha,0,.3,easeoutquad);
+    if(device.iphone,
+    set(layer[icon_touch].x,500);
+    ,
+    set(layer[icon_touch].width,0);
+    set(layer[icon_touch].height,0);
     );
+    <!-- Next line hides the fullscreen button for ipad -->
+    <!-- if(addfullscreen.enabled == true, -->
+    <!-- tween(layer[fullscreen_btn].alpha,0,.5,easeoutquad); -->
+    <!-- ); -->
   </action>
 
   <action name="show_nav_menu">
@@ -22,8 +29,8 @@
 
     if(device.iphone,
     if(layer[nav_btn].first_time == false,
-    tween(layer[nav_btn].x,-100,.3,easeoutquad);
-    tween(layer[nav_btn].y,-100,.3,easeoutquad);
+    tween(layer[nav_btn].x,-100,.5,easeoutquad);
+    tween(layer[nav_btn].y,-100,.5,easeoutquad);
     );
     tween(layer[icon_gyro].x,-140,.5,easeoutquad);
     tween(layer[icon_touch].x,140,.5,easeoutquad);
@@ -31,7 +38,7 @@
 
     if(device.ipad,
     if(layer[nav_btn].first_time == false,
-    tween(layer[nav_btn].y,-100,.3,easeoutquad);
+    tween(layer[nav_btn].y,-100,.5,easeoutquad);
     );
     tween(layer[icon_gyro].x,-240,.5,easeoutquad);
     tween(layer[icon_arrows].x,240,.5,easeoutquad);
@@ -49,14 +56,9 @@
     );
     );
     );
-    <!-- arrows navigation -->
-    if(layer[arrows_container].x == 0,
-    hide_nav_arrows();
-    <!-- tween(layer[arrows_container].x,-200,.5,easeoutquad); -->
-    <!-- tween(layer[zoom_container].x,-90,.5,easeoutquad); -->
+    if(layer[arrows_container].status == open, hide_nav_arrows());
+    if(addfullscreen.enabled          == true,hide_full_screen_btn());
     );
-    <!-- full screen -->
-    if(addfullscreen.enabled==true,tween(layer[fullscreen_btn].y,-100,.3,easeoutquad));
   </action>
 
   <action name="hide_nav_menu">
@@ -67,8 +69,9 @@
     tween(layer[nav_btn].y,0,.5,easeoutquad);
     tween(layer[icon_gyro].x,-500,.5,easeoutquad);
     tween(layer[icon_touch].x,500,.5,easeoutquad);
-    ,
-    tween(layer[nav_btn].y,20,.3,easeoutquad);
+    );
+    if(device.ipad,
+    tween(layer[nav_btn].y,20,.5,easeoutquad);
     tween(layer[icon_gyro].x,-500,.5,easeoutquad);
     tween(layer[icon_arrows].x,500,.5,easeoutquad);
     tween(layer[icon_touch].height,0,.5,easeoutquad);
@@ -86,16 +89,21 @@
     );
     );
     );
-    if(addfullscreen.enabled==true,tween(layer[fullscreen_btn].alpha,1,.3,easeoutquad));
+    if(addinstructions.enabled == true, add_instructions());
+    if(addfullscreen.enabled   == true, add_fullscreen());
+    if(addscroll.enabled       == true, add_scroll());
+    if(addtitle.enabled        == true, add_title());
+    if(addlogo.enabled         == true, add_logo());
+    if(addlogoclient.enabled   == true, add_client());
+    if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
+    if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
   </action>
 
   <action name="activate_gyro">
     set(autorotate.enabled,false);
     if(layer[gyro].enabled == false, set(layer[gyro].enabled,true));
     hide_nav_menu();
-    <!-- tween(layer[arrows_container].x,-200,.3,easeoutquad); -->
     hide_nav_arrows();
-    tween(layer[zoom_container].x,-90,.3,easeoutquad);
     delayedcall(1,
     set(layer[icon_gyro].crop,0|0|218|210);
     set(layer[icon_touch].crop,218|210|218|210);
@@ -107,9 +115,7 @@
     delayedcall(5, set(autorotate.enabled,true));
     set(layer[gyro].enabled,false);
     hide_nav_menu();
-    <!-- tween(layer[arrows_container].x,-200,.3,easeoutquad); -->
     hide_nav_arrows();
-    tween(layer[zoom_container].x,-90,.3,easeoutquad);
     delayedcall(1,
     set(layer[icon_gyro].crop,218|0|218|210);
     set(layer[icon_touch].crop,0|210|218|210);
@@ -121,9 +127,7 @@
     delayedcall(5, set(autorotate.enabled,true));
     set(layer[gyro].enabled,false);
     hide_nav_menu();
-    <!-- tween(layer[arrows_container].x,0,.3,easeoutquad); -->
     show_nav_arrows();
-    <!-- tween(layer[zoom_container].x,0,.3,easeoutquad); -->
     delayedcall(1,
     set(layer[icon_gyro].crop,218|0|218|210);
     set(layer[icon_touch].crop,218|210|218|210);
@@ -159,13 +163,11 @@
            crop       ="218|210|218|210"
            onclick    ="activate_touch();"
            style      ="icon_style"
-           altonloaded="if(device.iphone,set(x,500));"
            x          ="0"
            />
 
     <layer name       ="icon_arrows"
            crop       ="218|420|218|210"
-           devices    ="ipad"
            onclick    ="activate_arrows();"
            style      ="icon_style"
            x          ="500"
