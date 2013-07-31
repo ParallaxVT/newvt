@@ -824,6 +824,9 @@ add_tour() {
 
     echo_ok "tour.xml -> New krpano tags added"
 
+    # Delete dos new line
+    sed -i 's///g' $tour_file
+
     # Delete empty lines
     sed -i '/^$/d' $tour_file
 
