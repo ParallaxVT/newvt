@@ -1033,7 +1033,7 @@ add_list() {
             sed -i -e '/\[CONTENT\]/d' ./$tour_name/index.html
             sed -i -e 's/<h4><a href="index.html">/<h4>/g' ./$tour_name/index.html
             sed -i -e 's/<\/a><\/h4>/<\/h4>/g' ./$tour_name/index.html
-            sed -i -e 's/.\/style.css/..\/style.css/g' ./$tour_name/index.html
+            sed -i -e 's|\.\/style.css|\.\.\/style.css|g' ./$tour_name/index.html
         done
 
         sed -i -e "/\[CONTENT\]/r $content_file" $index_file
