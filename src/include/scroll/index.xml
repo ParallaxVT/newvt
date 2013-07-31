@@ -1,15 +1,18 @@
 <krpano>
 
-  <addscroll enabled = "true" />
+  <!-- Next 2 lines control if I want the scroll for all devices or only mobiles -->
+  
+  <addscroll devices="all" enabled = "true" />
+  <!-- <addscroll devices="mobile" enabled = "true" /> -->
 
   <action name="add_scroll">
     tween(layer[scroll].y,0,0.5,easeoutquad);
     if(layer[scroll].status == first, delayedcall(3,set(layer[scroll].status,show)));
-    if(device.mobile, buildthumbs());
+    if(device.html5, buildthumbs());
   </action>
 
   <action name="tween_left">
-    if(device.mobile,
+    if(device.html5,
     add(total_x,get(thumbbarwidth),220);
     ,
     add(total_x,get(layer[scroll_swf].width),220);
@@ -22,7 +25,7 @@
   <action name="hide_menu">
     set(layer[scroll_swf].enabled,false);
 
-    if(device.mobile,
+    if(device.html5,
     add(scenes_btn_x,get(thumbbarwidth),130);
     ,
     add(scenes_btn_x,get(layer[scroll_swf].width),130);
@@ -47,7 +50,7 @@
   </action>
 
   <action name="show_menu">
-    if(device.mobile,
+    if(device.html5,
     tween(layer[thumbs_container].x,get(thumbs_container_x),.5,easeoutquad);
     ,
     tween(layer[scroll_swf].x,get(scroll_swf_x),.5,easeoutquad);
@@ -81,7 +84,6 @@
          bgalpha      ="0"
          bgcapture    ="true"
          children     ="true"
-         devices      ="mobile"
          edge         ="bottomleft"
          handcursor   ="false"
          height       ="80"
@@ -139,7 +141,7 @@
            zorder     ="30"
            />
 
-    <!-- Add it to devices with gyro only -->
+    <!-- Add to only devices with gyro -->
     <layer name         ="thumbs_container"
            align        ="bottomleft"
            edge         ="bottomleft"
