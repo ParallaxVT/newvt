@@ -1067,7 +1067,7 @@ start () {
             echo_fail ".src/panos directory NOT FOUND"
             exit 1
         else
-            if [ $(ls -A $jobs_dir/.src/panos/) ]; then
+            if [ "$(ls -A $jobs_dir/.src/panos/)" ]; then
                 for each_tour in $(find $jobs_dir/.src/panos/* -maxdepth 0 -type d ); do
                     each_tour=$(basename "$each_tour")
                     tours_array=( "${tours_array[@]}" "$each_tour")
