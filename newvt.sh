@@ -441,10 +441,6 @@ add_include_plugin_and_data() {
 add_plugins_in_custom() {
     # Check if .custom directory exists and is not empty
     if [ -d $new_dir/.custom ] && [ "$(ls -A $new_dir/.custom)" ]; then
-        # Check if .custom/html directory exists and it's not empty
-        if [ -d $new_dir/.custom/html ] && [ "$(ls -A $new_dir/.custom/html)" ]; then
-            cp $new_dir/.custom/html/*.html $dest_dir
-        fi
         # Check if .custom/include directory exists and it's not empty
         if [ -d $new_dir/.custom/include ] &&  [ "$(ls -A $new_dir/.custom/include)" ]; then
             # Make sure all the xml files have the latest version in the header
