@@ -189,7 +189,9 @@ add_custom_dir() {
 rm_old_xml_files() {
     if [ -d "$scenes_dir" ]; then
         if [ ! -z $1 ]; then
-            find $1 -maxdepth 2 -type f -name "*.html" -exec rm -rf {} \;
+            # Delete all the html files but 'index.html' because it's only generated
+            # when the script is run for all the tours
+            find $1/*.html -maxdepth 2 -type f ! -iname "index.html" -exec rm -rf {} \;
             # Remove any xml file which date stamp is year 2000 onwards
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
