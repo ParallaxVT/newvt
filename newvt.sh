@@ -733,7 +733,7 @@ add_plugins_data() {
         file_name=$(basename "$f")
         extension="${file_name##*.}"
         file_name="${file_name%.*}"
-        printf '  <include url="%%SWFPATH%%/content/'$file_name'.xml" />' >> $include_data
+        printf '  <include url="%%SWFPATH%%/content/'$file_name'.xml" />\n' >> $include_data
     done
 
     # Replace the line containing [DATA] with content
