@@ -1,6 +1,5 @@
 <krpano>
 
-
   <events onpreviewcomplete="if(develmode.enabled!=true,delayedcall(5, set(autorotate.enabled,true)));
                              if(device.flash,delayedcall(4, set(display.flash10,on)));" />
 
@@ -37,7 +36,7 @@
   <network downloadqueues="6" decodequeues="2"/>
 
   <security>
-    <crossdomainxml url="%SWFPATH%/crossdomain.xml" />
+    <crossdomainxml url="[SETCROSSDOMAIN]" />
   </security>
 
 </krpano>
