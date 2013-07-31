@@ -28,6 +28,7 @@
 
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
+    if(addnavarrows.enabled    == true, show_nav_arrows());
     );
     <!-- Actions only for gyro devices -->
     if(addgyro.enabled == true,
