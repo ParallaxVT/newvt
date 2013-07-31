@@ -25,17 +25,20 @@
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
     if(addnavarrows.enabled    == true, show_nav_arrows());
+    if(addviewbtn.enabled      == true, show_change_view_btn());
     );
     <!-- Actions only for gyro devices -->
     if(addgyro.enabled == true,
+    if(addviewbtn.enabled      == true, show_change_view_btn());
     );
   </action>
 
   <!-- Triggered by sa/index.xml - activatepano() -->
   <action name="scene_setup">
-    if(layer[view_btn].movecamera == true, movecamera_%1());
+    if(layer[change_view_btn].movecamera == true, movecamera_%1());
     if(addhs.enabled == true, add_hs_%1());
     if(addtitle.enabled == true, add_title(); update_title(%1));
+    if(addviewbtn.enabled == true, load_view(); set(layer[change_view_btn].movecamera,true));
   </action>
 
   <events name="vt_events" keep="true"

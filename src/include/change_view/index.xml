@@ -1,0 +1,44 @@
+<krpano>
+
+  <addviewbtn enabled="true" />
+
+  <layer name       ="change_view_btn"
+         align      ="bottomleft"
+         children   ="false"
+         crop       ="0|0|120|35"
+         edge       ="bottomleft"
+         handcursor ="true"
+         movecamera ="true"
+         keep       ="true"
+         onclick    =""
+         onovercrop  ="120|0|120|35"
+         url        ="%SWFPATH%/include/change_view/change_view_btn.png"
+         x          ="20"
+         y          ="-100"
+         zorder     ="10"
+         />
+
+  <!-- Enter the scenes names to swap between-->
+  <action name="load_view">
+    if(xml.scene == scene1, change_view(scene2));
+    if(xml.scene == scene2, change_view(scene1));
+  </action>
+
+  <action name="hide_change_view_btn">
+    tween(layer[change_view_btn].y,-100,.5,easeoutquad);
+  </action>
+
+  <action name="show_change_view_btn">
+    tween(layer[change_view_btn].y,20,.5,easeoutquad);
+  </action>
+
+  <action name="change_view">
+    set(layer[change_view_btn].onclick,activatepano_scenevariation(%1));
+  </action>
+
+</krpano>
+
+
+
+
+
