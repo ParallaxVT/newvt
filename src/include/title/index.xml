@@ -3,9 +3,15 @@
   <addtitle enabled="true" />
 
   <action name="add_title">
-    txtadd(layer[title_text].html,'[p]',get(layer[panolist].pano[get(current_scene)].title),'[/p]');
-    tween(layer[title].y,0,.3,easeoutquad);
+    txtadd(layer[title_text].html,'[p]',get(layer[panolist].pano[get(xml.scene)].title),'[/p]');
     set(layer[title].width,get(layer[title_text].width));
+    if(layer[title].y != 0,
+    tween(layer[title].y,0,.5,easeoutquad);
+    );
+  </action>
+
+  <action name="update_title">
+    txtadd(layer[title_text].html,'[p]',get(layer[panolist].pano[get(xml.scene)].title),'[/p]');
   </action>
 
   <data name="title_css">
