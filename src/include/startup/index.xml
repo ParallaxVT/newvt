@@ -20,12 +20,8 @@
     if(addgyro.enabled == false,
     if(addinstructions.enabled == true, add_instructions());
     if(addfullscreen.enabled   == true, add_fullscreen());
-    if(addtitle.enabled        == true, add_title());
     if(addscroll.enabled       == true, add_scroll());
     if(addlogoclient.enabled   == true, add_logoclient());
-
-    if(addhs.enabled           == true, add_hs_%1());
-
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
     if(addnavarrows.enabled    == true, show_nav_arrows());
@@ -35,8 +31,11 @@
     );
   </action>
 
-  <action name="move_camera">
-    if(addmovecamera.enabled   == true, movecamera_%1());
+  <!-- Triggered by sa/index.xml - activatepano() -->
+  <action name="scene_setup">
+    if(layer[view_btn].movecamera == true, movecamera_%1());
+    if(addhs.enabled == true, add_hs_%1());
+    if(addtitle.enabled == true, add_title(); update_title(%1));
   </action>
 
   <events name="vt_events" keep="true"

@@ -1,13 +1,14 @@
 <krpano>
 
   <action name="activatepano_scenevariation">
+    if(addviewbtn.enabled == true, set(layer[view_btn].movecamera,false));
     loadscene(%1,null,KEEPVIEW|MERGE,BLEND(1));
-    move_camera(get(xml.scene));
+    scene_setup(get(xml.scene));
   </action>
 
   <action name="activatepano">
     loadscene(%1,null,MERGE,BLEND(1));
-    move_camera(get(xml.scene));
+    scene_setup(get(xml.scene));
   </action>
 
 </krpano>
