@@ -18,11 +18,11 @@ else
     mydrive=/media/g
 fi
 # krpano tiles
-krpano_version="1.16.4"
+krpano_version="1.16.5"
 if [ $(uname -o) = "GNU/Linux" ]; then
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-linux-$krpano_version/kmakemultires"
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-linux-$krpano_version/kmakemultires"
 else
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpanotools-$krpano_version/kmakemultires.exe"
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-$krpano_version/kmakemultires.exe"
 fi
 krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
