@@ -57,12 +57,15 @@
     );
     );
     );
-    if(layer[arrows_container].status == open, hide_nav_arrows());
-    if(addfullscreen.enabled          == true,hide_full_screen_btn());
+    <!-- info_panel -->
     if(layer[side_panel].status       == open,
     tween(layer[side_panel].x,-510,.5,easeoutquad);
     set(layer[side_panel].status,close);
     );
+    <!-- other -->
+    if(layer[arrows_container].status == open, hide_nav_arrows());
+    if(addfullscreen.enabled          == true,hide_full_screen_btn());
+    if(addchangeviewbtn.enabled       == true, hide_change_view_btn());
   </action>
 
   <action name="hide_nav_menu">
@@ -101,6 +104,7 @@
     if(addlogoclient.enabled   == true, add_logoclient());
     if(addcombobox.enabled     == true, select_box_item(%1); add_combobox());
     if(addinfobtn.enabled      == true, set_sidebar_%1(); set_sidebar_btn());
+    if(addchangeviewbtn.enabled== true, add_change_view_btn());
     if(side_panel_status       == open,
     tween(layer[side_panel].x,0,.5,easeoutquad);
     set(layer[side_panel].status,open);

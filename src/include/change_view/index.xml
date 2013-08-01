@@ -8,8 +8,8 @@
          crop       ="0|0|120|35"
          edge       ="bottomleft"
          handcursor ="true"
-         movecamera ="true"
          keep       ="true"
+         movecamera ="true"
          onclick    =""
          onovercrop  ="120|0|120|35"
          url        ="%SWFPATH%/include/change_view/change_view_btn.png"
@@ -37,8 +37,3 @@
   </action>
 
 </krpano>
-
-
-
-
-
