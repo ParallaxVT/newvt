@@ -1,0 +1,182 @@
+<krpano>
+
+  <addnavarrows enabled="true" />
+
+  <action name="show_nav_arrows">
+    if(device.desktop,
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    ,
+    <!-- I don't know why I did this but it's preventing showing -->
+    <!-- the arrows if I choose them at the beginning -->
+    <!-- if(layer[arrows_container].first_time == false, -->
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    <!-- ); -->
+    );
+    delayedcall(1,set(layer[arrows_container].first_time,false));
+  </action>
+
+  <action name="hide_nav_arrows">
+    tween(layer[arrows_container].x,-100,.5,easeoutquad);
+  </action>
+
+  <layer name       ="arrows_container"
+         align      ="bottomleft"
+         alpha      ="1"
+         autoalpha  ="true"
+         bgalpha    ="0"
+         bgcapture  ="true"
+         bgcolor    ="#000"
+         edge       ="bottomleft"
+         first_time ="true"
+         handcursor ="false"
+         height     ="62"
+         keep       ="true"
+         type       ="container"
+         visible    ="true"
+         width      ="390"
+         x          ="-100"
+         y          ="383"
+         zorder     ="18"
+         >
+
+    <layer name       ="arrow_left"
+           align      ="leftcentre"
+           crop       ="0|0|42|42"
+           onovercrop ="0|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(hlookat_moveforce,-1);"
+           onup       ="set(hlookat_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="18"
+           />
+
+    <layer name       ="arrow_right"
+           align      ="leftcentre"
+           crop       ="42|0|42|42"
+           onovercrop ="42|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(hlookat_moveforce,+1);"
+           onup       ="set(hlookat_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="78"
+           />
+
+    <layer name       ="arrow_up"
+           align      ="leftcentre"
+           crop       ="84|0|42|42"
+           onovercrop ="84|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(vlookat_moveforce,-1);"
+           onup       ="set(vlookat_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="138"
+           />
+
+    <layer name       ="arrow_down"
+           align      ="leftcentre"
+           crop       ="126|0|42|42"
+           onovercrop ="126|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(vlookat_moveforce,+1);"
+           onup       ="set(vlookat_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="198"
+           />
+
+    <layer name       ="zoom_in"
+           align      ="leftcentre"
+           crop       ="168|0|42|42"
+           onovercrop ="168|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(fov_moveforce,-1);"
+           onup       ="set(fov_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="258"
+           />
+
+    <layer name       ="zoom_out"
+           align      ="leftcentre"
+           crop       ="210|0|42|42"
+           onovercrop ="210|42|42|42"
+           edge       ="leftcentre"
+           ondown     ="set(fov_moveforce,+1);"
+           onup       ="set(fov_moveforce,0);"
+           style      ="arrow_style"
+           x          ="18"
+           y          ="318"
+           />
+
+  </layer>
+
+
+  <layer name       ="nav_btn"
+         children   ="false"
+         first_time ="true"
+         handcursor ="true"
+         keep       ="true"
+         onclick    ="show_nav_menu();"
+         style      ="nav_btn_style"
+         x          ="20"
+         zorder     ="10"
+         />
+
+
+  <style name       ="nav_btn_style"
+         align      ="bottomcentre"
+         crop       ="0|0|150|35"
+         devices    ="ipad"
+         edge       ="bottomcentre"
+         ondowncrop ="150|0|150|35"
+         url        ="%SWFPATH%/include/gyro/i/nav_btn.png"
+         y          ="-70"
+         />
+
+  <style name       ="nav_btn_style"
+         align      ="bottomleft"
+         crop       ="0|0|50|50"
+         devices    ="iphone"
+         edge       ="bottomleft"
+         ondowncrop ="50|0|50|50"
+         scale      ="2"
+         url        ="%SWFPATH%/include/gyro/i/nav_btn_iphone.png"
+         x          ="-100"
+         y          ="-100"
+         />
+
+  <layer name       ="gyro"
+         camroll    ="true"
+         devices    ="ipad"
+         enabled    ="false"
+         friction   =".5"
+         keep       ="true"
+         url        ="%SWFPATH%/plugins/gyro.js"
+         velastic   =".2"
+         onavailable="add_gyro();"
+         />
+  <!-- onloaded   ="add_gyro();" -->
+
+  <style name       ="icon_style"
+         align      ="centre"
+         children   ="false"
+         edge       ="centre"
+         handcursor ="true"
+         keep       ="true"
+         url        ="%SWFPATH%/include/gyro/i/icons.png"
+         y          ="10"
+         zorder     ="15"
+         />
+
+  <style name       ="arrow_style"
+         children   ="false"
+         handcursor ="true"
+         keep       ="true"
+         url        ="%SWFPATH%/include/gyro/i/arrow_set.png"
+         zorder     ="15"
+         />
+
+</krpano>
