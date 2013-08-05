@@ -702,6 +702,9 @@ EOF
     printf "</content>\n" >> $dest_content/scroll.xml
 
     # Duplicate scroll.xml and scroll_thumbs to make it work in devel mode
+    if [ ! -d $dest_dir/devel ]; then
+        mkdir $dest_dir/devel
+    fi
     if [ ! -d $dest_dir/devel/files ]; then
         mkdir $dest_dir/devel/files
     fi
