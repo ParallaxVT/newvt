@@ -19,21 +19,26 @@
          />
 
   <!-- Enter the scenes names to swap between-->
-  <action name="load_view">
-    if(xml.scene == scene1, change_view(scene2));
-    if(xml.scene == scene2, change_view(scene1));
+  <action name="update_change_view_btn">
+    if(xml.scene == scene1, update_action(scene2));
+    if(xml.scene == scene2, update_action(scene1));
   </action>
 
-  <action name="hide_change_view_btn">
-    tween(layer[change_view_btn].y,-100,.5,easeoutquad);
+  <action name="update_action">
+    set(layer[change_view_btn].onclick,activatepano_scenevariation(%1));
+  </action>
+
+  <action name="add_change_view_btn">
+    if(xml.scene == scene1,show_change_view_btn());
+    if(xml.scene == scene2,show_change_view_btn());
   </action>
 
   <action name="show_change_view_btn">
     tween(layer[change_view_btn].y,20,.5,easeoutquad);
   </action>
 
-  <action name="change_view">
-    set(layer[change_view_btn].onclick,activatepano_scenevariation(%1));
+  <action name="hide_change_view_btn">
+    tween(layer[change_view_btn].y,-100,.5,easeoutquad);
   </action>
 
 </krpano>
