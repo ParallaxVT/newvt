@@ -192,7 +192,10 @@ rm_old_xml_files() {
         if [ ! -z $1 ]; then
             # Delete all the html files but 'index.html' because it's only generated
             # when the script is run for all the tours
-            find $1/*.html -maxdepth 2 -type f ! -iname "index.html" -exec rm -rf {} \;
+            check_html=$(find $1/* -type f -name "*.html*")
+            if [ ! -z "$check_html" ]; then
+                find $1/*.html -maxdepth 2 -type f ! -iname "index.html" -exec rm -rf {} \;
+            fi
             # Remove any xml file which date stamp is year 2000 onwards
             find $1 -name "tour20*.xml" -exec rm -rf {} \;
             find $1 -name "tour_clean20*.xml" -exec rm -rf {} \;
