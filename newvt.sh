@@ -1170,6 +1170,6 @@ else
     start $1
 fi
 
-printf "\nEOF\n" >> $log_file
+printf "\n EOF\n" >> $log_file
 echo_done
 exit 0
