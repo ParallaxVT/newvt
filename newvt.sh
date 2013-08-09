@@ -1102,13 +1102,23 @@ start () {
         scenes_array=()
         # Make sure the tour folder is not empty
         if [ "$(ls -A $jobs_dir/.src/panos/$scenes_dir)" ]; then
-            # Build tour array with every jpg file found
+            # Build a temp file with every jpg file found
+            # and sort it
+            temp_array=$temp_folder/scenes_array
+            temp_array_sort=$temp_folder/scenes_array_sort
+            > $temp_array
+            > $temp_array_sort
             for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*.jpg  -maxdepth 0); do
                 each_pano=$(basename "$each_pano")
                 extension="${each_pano##*.}"
                 each_pano="${each_pano%.*}"
-                scenes_array=( "${scenes_array[@]}" "$each_pano")
+                echo $each_pano >> $temp_array
             done
+            sort --version-sort $temp_array >$temp_array_sort
+            # Build an array containing all the scenes
+            while read line; do
+                scenes_array=( "${scenes_array[@]}" "$line")
+            done < $temp_array_sort
         else
             echo_fail "There are no scenes.jpg in .src/panos/$scenes_dir"
             exit 1
