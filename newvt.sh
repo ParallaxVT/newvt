@@ -1095,9 +1095,9 @@ start () {
 
     for scenes_dir in "${tours_array[@]}"; do
         printf "TOUR NAME: $scenes_dir\n"
-        printf "\n---------------------------------\n" >> $log_file
-        printf "TOUR: $scenes_dir\n" >> $log_file
-        printf "\---------------------------------\n" >> $log_file
+        printf "\n# -------------------------------\n" >> $log_file
+        printf "# TOUR: $scenes_dir\n" >> $log_file
+        printf "# ---------------------------------\n" >> $log_file
 
         scenes_array=()
         # Make sure the tour folder is not empty
