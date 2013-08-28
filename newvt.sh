@@ -942,8 +942,8 @@ add_html() {
 
 add_html_in_custom() {
     # Check if .custom/html directory exists and it's not empty
-    if [ -d $new_dir/.custom/html ] && [ "$(ls -A $new_dir/.custom/html)" ]; then
-        for eachhtmlfile in $(find $new_dir/.custom/html/* -maxdepth 0 -name "*.html" ); do
+    if [ -d $new_dir/.custom/html/$scenes_dir ] && [ "$(ls -A $new_dir/.custom/html/$scenes_dir)" ]; then
+        for eachhtmlfile in $(find $new_dir/.custom/html/$scenes_dir/* -maxdepth 0 -name "*.html" ); do
             cp $eachhtmlfile $dest_dir
         done
     fi
@@ -1094,6 +1094,10 @@ start () {
     fi
 
     for scenes_dir in "${tours_array[@]}"; do
+        # Create a folder for each tour in .src/custom/html
+        # Thew will containt html files to replace the default ones
+        mkdir -p $new_dir/.custom/html/$scenes_dir
+        # Add Tour header to log_file
         printf "TOUR NAME: $scenes_dir\n"
         printf "\n# -------------------------------\n" >> $log_file
         printf "# TOUR: $scenes_dir\n" >> $log_file
