@@ -456,7 +456,7 @@ add_plugins_in_custom() {
             printf "\n" >> $log_file
             for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
                 cp -r $eachdirectory $dest_include
-                printf '  <include url="%%SWFPATH%%/include/'$(basename $eachdirectory)'/index.xml" />' >> $include_plugin;
+                printf '  <include url="%%SWFPATH%%/include/'$(basename $eachdirectory)'/index.xml" />\n' >> $include_plugin;
                 printf "    ADDED FOLDER $(basename $eachdirectory) FROM .custom/include/\n" >> $log_file
             done
         else
