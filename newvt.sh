@@ -12,10 +12,17 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
-if ! [ $HOSTNAME = "RafaelGP" ]; then
-    mydrive=/media/c/Users/rafaelgp/work
-else
-    mydrive=/media/g
+# VirtualBox - Linux Mint Debian Edition
+if [ $HOSTNAME = "debianlaptop" ]; then
+    mydrive=/media/sf_e
+fi
+# GitBash
+if [ $HOSTNAME = "RAFALAPTOP" ]; then
+    mydrive=/e/
+fi
+# MinGW
+if [ $HOSTNAME = "RafaLaptop" ]; then
+    mydrive=/e/
 fi
 #_krpano tiles
 krpano_version="1.17"
@@ -1173,7 +1180,7 @@ start () {
 }
 
 
-if [ $(uname -o) = "GNU/Linux" ]; then
+if [ $(uname -s) = "Linux" ]; then
     clear
 fi
 
