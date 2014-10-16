@@ -105,7 +105,8 @@ build_config_file () {
     printf "Is this a test? [y/n]\n"
     read testing
     if [ $testing = "n" ]; then
-        read -e -p "Path to virtual tour output folder: " -i "$mydrive/virtual_tours/" VTPATH
+        # read -e -p "Path to virtual tour output folder: " -i "$mydrive/virtual_tours/" VTPATH
+        read -e -p "Path to virtual tour output folder: " VTPATH
         new_dir=$VTPATH
         jobs_dir=$PWD
     else
