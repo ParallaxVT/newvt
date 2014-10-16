@@ -1,4 +1,4 @@
-<krpano>
+<krpano version="1.17">
 
   <addgyro enabled="false" />
 
@@ -63,7 +63,7 @@
     set(layer[side_panel].status,close);
     );
     <!-- other -->
-    if(layer[arrows_container].status == open, hide_nav_arrows());
+    if(layer[arrows_container].status == open, hide_gyro_nav_arrows());
     if(addfullscreen.enabled          == true,hide_full_screen_btn());
     if(addchangeviewbtn.enabled       == true, hide_change_view_btn());
   </action>
@@ -116,7 +116,7 @@
     set(autorotate.enabled,false);
     if(layer[gyro].enabled == false, set(layer[gyro].enabled,true));
     hide_nav_menu();
-    hide_nav_arrows();
+    hide_gyro_nav_arrows();
     delayedcall(1,
     set(layer[icon_gyro].crop,0|0|218|210);
     set(layer[icon_touch].crop,218|210|218|210);
@@ -128,7 +128,7 @@
     delayedcall(5, set(autorotate.enabled,true));
     set(layer[gyro].enabled,false);
     hide_nav_menu();
-    hide_nav_arrows();
+    hide_gyro_nav_arrows();
     delayedcall(1,
     set(layer[icon_gyro].crop,218|0|218|210);
     set(layer[icon_touch].crop,0|210|218|210);
@@ -140,7 +140,7 @@
     delayedcall(5, set(autorotate.enabled,true));
     set(layer[gyro].enabled,false);
     hide_nav_menu();
-    show_nav_arrows();
+    show_gyro_nav_arrows();
     delayedcall(1,
     set(layer[icon_gyro].crop,218|0|218|210);
     set(layer[icon_touch].crop,218|210|218|210);
@@ -148,6 +148,23 @@
     );
   </action>
 
+  <action name="show_gyro_nav_arrows">
+    if(device.desktop,
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    ,
+    <!-- I don't know why I did this but it's preventing showing -->
+    <!-- the arrows if I choose them at the beginning -->
+    <!-- if(layer[arrows_container].first_time == false, -->
+    tween(layer[arrows_container].x,0,.5,easeoutquad);
+    <!-- ); -->
+    );
+    delayedcall(1,set(layer[arrows_container].first_time,false));
+  </action>
+  
+  <action name="hide_gyro_nav_arrows">
+    tween(layer[arrows_container].x,-100,.5,easeoutquad);
+  </action>
+  
   <layer name       ="nav_icons_container"
          align      ="bottomcentre"
          alpha      ="0"
@@ -190,120 +207,6 @@
 
   <addnavarrows enabled="true" />
 
-  <action name="show_nav_arrows">
-
-    if(device.desktop,
-    tween(layer[arrows_container].x,0,.5,easeoutquad);
-    ,
-    <!-- I don't know why I did this but it's preventing showing -->
-    <!-- the arrows if I choose them at the beginning -->
-    <!-- if(layer[arrows_container].first_time == false, -->
-    tween(layer[arrows_container].x,0,.5,easeoutquad);
-    <!-- ); -->
-    );
-    delayedcall(1,set(layer[arrows_container].first_time,false));
-  </action>
-
-  <action name="hide_nav_arrows">
-    tween(layer[arrows_container].x,-100,.5,easeoutquad);
-  </action>
-
-  <layer name       ="arrows_container"
-         align      ="bottomleft"
-         alpha      ="1"
-         autoalpha  ="true"
-         bgalpha    ="0"
-         bgcapture  ="true"
-         bgcolor    ="#000"
-         devices    ="ipad"
-         edge       ="bottomleft"
-         first_time ="true"
-         handcursor ="false"
-         height     ="62"
-         keep       ="true"
-         type       ="container"
-         visible    ="true"
-         width      ="390"
-         x          ="-100"
-         y          ="383"
-         zorder     ="18"
-         >
-
-    <layer name       ="arrow_left"
-           align      ="leftcentre"
-           crop       ="0|0|42|42"
-           onovercrop ="0|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(hlookat_moveforce,-1);"
-           onup       ="set(hlookat_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="18"
-           />
-
-    <layer name       ="arrow_right"
-           align      ="leftcentre"
-           crop       ="42|0|42|42"
-           onovercrop ="42|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(hlookat_moveforce,+1);"
-           onup       ="set(hlookat_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="78"
-           />
-
-    <layer name       ="arrow_up"
-           align      ="leftcentre"
-           crop       ="84|0|42|42"
-           onovercrop ="84|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(vlookat_moveforce,-1);"
-           onup       ="set(vlookat_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="138"
-           />
-
-    <layer name       ="arrow_down"
-           align      ="leftcentre"
-           crop       ="126|0|42|42"
-           onovercrop ="126|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(vlookat_moveforce,+1);"
-           onup       ="set(vlookat_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="198"
-           />
-
-    <layer name       ="zoom_in"
-           align      ="leftcentre"
-           crop       ="168|0|42|42"
-           onovercrop ="168|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(fov_moveforce,-1);"
-           onup       ="set(fov_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="258"
-           />
-
-    <layer name       ="zoom_out"
-           align      ="leftcentre"
-           crop       ="210|0|42|42"
-           onovercrop ="210|42|42|42"
-           edge       ="leftcentre"
-           ondown     ="set(fov_moveforce,+1);"
-           onup       ="set(fov_moveforce,0);"
-           style      ="arrow_style"
-           x          ="18"
-           y          ="318"
-           />
-
-  </layer>
-
-
   <layer name       ="nav_btn"
          children   ="false"
          first_time ="true"
@@ -314,7 +217,6 @@
          x          ="20"
          zorder     ="10"
          />
-
 
   <style name       ="nav_btn_style"
          align      ="bottomcentre"
@@ -358,14 +260,6 @@
          keep       ="true"
          url        ="%SWFPATH%/include/gyro/i/icons.png"
          y          ="10"
-         zorder     ="15"
-         />
-
-  <style name       ="arrow_style"
-         children   ="false"
-         handcursor ="true"
-         keep       ="true"
-         url        ="%SWFPATH%/include/gyro/i/arrow_set.png"
          zorder     ="15"
          />
 

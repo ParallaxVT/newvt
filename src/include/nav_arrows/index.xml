@@ -1,4 +1,4 @@
-<krpano>
+<krpano version="1.17">
 
   <addnavarrows enabled="true" />
 
@@ -113,69 +113,11 @@
 
   </layer>
 
-
-  <layer name       ="nav_btn"
-         children   ="false"
-         first_time ="true"
-         handcursor ="true"
-         keep       ="true"
-         onclick    ="show_nav_menu();"
-         style      ="nav_btn_style"
-         x          ="20"
-         zorder     ="10"
-         />
-
-
-  <style name       ="nav_btn_style"
-         align      ="bottomcentre"
-         crop       ="0|0|150|35"
-         devices    ="ipad"
-         edge       ="bottomcentre"
-         ondowncrop ="150|0|150|35"
-         url        ="%SWFPATH%/include/gyro/i/nav_btn.png"
-         y          ="-70"
-         />
-
-  <style name       ="nav_btn_style"
-         align      ="bottomleft"
-         crop       ="0|0|50|50"
-         devices    ="iphone"
-         edge       ="bottomleft"
-         ondowncrop ="50|0|50|50"
-         scale      ="2"
-         url        ="%SWFPATH%/include/gyro/i/nav_btn_iphone.png"
-         x          ="-100"
-         y          ="-100"
-         />
-
-  <layer name       ="gyro"
-         camroll    ="true"
-         devices    ="ipad"
-         enabled    ="false"
-         friction   =".5"
-         keep       ="true"
-         url        ="%SWFPATH%/plugins/gyro.js"
-         velastic   =".2"
-         onavailable="add_gyro();"
-         />
-  <!-- onloaded   ="add_gyro();" -->
-
-  <style name       ="icon_style"
-         align      ="centre"
-         children   ="false"
-         edge       ="centre"
-         handcursor ="true"
-         keep       ="true"
-         url        ="%SWFPATH%/include/gyro/i/icons.png"
-         y          ="10"
-         zorder     ="15"
-         />
-
   <style name       ="arrow_style"
          children   ="false"
          handcursor ="true"
          keep       ="true"
-         url        ="%SWFPATH%/include/gyro/i/arrow_set.png"
+         url        ="%SWFPATH%/include/nav_arrows/i/arrow_set.png"
          zorder     ="15"
          />
 
