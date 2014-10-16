@@ -12,10 +12,6 @@
   <action name="startup">
     set(current_scene,%1);
 
-    if(device.flash,trace(Agent is Flash));
-    if(device.webgl,trace(Agent is WebGL));
-    if(device.css3e,trace(Agent is CSS 3D));
-
     <!-- Actions for anything but gyro devices -->
     if(addgyro.enabled == false,
     if(addinstructions.enabled  == true, add_instructions());
