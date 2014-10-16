@@ -995,7 +995,8 @@ add_list() {
         cp -r $orig_dir/generate_html/ $src
         # Download style.css from tourvista
         if [ ! -f "./style.css" ]; then
-            wget http://www.tourvista.co.uk/css/style.css
+            # wget http://www.tourvista.co.uk/css/style.css
+            cp "./.src/generate_html/style.css" "./"
         fi
 
         cp $template_file $index_file
