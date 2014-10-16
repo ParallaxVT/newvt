@@ -141,19 +141,41 @@ EOF
     # 2- Base: plugins that are always inculded in a virtual tour
     base="coordfinder|editor_and_options|global|gyro|movecamera|sa|startup"
     printf "# ========== Base ==========\n" >> $config
-    for d in $orig_include/*; do
-        plugin=$(basename $d)
-        [[ ! $plugin =~ ^($base)$ ]] && continue
-        printf "$plugin=y\n"                >> $config
-    done
-    printf '\n'                             >> $config
+    #for d in $orig_include/*; do
+    #plugin=$(basename $d)
+    #[[ ! $plugin =~ ^($base)$ ]] && continue
+    #printf "$plugin=y\n"                >> $config
+    #done
+    #printf "$plugin=y\n"            >> $config
+    printf "coordfinder=y\n"        >> $config
+    printf "editor_and_options=y\n" >> $config
+    printf "global=y\n"             >> $config
+    printf "gyro=y\n"               >> $config
+    printf "movecamera=y\n"         >> $config
+    printf "sa=y\n"                 >> $config
+    printf "startup=y\n"            >> $config
+    printf "\n"                     >> $config
 
     # 3- Optional: There are 2 types.
     printf "# ========== Optional ==========\n" >> $config
     for d in $orig_include/*; do
         optional_plugins=$(basename $d)
-        [[ $optional_plugins =~ ^($base)$ ]] && continue
-        printf "$optional_plugins=n\n"      >> $config
+        #[[ $optional_plugins =~ ^($base)$ ]] && continue
+        if [ $optional_plugins != coordfinder ]; then
+            if [ $optional_plugins != editor_and_options ]; then
+                if [ $optional_plugins != global ]; then
+                    if [ $optional_plugins != gyro ]; then
+                        if [ $optional_plugins != movecamera ]; then
+                            if [ $optional_plugins != sa ]; then
+                                if [ $optional_plugins != startup ]; then
+                                    printf "$optional_plugins=n\n"      >> $config
+                                fi
+                            fi
+                        fi
+                    fi
+                fi
+            fi
+        fi
     done
     cat >> $config << EOF
 
