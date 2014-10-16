@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>TourVista Virtual Tour</title>
+        <meta name="dcterms.rightsHolder" content="TourVista">
+        <meta name="keywords" content="virtualtour, virtual tour, flash, 360 degrees, TourVista"/>
+        <meta name="description" content="Virtual Tour created by www.tourvista.co.uk"/>
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <style type="text/css" media="screen">
+            html { height:100%; }
+            body { height:100%; overflow: hidden; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#FFFFFF; background-color:#ffffff; }
+        </style>
+        <!-- Social Bar Metadata -->
+        <!-- The following info is just for Facebook -->
+        <meta property="og:type" content="vt_type" />
+        <meta property="og:title" content="vt_title" />
+        <meta property="og:description" content="vt_description" />
+        <meta property="og:image" content="vt_img" />
+        <meta property="og:url" content="vt_url" />
+        <meta property="fb:admins" content="vt_admins"/>
+    </head>
+    <body>
+        <link rel="stylesheet" type="text/css" href="vt_social_css">
+        <link rel="image_src" href="vt_image_src" />
+kr1
+        <div class="vt_container" style="width:100%; height:100%; position:relative;">
+            <div id="pano" style="width:100%; height:100%; margin: 0 auto;">
+                <noscript>
+                    <div id="align_centre"> <b>Attention:</b><br/> <p>Your browser's Javascript is not activated.</p> <p>Please activate it to see the virtual tour.</p><br/> </div>
+                </noscript>
+                <script>
+                    var variables = {};
+kr2
+kr3
+                </script>
+            </div>
+            <!-- Social Bar -->
+            <div id="fb-root"></div>
+            <script>
+                (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+                } (document, 'script', 'facebook-jssdk'));
+            </script>
+            <div id="content-social">
+                <table style="z-index: 999999999;">
+                    <tr style="z-index: 999999999;">
+                        <td style="z-index: 999999999;">
+                            <a href="https://twitter.com/share"
+                               class="twitter-share-button"
+                               data-url="vt_url"
+                               data-via="vt_via"
+                               data-hashtags="vt_hashtags"
+                               data-lang="en"
+                               data-text="vt_description"
+                               style="z-index: 999999999;">Tweet</a>
+                        </td>
+                        <td style="z-index: 999999999;">
+                            <div class="fb-like"
+                                 data-send="true"
+                                 data-layout="button_count"
+                                 data-width="450"
+                                 data-show-faces="false"
+                                 data-font="verdana"
+                                 style="z-index: 999999999;">
+                            </div>
+                        </td>
+                        <td style="z-index: 999999999; padding-left:30px;">
+                            <div class="g-plusone"
+                                 style="z-index: 999999999; display: none;"
+                                 data-href="vt_url"
+                                 data-size="medium"
+                                 data-style="z-index: 999999999;">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- End of Social Bar -->
+            <!-- Social Bar JS -->
+            <script type="text/javascript" src="https://apis.google.com/js/plusone.js" ></script>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </div><!-- End of vt_container -->
+    </body>
+</html>
