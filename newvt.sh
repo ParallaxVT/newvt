@@ -895,7 +895,7 @@ add_tour_clean() {
     # Delete the line with <krpnano at the beginning
     sed -i '/^<krpano/d' $tour_clean
     # Add krpano tag with onstart action on line number 2
-    # I thin we still need onstart-activatepano to ensure backward compatibility
+    # I think we still need onstart-activatepano to ensure backward compatibility
     sed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
     echo_ok "Created FILE: tour_clean.xml"
 }
