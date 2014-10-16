@@ -170,7 +170,7 @@
          height     ="100%"
          keep       ="true"
          url        ="%SWFPATH%/include/intro_panel/transparent.png"
-         visible    ="true"
+         visible    ="false"
          width      ="100%"
          x          ="0"
          y          ="0"
