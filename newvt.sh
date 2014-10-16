@@ -1155,7 +1155,7 @@ start () {
             temp_array_sort=$temp_folder/scenes_array_sort
             > $temp_array
             > $temp_array_sort
-            for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/*.jpg  -maxdepth 0); do
+            for each_pano in $(find $jobs_dir/.src/panos/$(basename $scenes_dir)/ -maxdepth 1 -name "*.jpg"); do
                 each_pano=$(basename "$each_pano")
                 extension="${each_pano##*.}"
                 each_pano="${each_pano%.*}"
