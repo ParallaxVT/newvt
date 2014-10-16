@@ -903,6 +903,10 @@ add_tour_clean() {
 set_crossdomain() {
     source $config
     sed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $tour_file
+    sed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $dest_include/global/index.xml
+    # sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
+
+    # sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
     echo_ok "Set $crossdomain"
     # Remove any orphan crossdomain.xml files
     find $dest_files/* -name "crossdomain.xml" -exec rm -rf {} \;
