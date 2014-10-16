@@ -1161,7 +1161,8 @@ start () {
                 each_pano="${each_pano%.*}"
                 echo $each_pano >> $temp_array
             done
-            sort --version-sort $temp_array >$temp_array_sort
+            # sort --version-sort $temp_array >$temp_array_sort
+            sort -k1.6n $temp_array -o $temp_array_sort
             # Build an array containing all the scenes
             while read line; do
                 scenes_array=( "${scenes_array[@]}" "$line")
