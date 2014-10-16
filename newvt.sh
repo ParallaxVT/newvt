@@ -75,7 +75,8 @@ conf_file_found () {
     else
         # printf "is g\n"
         # Replace /media/c with /media/g
-        sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
+        # sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
+        sed -i 's/\/media\/e\/Users\/rafaelgp\/work/\/media\/g/g' $config
     fi
     source $config
     if [ -z $timestamp ]; then
