@@ -1,4 +1,4 @@
-/* krpano 1.16.5 gyro plugin (build 2013-07-09) 
+/* krpano 1.17.5 gyro plugin (build 2014-08-26) 
 for devices with Gyro sensor (iPhone4 and iPad2 with iOS4.2+)
 by Aldo Hoeben / fieldOfView.com
 contributions by 
