@@ -22,7 +22,7 @@ krpano_version="1.17"
 if [ $(uname -s) = "Linux" ]; then
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-linux-$krpano_version/kmakemultires"
 else
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-$krpano_version/kmakemultires.exe"
+    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools\krpanotools-$krpano_version/kmakemultires.exe"
 fi
 krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
