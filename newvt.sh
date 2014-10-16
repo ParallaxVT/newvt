@@ -17,9 +17,9 @@ if ! [ $HOSTNAME = "RafaelGP" ]; then
 else
     mydrive=/media/g
 fi
-# krpano tiles
-krpano_version="1.16.5"
-if [ $(uname -o) = "GNU/Linux" ]; then
+#_krpano tiles
+krpano_version="1.17"
+if [ $(uname -s) = "Linux" ]; then
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-linux-$krpano_version/kmakemultires"
 else
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-$krpano_version/kmakemultires.exe"
