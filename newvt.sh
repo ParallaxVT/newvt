@@ -428,6 +428,17 @@ add_scene_tiles() {
     printf "\n    CREATE FILE $temp_folder/tiles.temp\n" >> $log_file
 }
 
+check_scene_tiles() {
+    if [ ! "$(ls $dest_scenes/ )" ]; then
+        echo_fail "    $dest_scenes/ doesn't contain any folder'\n"
+        exit 1
+    fi
+    if [ ! "$(find $dest_scenes/ -maxdepth 1 -name "*.xml")" ]; then
+        echo_fail "    $dest_scenes/ doesn't contain any XML files'\n"
+        exit 1
+    fi
+}
+
 # -------------------
 # include_plugin.temp
 # -------------------
@@ -1169,7 +1180,8 @@ start () {
         rm_old_xml_files $scenes_dir
         add_structure
         add_scene_names
-        add_scene_tiles
+        #add_scene_tiles
+        check_scene_tiles
         # include_plugin.temp
         add_include_plugin_and_data
         add_plugins_in_custom
