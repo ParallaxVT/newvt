@@ -1,0 +1,139 @@
+<krpano version="1.17">
+
+  <addhs enabled="true" />
+
+  <textstyle name="hs_textstyle"
+             alpha=".9"
+             background="true"
+             backgroundcolor="0xc30e2e"
+             border="true"
+             bordercolor="0x800000"
+             bold="false"
+             font="Arial"
+             fontsize="14"
+             origin="cursor"
+             textcolor="0xFFFFFF"
+             xoffset="0"
+             yoffset="-10"
+             italic="true"
+             />
+
+  <data name="hotspot_css">
+    p { color:#ffffff;
+    font-family:Helvetica;
+    font-weight:normal;
+    font-size:12;
+    text-align:center;
+    margin-left:10;
+    margin-right:10;
+    }
+  </data>
+
+  <data name="tooltip">
+    <p>Click here to explore</p>
+  </data>
+
+  <action name="loadnewpano">
+    lookto(%6,%7,50,smooth(100,20,50));
+    activatepano(%2);
+  </action>
+
+  <action name="up">
+    set(hotspot[arrow_%1].rotate,0);
+    <!-- set(hotspot[arrow_%1].ox,-50); -->
+  </action>
+
+  <action name="down">
+    set(hotspot[arrow_%1].rotate,180);
+    <!-- set(hotspot[arrow_%1].ox,50); -->
+  </action>
+
+  <action name="right">
+    set(hotspot[arrow_%1].rotate,90);
+    <!-- set(hotspot[arrow_%1].ox,0); -->
+    <!-- set(hotspot[arrow_%1].oy,50); -->
+  </action>
+
+  <action name="left">
+    set(hotspot[arrow_%1].rotate,-90);
+    <!-- set(hotspot[arrow_%1].ox,0); -->
+    <!-- set(hotspot[arrow_%1].oy,-50); -->
+  </action>
+
+  <action name="add_hs">
+    addhotspot(arrow_%2);
+    set(hotspot[arrow_%2].alpha,1);
+    set(hotspot[arrow_%2].ath,%4);
+    set(hotspot[arrow_%2].atv,%5);
+    set(hotspot[arrow_%2].children,false);
+    set(hotspot[arrow_%2].edge,center);
+    set(hotspot[arrow_%2].handcursor,true);
+    set(hotspot[arrow_%2].height,110);
+    set(hotspot[arrow_%2].keep,false);
+    set(hotspot[arrow_%2].onclick,action(loadnewpano, %1, %2, %3, %4, %5, %6, %7));
+    set(hotspot[arrow_%2].onhover,showtext(get(data[tooltip].content),hs_textstyle));
+    set(hotspot[arrow_%2].url,%SWFPATH%/include/hotspots/arrow.png);
+    set(hotspot[arrow_%2].alturl,%SWFPATH%/include/hotspots/arrow_big.png);
+    set(hotspot[arrow_%2].width,255);
+    set(hotspot[arrow_%2].zorder,10);
+    set(hotspot[arrow_%2].scale,.7);
+
+    if(device.mobile,
+    mul(hotspot[arrow_%2].scale,2.5);
+    sub(hotspot[arrow_%2].ath,-4);
+    );
+
+    if(device.ipad,
+    mul(hotspot[arrow_%2].scale,1.5);
+    );
+
+    <!-- if(device.desktop, -->
+    <!-- addhotspot(hs_bg_%2); -->
+    <!-- set(hotspot[hs_bg_%2].alpha,0.8); -->
+    <!-- set(hotspot[hs_bg_%2].ath,%4); -->
+    <!-- set(hotspot[hs_bg_%2].atv,%5); -->
+    <!-- set(hotspot[hs_bg_%2].background,true); -->
+    <!-- set(hotspot[hs_bg_%2].backgroundcolor,0x000000); -->
+    <!-- set(hotspot[hs_bg_%2].bordercolor,0xffffff); -->
+    <!-- set(hotspot[hs_bg_%2].borderwidth,1); -->
+    <!-- set(hotspot[hs_bg_%2].children,false); -->
+    <!-- set(hotspot[hs_bg_%2].edge,center); -->
+    <!-- set(hotspot[hs_bg_%2].height,45); -->
+    <!-- set(hotspot[hs_bg_%2].handcursor,true); -->
+    <!-- set(hotspot[hs_bg_%2].keep,false); -->
+    <!-- set(hotspot[hs_bg_%2].onclick,action(loadnewpano, %1, %2, %3, %4, %5, %6, %7)); -->
+    <!-- set(hotspot[hs_bg_%2].onhover,showtext(get(data[tooltip].content),hs_textstyle)); -->
+    <!-- set(hotspot[hs_bg_%2].roundedge,4); -->
+    <!-- set(hotspot[hs_bg_%2].selectable,false); -->
+    <!-- set(hotspot[hs_bg_%2].url,%SWFPATH%/plugins/textfield.swf); -->
+    <!-- set(hotspot[hs_bg_%2].width,45); -->
+    <!-- set(hotspot[hs_bg_%2].zorder,5); -->
+
+    <!-- addhotspot(hs_%2); -->
+    <!-- set(hotspot[hs_%2].alpha,0.8); -->
+    <!-- set(hotspot[hs_%2].ath,%4); -->
+    <!-- set(hotspot[hs_%2].atv,%5); -->
+    <!-- set(hotspot[hs_%2].autosize,center); -->
+    <!-- set(hotspot[hs_%2].background,false); -->
+    <!-- set(hotspot[hs_%2].children,false); -->
+    <!-- set(hotspot[hs_%2].css,data:hotspot_css); -->
+    <!-- set(hotspot[hs_%2].edge,center); -->
+    <!-- set(hotspot[hs_%2].handcursor,true); -->
+    <!-- set(hotspot[hs_%2].height,50); -->
+    <!-- set(hotspot[hs_%2].html,[p]%3[/p]); -->
+    <!-- set(hotspot[hs_%2].keep,false); -->
+    <!-- set(hotspot[hs_%2].onclick,action(loadnewpano, %1, %2, %3, %4, %5, %6, %7)); -->
+    <!-- set(hotspot[hs_%2].onhover,showtext(get(data[tooltip].content),hs_textstyle)); -->
+    <!-- set(hotspot[hs_%2].ox,19); -->
+    <!-- set(hotspot[hs_%2].oy,0); -->
+    <!-- set(hotspot[hs_%2].selectable,false); -->
+    <!-- set(hotspot[hs_%2].url,%SWFPATH%/plugins/textfield.swf); -->
+    <!-- set(hotspot[hs_%2].width,112); -->
+    <!-- set(hotspot[hs_%2].wordwrap,true); -->
+    <!-- set(hotspot[hs_%2].zorder,10); -->
+    <!-- ); -->
+
+    %1(%2);
+  </action>
+
+</krpano>
