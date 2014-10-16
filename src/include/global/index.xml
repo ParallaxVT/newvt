@@ -1,7 +1,6 @@
 <krpano>
 
-  <events onpreviewcomplete="if(develmode.enabled!=true,delayedcall(5, set(autorotate.enabled,true)));
-                             if(device.flash,delayedcall(4, set(display.flash10,on)));" />
+  <events onpreviewcomplete="if(develmode.enabled!=true,delayedcall(5, set(autorotate.enabled,true)));"/>
 
   <addglobal enabled="true"/>
 
@@ -10,7 +9,7 @@
            tessmode="0"
            movequality="low"
            stillquality="high"
-           flash10="off"
+           flash10="on"
            movequality10="best"
            stillquality10="best"
            stilltime="0.25"
@@ -22,15 +21,16 @@
 
   <control mousefovchange="0"/>
 
-  <data name="custom_fov">95</data>
+  <data name="custom_fov">100</data>
 
   <view hlookat="0"
         vlookat="0"
-        fov="95"
+        fov="100"
         fovmin="25"
         fovmax="110"
         limitfov="true"
-        fovtype="MFOV"
+        fovtype="DFOV"
+        maxpixelzoom="1"
         />
 
   <network downloadqueues="6" decodequeues="2"/>
