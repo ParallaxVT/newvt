@@ -205,8 +205,6 @@
 
   </layer>
 
-  <addnavarrows enabled="true" />
-
   <layer name       ="nav_btn"
          children   ="false"
          first_time ="true"
