@@ -18,11 +18,11 @@ if [ $HOSTNAME = "debianlaptop" ]; then
 fi
 # GitBash
 if [ $HOSTNAME = "RAFALAPTOP" ]; then
-    mydrive=/e/
+    mydrive=/e
 fi
 # MinGW
 if [ $HOSTNAME = "RafaLaptop" ]; then
-    mydrive=/e/
+    mydrive=/e
 fi
 #_krpano tiles
 krpano_version="1.17"
