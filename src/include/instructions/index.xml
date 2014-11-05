@@ -29,7 +29,7 @@
          bgalpha    ="0"
          bgcapture  ="true"
          bgcolor    ="#fff"
-         devices    ="flash"
+         devices    ="desktop"
          edge       ="centre"
          handcursor ="false"
          height     ="180"
@@ -67,7 +67,7 @@
 
   <layer name     ="instructions"
          crop     ="0|0|310|180"
-         devices  ="ipad"
+         devices  ="tablet"
          style    ="instructions_style"
          url      ="%SWFPATH%/include/instructions/instructions_touch.png"
          y        ="30%"
@@ -75,7 +75,7 @@
 
   <layer name     ="instructions"
          crop     ="0|0|310|180"
-         devices  ="iphone"
+         devices  ="mobile"
          scale    ="1.6"
          style    ="instructions_style"
          url      ="%SWFPATH%/include/instructions/instructions_touch.png"
