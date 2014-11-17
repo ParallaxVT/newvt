@@ -25,7 +25,7 @@ if [ $HOSTNAME = "RafaLaptop" ]; then
     mydrive=/e
 fi
 #_krpano tiles
-krpano_version="1.17"
+krpano_version="1.18"
 if [ $(uname -s) = "Linux" ]; then
     krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-linux-$krpano_version/kmakemultires"
 else
