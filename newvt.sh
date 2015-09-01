@@ -12,9 +12,9 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
-# VirtualBox - Linux Mint Debian Edition
-if [ $HOSTNAME = "debianlaptop" ]; then
-    mydrive=/media/sf_e
+# VirtualBox - Debian
+if [ $HOSTNAME = "debian" ]; then
+    mydrive=/media/e
 fi
 # GitBash
 if [ $HOSTNAME = "RAFALAPTOP" ]; then
