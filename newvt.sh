@@ -22,7 +22,7 @@ fi
 krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
 # origin directory paths
-orig_dir=$mydrive/bin/newvt/src
+orig_dir=~/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_html=$orig_dir/html
