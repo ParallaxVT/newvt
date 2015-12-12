@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Usage:
@@ -12,18 +11,7 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 # Some paths variables
-# VirtualBox - Debian
-if [ $HOSTNAME = "debian" ]; then
-    mydrive=/media/e
-fi
-# GitBash
-if [ $HOSTNAME = "RAFALAPTOP" ]; then
-    mydrive=/e
-fi
-# MinGW
-if [ $HOSTNAME = "RafaLaptop" ]; then
-    mydrive=/e
-fi
+mydrive=/home/rafael/
 #_krpano tiles
 krpano_version="1.18"
 if [ $(uname -s) = "Linux" ]; then
@@ -34,7 +22,7 @@ fi
 krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
 # origin directory paths
-orig_dir=$mydrive/virtual_tours/.archives/bin/newvt/src
+orig_dir=$mydrive/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_html=$orig_dir/html
