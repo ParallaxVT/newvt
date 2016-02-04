@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+
+#!/bin/bash
 
 # Usage:
 #    ???
@@ -10,19 +11,13 @@
 #    scroll_more=title     -> add scroll without title
 #    scroll_more=notitle   -> idem as custom but without title
 
-# Some paths variables
-mydrive=/home/rafael/
 #_krpano tiles
 krpano_version="1.18"
-if [ $(uname -s) = "Linux" ]; then
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools-linux-$krpano_version/kmakemultires"
-else
-    krpath="$mydrive/documents/software/virtual_tours/krpano/krpano_tools/krpanotools\krpanotools-$krpano_version/kmakemultires.exe"
-fi
-krconfig="-config=$mydrive/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
+krpath="/media/e/documents/software/virtual_tours/krpano/krpano_tools/krpanotools\krpanotools-$krpano_version/kmakemultires.exe"
+krconfig="-config=/media/e/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
 # origin directory paths
-orig_dir=~/bin/newvt/src
+orig_dir=/media/c/Users/Rafael/AppData/Roaming/bin/newvt/src/
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_html=$orig_dir/html
@@ -98,8 +93,8 @@ build_config_file () {
         new_dir=$VTPATH
         jobs_dir=$PWD
     else
-        new_dir=$mydrive/virtual_tours/.archives/vt_test/output
-        jobs_dir=$mydrive/virtual_tours/.archives/vt_test/test_directory
+        new_dir=/media/e/virtual_tours/.archives/vt_test/output
+        jobs_dir=/media/e/virtual_tours/.archives/vt_test/test_directory
     fi
 
     # Generate log file
