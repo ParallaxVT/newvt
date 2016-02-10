@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Usage:
@@ -845,7 +844,12 @@ add_tour() {
     echo_ok "tour.xml -> krpano tags removed"
 
     # Add krpano tags at the beginning of tour.xml
-    sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
+    current_dir=$(pwd);
+    if [ $current_dir = '/media/e/virtual_tours/clarendon_apartments' ]; then
+        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_file
+    else
+        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
+    fi
 
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
     printf "</krpano>\n" >> $tour_file
