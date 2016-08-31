@@ -34,8 +34,8 @@
   </data>
 
   <action name="loadnewpano">
-    lookto(%6,%7,50,smooth(100,20,50));
-    activatepano(%2);
+    lookto(%3,%4,50,smooth(100,20,50));
+    loadscene(%2,null,MERGE,BLEND(1));
   </action>
 
   <action name="up">
