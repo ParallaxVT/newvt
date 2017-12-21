@@ -1,4 +1,4 @@
-<krpano version="1.17">
+<krpano>
 
   <addgyro enabled="false" />
 
@@ -160,11 +160,11 @@
     );
     delayedcall(1,set(layer[arrows_container].first_time,false));
   </action>
-  
+
   <action name="hide_gyro_nav_arrows">
     tween(layer[arrows_container].x,-100,.5,easeoutquad);
   </action>
-  
+
   <layer name       ="nav_icons_container"
          align      ="bottomcentre"
          alpha      ="0"
