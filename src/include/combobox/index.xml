@@ -24,7 +24,6 @@
          keep="true"
          native="false"
          onloaded="fill_with_scenes();"
-         style="combobox"
          x="20"
          y="-60"
          url="%SWFPATH%/plugins/combobox.swf"
