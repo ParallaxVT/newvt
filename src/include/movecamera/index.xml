@@ -1,33 +1,35 @@
 <krpano>
 
-  <addmovecamera enabled="true"/>
+	<addmovecamera enabled="true"/>
 
-  <!-- Randomly move the camera to the left or right -->
+	<!-- Randomly move the camera to the left or right -->
 
-  <action name="movecamera">
-    if(develmode.enabled != true,
-    <!-- get a random numbor below 1 -->
-    mul(randomvalue, random, 1);
-    <!-- add 1 -->
-    add(thevalue,randomvalue,1);
-    <!--remove decimals and round the number. The result is 1 or 2 -->
-    roundval(thevalue, 0);
-    set (end_h, %1);
-    set (end_v, %2);
-    <!-- if random value is 1 then substract 70 to end_h, else add 70 -->
-    if (thevalue == "1" ,
-    sub (begin, get(end_h), 70); ,
-    add (begin, get(end_h), 70);
-    );
-    set (view.hlookat, get(begin));
-    set (view.vlookat, 10);
-    set(view.fov, get(data[custom_fov].content));
-    tween(view.hlookat, get(end_h), 3, easeoutquad);
-    tween(view.vlookat, get(end_v), 3, easeoutquad);
-    ,
-    set(view.fov, get(data[custom_fov].content));
-    );
-  </action>
+	<action name="movecamera">
+		<!-- get a random numbor below 1 -->
+		mul(randomvalue, random, 1);
+		<!-- add 1 -->
+		add(thevalue,randomvalue,1);
+		<!--remove decimals and round the number. The result is 1 or 2 -->
+		roundval(thevalue, 0);
+		set (end_h, %1);
+		set (end_v, %2);
+		<!-- if random value is 1 then substract 70 to end_h, else add 70 -->
+		if (thevalue == "1" ,
+			sub (begin, get(end_h), 70); ,
+			add (begin, get(end_h), 70);
+		);
+		set (view.hlookat, get(begin));
+		set (view.vlookat, 10);
+		set(view.fov, get(data[custom_fov].content));
+		if(develmode.enabled != true,
+			tween(view.hlookat, get(end_h), 3, easeoutquad);
+			tween(view.vlookat, get(end_v), 3, easeoutquad);
+		,
+			set(view.hlookat,%1);
+			set(view.vlookat,%2);
+			set(view.fov, get(data[custom_fov].content));
+		);
+	</action>
 
 </krpano>
 
