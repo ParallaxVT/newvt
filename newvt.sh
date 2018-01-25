@@ -11,12 +11,12 @@
 #    scroll_more=notitle   -> idem as custom but without title
 
 #_krpano tiles
-krpano_version="1.18"
-krpath="/media/e/documents/software/virtual_tours/krpano/krpano_tools/krpanotools\krpanotools-$krpano_version/kmakemultires.exe"
-krconfig="-config=/media/e/documents/software/virtual_tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
+krpano_version="1.19"
+krpath="/Users/Rafael/Documents/software/virtual-tours/krpano/bin/krpanotools"
+krconfig="-config=~/Documents/software/virtual-tours/krpano/krpano_conf/templates/tv_tiles_2_levels_all_devices.config"
 
 # origin directory paths
-orig_dir=/media/c/Users/Rafael/AppData/Roaming/bin/newvt/src/
+orig_dir=/Users/Rafael/dotfiles/bin/newvt/src
 orig_content=$orig_dir/content
 orig_include=$orig_dir/include
 orig_html=$orig_dir/html
@@ -53,12 +53,12 @@ conf_file_found () {
     if ! [ $HOSTNAME = "RafaelGP" ]; then
         # printf "is c\n"
         # Replace /media/g with /media/c
-        sed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
+        gsed -i 's/\/media\/g/\/media\/c\/Users\/rafaelgp\/work/g' $config
     else
         # printf "is g\n"
         # Replace /media/c with /media/g
-        # sed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
-        sed -i 's/\/media\/e\/Users\/rafaelgp\/work/\/media\/g/g' $config
+        gsed -i 's/\/media\/c\/Users\/rafaelgp\/work/\/media\/g/g' $config
+        gsed -i 's/\/media\/e\/Users\/rafaelgp\/work/\/media\/g/g' $config
     fi
     source $config
     if [ -z $timestamp ]; then
@@ -361,24 +361,24 @@ add_scene_tiles() {
         else
             printf "\n    $dest_scenes/$filename NOT FOUND or EMPTY\n" >> $log_file
             printf "\n    panofile IS:\n    $panofile\n" >> $log_file
-            if [ $HOSTNAME = "RafaelGP" ]; then
+            # if [ $HOSTNAME = "RafaelGP" ]; then
                 # Replace /media/g/ with G:/
-                pano_path=$(printf $panofile | sed -e 's/\/media\/g/G\:/g')
-            fi
-            if [ $HOSTNAME = "RafaLaptop" ]; then
+                # pano_path=$(printf $panofile | gsed -e 's/\/media\/g/G\:/g')
+            # fi
+            # if [ $HOSTNAME = "RafaLaptop" ]; then
                 # Replace /media/c/ with C:/
-                pano_path=$(printf $panofile | sed -e 's/\/media\/c/C\:/g')
-            fi
-            if [ $HOSTNAME = "debian" ]; then
+                # pano_path=$(printf $panofile | gsed -e 's/\/media\/c/C\:/g')
+            # fi
+            # if [ $HOSTNAME = "debian" ]; then
                 # Don't do anything
-                pano_path=$panofile
-            fi
+                # pano_path=$panofile
+            # fi
             check_pano_images "$panos_dir"
 
             printf "    krpath IS:\n    $krpath\n" >> $log_file
             printf "    krconfig IS:\n    $krconfig\n" >> $log_file
             printf "    pano_path IS:\n    $pano_path\n" >> $log_file
-            $krpath $krconfig $pano_path
+            $krpath makepano $krconfig $pano_path
 
             if [ $? != 0 ]; then
                 echo_fail  "Krpano tiles FAILED while processing: $each_scene"
@@ -387,7 +387,7 @@ add_scene_tiles() {
                 mv $panos_dir/output/scenes/$filename $dest_scenes
                 mv $panos_dir/output/$filename.xml $dest_scenes
                 # Replace '/scenes' for '%SWFPATH%/scenes'
-                sed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
+                gsed -e 's/scenes/\%SWFPATH\%\/scenes/g' $dest_scenes/$filename.xml > $dest_scenes/bck_$filename.xml
                 mv $dest_scenes/bck_$filename.xml $dest_scenes/$filename.xml
             fi
             echo_ok "Made TILES: $(basename $scenes_dir)/$filename ..."
@@ -473,8 +473,8 @@ add_plugins_in_custom() {
         if [ -d $new_dir/.custom/include ] &&  [ "$(ls -A $new_dir/.custom/include)" ]; then
             # Make sure all the xml files have the latest version in the header
             for each_custom_xml_file in $(find ./.custom/include/ -type f  -name "*.xml"); do
-                sed -i '/^<krpano/d' $each_custom_xml_file
-                sed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
+                gsed -i '/^<krpano/d' $each_custom_xml_file
+                gsed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
             done
             # For each directory add a <include/> line to $include_pluging file>
             printf "\n" >> $log_file
@@ -497,8 +497,8 @@ add_include_plugin() {
     include_plugin_sort=$temp_folder/include_plugin_sort.temp
     sort -u $include_plugin > $include_plugin_sort
     # Replace the line containing [PLUGINS] with .src/temp/include_plugin_sort.temp
-    sed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
-    sed -i -e '/\[PLUGINS\]/d' $dest_devel
+    gsed -i -e "/\[PLUGINS\]/r $include_plugin_sort" $dest_devel
+    gsed -i -e '/\[PLUGINS\]/d' $dest_devel
     echo_ok "devel.xml -> Added PLUGINS"
     printf "\n    ADDED $include_plugin_sort\n       TO $dest_devel\n" >> $log_file
 }
@@ -526,7 +526,7 @@ add_info_btn() {
                 cat >> $dest_content/info_btn.xml << EOF
   <action name="$actionname">
       set(layer[sidebar_text].html,data:text1);
-      set(sidebar_btn, true);
+      set(sidebar_btn, false);
   </action>
 
 EOF
@@ -569,8 +569,8 @@ add_sa() {
     printf '  <layer name="panolist" keep="true">\n\n[SCENE_NAMES]\n' >> $dest_content/panolist.xml
     printf '  </layer>\n\n</krpano>\n' >> $dest_content/panolist.xml
     # Replace the line containing [SCENE_NAMES] with the scene names in temp/scene_names.temp
-    sed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/panolist.xml
-    sed -i -e '/\[SCENE_NAMES\]/d' $dest_content/panolist.xml
+    gsed -i -e "/\[SCENE_NAMES\]/r $temp_folder/scene_names.temp" $dest_content/panolist.xml
+    gsed -i -e '/\[SCENE_NAMES\]/d' $dest_content/panolist.xml
     echo_ok "Created FILE: content/panolist.xml"
     printf "\n    COPY FILE $orig_content/panolist.xml\n      TO $dest_content/panolist.xml\n" >> $log_file
 }
@@ -598,7 +598,7 @@ add_logo_client() {
     if [ $logo_client = "y" ]; then
         # If $client_logo_name variable is not defined in vt_conf.sh
         if [ -z $logo_client_name ]; then
-            sed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
+            gsed -i "s/CLIENTNAME/other/g" $dest_include"/logo_client/index.xml"
             printf "    ADD PLUGIN: logo client - other\n" >> $log_file
         else
             # Possible values for variable client_logo_name:
@@ -606,13 +606,13 @@ add_logo_client() {
             # 2 - Addoctor
             # 3 - Llama Digital
             if [ $logo_client_name = "1" ]; then
-                sed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
+                gsed -i "s/CLIENTNAME/creare/g" $dest_include"/logo_client/index.xml"
             fi
             if [ $logo_client_name = "2" ]; then
-                sed -i "s/CLIENTNAME/addoctor/g" $dest_include"/logo_client/index.xml"
+                gsed -i "s/CLIENTNAME/addoctor/g" $dest_include"/logo_client/index.xml"
             fi
             if [ $logo_client_name = "3" ]; then
-                sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
+                gsed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
             fi
             printf "    ADD PLUGIN: logo client - option $logo_client_name\n" >> $log_file
         fi
@@ -650,7 +650,7 @@ EOF
             fi
             if [ -d $dest_include/hotspots ]; then
                 rm -r $dest_include/hotspots
-                sed -i -e '/hotspots\/index.xml/d' $dest_devel
+                gsed -i -e '/hotspots\/index.xml/d' $dest_devel
             fi
             printf "    REMOVE PLUGIN: hotspots (Only 1 scene)\n" >> $log_file
             echo_ok "Deleted PLUGIN: hotspots (Only 1 scene)"
@@ -664,7 +664,7 @@ remove_scroll () {
     fi
     if [ -d $dest_include/scroll ]; then
         rm -r $dest_include/scroll
-        sed -i -e '/scroll\/index.xml/d' $dest_devel
+        gsed -i -e '/scroll\/index.xml/d' $dest_devel
     fi
     printf "    REMOVE PLUGIN: scroll\n" >> $log_file
 }
@@ -694,7 +694,7 @@ add_scroll () {
 
 add_scroll_data() {
     # Replace the word [SWF_FILE] with the swf file name, in include/scroll/index.xml
-    sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
+    gsed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
     # Copy the corresponding swf file for the number of scenes
     cp -r $orig_content'/scroll/'$scroll_swf.swf  $dest_include'/scroll'
 
@@ -720,10 +720,10 @@ add_scroll_data() {
 
 EOF
         # Make a thumbnail for each pano, only if it doesn't exists already
-        # if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
-        #     convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
-        #     printf "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg\n" >> $log_file
-        # fi
+        if [ ! -f $dest_content'/scroll_thumbs/'$file_name'.jpg' ]; then
+            convert $panos_dir/$file_name'.jpg' -resize 420x210^ -gravity center -extent 200x120 $dest_content'/scroll_thumbs/'$file_name'.jpg'
+            printf "    CREATE THUMBNAIL: $content/scroll_thumbs/$file_name.jpg\n" >> $log_file
+        fi
         order=$(expr $order + 1)
     done
     printf "</content>\n" >> $dest_content/scroll.xml
@@ -752,8 +752,8 @@ add_plugins_data() {
 
     # Make sure all the xml files, apart from scroll.xml, have the latest version in the header
     for f in $(find $dest_content/*.xml ! -iname "scroll.xml") ; do
-        sed -i '/^<krpano/d' $f
-        sed -i "1i<krpano version=\"$krpano_version\">" $f
+        gsed -i '/^<krpano/d' $f
+        gsed -i "1i<krpano version=\"$krpano_version\">" $f
     done
     for f in $dest_content/*.xml; do
         # Get rid off the path and the extension
@@ -764,8 +764,8 @@ add_plugins_data() {
     done
 
     # Replace the line containing [DATA] with content
-    sed -i -e "/\[DATA\]/r $include_data" $dest_devel
-    sed -i -e '/\[DATA\]/d' $dest_devel
+    gsed -i -e "/\[DATA\]/r $include_data" $dest_devel
+    gsed -i -e '/\[DATA\]/d' $dest_devel
 
     echo_ok "devel.xml -> Added DATA"
     printf "\n    ADD $include_data\n    TO $dest_devel\n" >> $log_file
@@ -781,8 +781,8 @@ add_plugins_data() {
     for each_tiles_file in ${scenes_array[@]} ; do
         printf '  <include url="%%SWFPATH%%/scenes/'$each_tiles_file'.xml" />\n' >> $temp_folder/all_tiles_files.temp
     done
-    sed -i -e "/\[TILES\]/r $temp_folder/all_tiles_files.temp" $dest_devel
-    sed -i -e '/\[TILES\]/d' $dest_devel
+    gsed -i -e "/\[TILES\]/r $temp_folder/all_tiles_files.temp" $dest_devel
+    gsed -i -e '/\[TILES\]/d' $dest_devel
 
     echo_ok "devel.xml -> Added TILES"
     printf "    ADD $temp_folder/tiles.temp\n    TO $dest_devel\n" >> $log_file
@@ -807,15 +807,15 @@ add_tour() {
     # Make a temp file with all the files url's
     grep -o 'url=['"'"'"][^"'"'"']*['"'"'"]' $temp_folder"/devel1.temp" > $temp_folder"/devel2.temp"
     # Delete lines containing 'editor_and_options'
-    sed -e '/editor_and_options/d' $temp_folder/devel2.temp > $temp_folder/devel3.temp
+    gsed -e '/editor_and_options/d' $temp_folder/devel2.temp > $temp_folder/devel3.temp
     # Delete lines containing 'scene'
-    sed -e '/scenes/d' $temp_folder/devel3.temp > $temp_folder/devel4.temp
+    gsed -e '/scenes/d' $temp_folder/devel3.temp > $temp_folder/devel4.temp
     # Strip off everything to leave just the url's'
-    sed -e 's/^url=["'"'"']//' -e 's/["'"'"']$//' $temp_folder"/devel4.temp" > $temp_folder"/devel5.temp"
+    gsed -e 's/^url=["'"'"']//' -e 's/["'"'"']$//' $temp_folder"/devel4.temp" > $temp_folder"/devel5.temp"
     # Delete %SWFPATH%
-    sed -i 's/%SWFPATH%//g' $temp_folder/devel5.temp
+    gsed -i 's/%SWFPATH%//g' $temp_folder/devel5.temp
     # Delete the line containing the coordinates finder
-    sed -i '/coordfinder/d' $temp_folder/devel5.temp
+    gsed -i '/coordfinder/d' $temp_folder/devel5.temp
 
     # Merge all the files into tour.xml
     while read line; do
@@ -837,18 +837,18 @@ add_tour() {
     printf "\n    ADD $temp_folder/tiles.temp\n    TO $tour_file\n" >> $log_file
 
     # Delete all the lines beginning with <?xml, <krpano </krpano
-    sed -i '/^<?xml/d' $tour_file
-    sed -i '/^<krpano/d' $tour_file
-    sed -i '/^<\/krpano/d' $tour_file
+    gsed -i '/^<?xml/d' $tour_file
+    gsed -i '/^<krpano/d' $tour_file
+    gsed -i '/^<\/krpano/d' $tour_file
 
     echo_ok "tour.xml -> krpano tags removed"
 
     # Add krpano tags at the beginning of tour.xml
     current_dir=$(pwd);
-    if [ $current_dir = '/media/e/virtual_tours/clarendon_apartments' ]; then
-        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_file
+    if [ $current_dir = '/media/e/virtual-tours/clarendon_apartments' ]; then
+        gsed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_file
     else
-        sed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
+        gsed -i "1i<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<krpano version=\"$krpano_version\" showerrors=\"false\">" $tour_file
     fi
 
     # Add closing krpano tag at the end of tour.xml and tour_clean.xml
@@ -857,19 +857,19 @@ add_tour() {
     echo_ok "tour.xml -> New krpano tags added"
 
     # Delete dos new line
-    # sed -i 's///g' $tour_file
+    # gsed -i 's///g' $tour_file
 
     # Delete empty lines
-    sed -i '/^$/d' $tour_file
+    gsed -i '/^$/d' $tour_file
 
     # Delete commented lines
-    sed -i '/-->/d' $tour_file
+    gsed -i '/-->/d' $tour_file
 
     # Delete indentation
-    sed -i -r 's/^[[:blank:]]+//g' $tour_file
+    gsed -i -r 's/^[[:blank:]]+//g' $tour_file
 
     # Delete empty spaces around any = signs
-    sed -i 's/\ *=\ */=/g' $tour_file
+    gsed -i 's/\ *=\ */=/g' $tour_file
 
     echo_ok "tour.xml ->  Empty lines, comments and indentation removed"
 
@@ -880,20 +880,20 @@ add_tour_clean() {
     tour_clean="$dest_files/tour_clean.xml"
     cp $tour_file $tour_clean
     # Delete the line with <krpnano at the beginning
-    sed -i '/^<krpano/d' $tour_clean
+    gsed -i '/^<krpano/d' $tour_clean
     # Add krpano tag with onstart action on line number 2
     # I think we still need onstart-activatepano to ensure backward compatibility
-    sed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
+    gsed -i "2i<krpano version=\"$krpano_version\" showerrors=\"false\" onstart=\"activatepano(scene1);\">" $tour_clean
     echo_ok "Created FILE: tour_clean.xml"
 }
 
 set_crossdomain() {
     source $config
-    sed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $tour_file
-    sed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $dest_include/global/index.xml
-    # sed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
+    gsed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $tour_file
+    gsed -i "s|\[SETCROSSDOMAIN\]|$crossdomain|g" $dest_include/global/index.xml
+    # gsed -i "s/CLIENTNAME/llama/g" $dest_include"/logo_client/index.xml"
 
-    # sed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
+    # gsed -i "s/\[SWF_FILE\]/$scroll_swf/g" $dest_include'/scroll/index.xml'
     echo_ok "Set $crossdomain"
     # Remove any orphan crossdomain.xml files
     find $dest_files/* -name "crossdomain.xml" -exec rm -rf {} \;
@@ -947,8 +947,8 @@ add_html() {
     counter="1"
     for scene_item in "${scenes_array[@]}"; do
         cp -r $orig_dir/html/scene.html $dest_dir/$scene_item.html
-        sed -i "s/SCENENAME/$scene_item/g" $dest_dir/$scene_item.html
-        sed -i "s|files|$domain_url|g" $dest_dir/$scene_item.html
+        gsed -i "s/SCENENAME/$scene_item/g" $dest_dir/$scene_item.html
+        gsed -i "s|files|$domain_url|g" $dest_dir/$scene_item.html
         printf "Made $scene_item.html file\n" >> $log_file
         count_files "$counter" "Created scenes HTML FILE"
     done
@@ -956,7 +956,7 @@ add_html() {
     # Devel
     cp -r $orig_dir/html/devel $dest_dir/
     for devel_item in $(find $dest_dir/devel/*.html); do
-        sed -i "s/SCENENAME/${scenes_array[0]}/g" $dest_dir/devel/$(basename $devel_item)
+        gsed -i "s/SCENENAME/${scenes_array[0]}/g" $dest_dir/devel/$(basename $devel_item)
     done
     echo_ok "Created devel HTML files"
     # Devel html files will be named devel/1.html, devel/2.html, etc...
@@ -966,7 +966,7 @@ add_html() {
     for scene_devel_item in "${scenes_array[@]}"; do
         scene_counter=$(expr $counter - 1)
         cp -r $orig_dir/html/devel.html $dest_dir/devel/$counter.html
-        sed -i "s/SCENENAME/${scenes_array[$scene_counter]}/g" $dest_dir/devel/$counter.html
+        gsed -i "s/SCENENAME/${scenes_array[$scene_counter]}/g" $dest_dir/devel/$counter.html
         printf "    Made devel/$scene_counter.html file\n" >> $log_file
         count_files "$counter" "Created devel scenes HTML file"
     done
@@ -1001,8 +1001,8 @@ add_timestamp() {
             # printf "$each_tour_clean_xml.xml -> $each_tour_clean_xml$timestamp\n"
         done
         for each_html_file in $(find . -name "*.html"); do
-            sed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
-            sed -i "s/tour.xml/tour$timestamp/g" $each_html_file
+            gsed -i "s/tour_clean.xml/tour_clean$timestamp/g" $each_html_file
+            gsed -i "s/tour.xml/tour$timestamp/g" $each_html_file
         done
         echo_ok "Added TIME-STAMP"
     fi
@@ -1010,7 +1010,7 @@ add_timestamp() {
 
 add_version() {
     for each_xml_file in $(find $scenes_dir/files/ -type f  -name "*.xml"); do
-        sed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
+        gsed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
     done
     echo_info "Krpano VERSION: $krpano_version"
 }
@@ -1062,16 +1062,16 @@ add_list() {
 
             cp $template_file ./$tour_name/index.html
 
-            sed -i "s/$tour_name\///g" "$temp_dir/tour_$tour_name"
-            sed -i -e "/\[CONTENT\]/r $temp_dir/tour_$tour_name" ./$tour_name/index.html
-            sed -i -e '/\[CONTENT\]/d' ./$tour_name/index.html
-            sed -i -e 's/<h4><a href="index.html">/<h4>/g' ./$tour_name/index.html
-            sed -i -e 's/<\/a><\/h4>/<\/h4>/g' ./$tour_name/index.html
-            sed -i -e 's|\.\/style.css|\.\.\/style.css|g' ./$tour_name/index.html
+            gsed -i "s/$tour_name\///g" "$temp_dir/tour_$tour_name"
+            gsed -i -e "/\[CONTENT\]/r $temp_dir/tour_$tour_name" ./$tour_name/index.html
+            gsed -i -e '/\[CONTENT\]/d' ./$tour_name/index.html
+            gsed -i -e 's/<h4><a href="index.html">/<h4>/g' ./$tour_name/index.html
+            gsed -i -e 's/<\/a><\/h4>/<\/h4>/g' ./$tour_name/index.html
+            gsed -i -e 's|\.\/style.css|\.\.\/style.css|g' ./$tour_name/index.html
         done
 
-        sed -i -e "/\[CONTENT\]/r $content_file" $index_file
-        sed -i -e '/\[CONTENT\]/d' $index_file
+        gsed -i -e "/\[CONTENT\]/r $content_file" $index_file
+        gsed -i -e '/\[CONTENT\]/d' $index_file
 
         rm -r $temp_dir
         echo_ok "Added HTML LIST"
