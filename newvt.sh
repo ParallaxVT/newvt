@@ -705,7 +705,6 @@ add_scroll_data() {
     # Always overwrite content/scroll.xml
     > $dest_content/scroll.xml
     order=1
-    printf "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" >> $dest_content/scroll.xml
     printf "<!-- This file is generated automatically -->\n\n" >> $dest_content/scroll.xml
     printf "<content>\n\n" >> $dest_content/scroll.xml
     for file_name in ${scenes_array[@]}; do
