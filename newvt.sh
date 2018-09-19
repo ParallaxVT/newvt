@@ -472,10 +472,10 @@ add_plugins_in_custom() {
         # Check if .custom/include directory exists and it's not empty
         if [ -d $new_dir/.custom/include ] &&  [ "$(ls -A $new_dir/.custom/include)" ]; then
             # Make sure all the xml files have the latest version in the header
-            for each_custom_xml_file in $(find ./.custom/include/ -type f  -name "*.xml"); do
-                gsed -i '/^<krpano/d' $each_custom_xml_file
-                gsed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
-            done
+            #for each_custom_xml_file in $(find ./.custom/include/ -type f  -name "*.xml"); do
+            #    gsed -i '/^<krpano/d' $each_custom_xml_file
+            #    gsed -i "1i<krpano version=\"$krpano_version\">" $each_custom_xml_file
+            #done
             # For each directory add a <include/> line to $include_pluging file>
             printf "\n" >> $log_file
             for eachdirectory in $(find $new_dir/.custom/include/* -maxdepth 0 -type d ); do
@@ -519,7 +519,7 @@ add_info_btn() {
         if [ ! -f $dest_content/info_btn.xml ]; then
             order=1
             > $dest_content/info_btn.xml
-            printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn.xml
+            printf "<krpano>\n" >> $dest_content/info_btn.xml
             # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
             for eachpano in ${scenes_array[@]} ; do
                 actionname=set_sidebar_scene$order
@@ -538,7 +538,7 @@ EOF
         # Add some data with text per scene to content/info_btn_text.xml
         if [ ! -f $dest_content/info_btn_text.xml ]; then
             order=1
-            printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/info_btn_text.xml
+            printf "<krpano>\n" >> $dest_content/info_btn_text.xml
             # for f in $(find $dest_scenes/*.xml -maxdepth 0); do
             for eachpano in ${scenes_array[@]} ; do
                 textname=text$order
@@ -580,7 +580,7 @@ add_movecamera_coords()  {
     if [ ! -f $dest_content/coord.xml ]; then
         order=1
         > $dest_content/coord.xml
-        printf "<krpano version=\"$krpano_version\">\n" >> $dest_content/coord.xml
+        printf "<krpano>\n" >> $dest_content/coord.xml
         printf "\n    CREATE FILE $dest_content/coord.xml\n" >> $log_file
         for eachpano in "${scenes_array[@]}"; do
             cat >> $dest_content/coord.xml << EOF
@@ -626,7 +626,7 @@ add_hotspots() {
             # Never overwrite content/hs.xml
             if [ ! -f $dest_content/hs.xml ]; then
                 > $dest_content/hs.xml
-                printf "<krpano version=\"$krpano_version\">\n"  >> $dest_content/hs.xml
+                printf "<krpano>\n"  >> $dest_content/hs.xml
                 order=1
                 for f in $(find $dest_scenes/*.xml -maxdepth 0); do
                     hs_action=add_hs_scene$order
@@ -750,10 +750,10 @@ EOF
 add_plugins_data() {
 
     # Make sure all the xml files, apart from scroll.xml, have the latest version in the header
-    for f in $(find $dest_content/*.xml ! -iname "scroll.xml") ; do
-        gsed -i '/^<krpano/d' $f
-        gsed -i "1i<krpano version=\"$krpano_version\">" $f
-    done
+    #for f in $(find $dest_content/*.xml ! -iname "scroll.xml") ; do
+    #    gsed -i '/^<krpano/d' $f
+    #    gsed -i "1i<krpano version=\"$krpano_version\">" $f
+    #done
     for f in $dest_content/*.xml; do
         # Get rid off the path and the extension
         file_name=$(basename "$f")
@@ -1008,9 +1008,8 @@ add_timestamp() {
 }
 
 add_version() {
-    for each_xml_file in $(find $scenes_dir/files/ -type f  -name "*.xml"); do
-        gsed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $each_xml_file
-    done
+    gsed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $scenes_dir/files/tour.xml
+    gsed -i "s/<krpano>/<krpano version=\"$krpano_version\">/g" $scenes_dir/files/devel.xml
     echo_info "Krpano VERSION: $krpano_version"
 }
 
